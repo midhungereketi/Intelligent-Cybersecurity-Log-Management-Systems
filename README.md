@@ -4,6 +4,8 @@ This repository contains the Member 1 data pipeline for a three-member Database 
 
 The other members can add authentication, detection, alerts, analytics, and incident handling using the API described below.
 
+For teammate and AI-agent handoff, see [Member 1 Handoff Report](docs/MEMBER1_HANDOFF.md).
+
 ## Member 1 deliverables
 
 | Area | Implementation |
