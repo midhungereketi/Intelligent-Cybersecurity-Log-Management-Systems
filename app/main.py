@@ -89,7 +89,7 @@ async def upload_logs(file: Annotated[UploadFile, File()]):
     try:
         return ingest(app.state.logs, parse_upload(content, file.filename or ""))
     except ValueError as exc:
-        raise HTTPException(422, str(exc)) from exc
+        raise HTTPException(422, "invalid upload payload") from exc
 
 
 @app.get("/api/logs")
