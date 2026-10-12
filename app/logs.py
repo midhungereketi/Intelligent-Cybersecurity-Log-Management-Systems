@@ -142,7 +142,7 @@ def ingest(collection: Any, rows: Iterable[tuple[int, dict[str, Any]]], batch_si
         except ValueError as exc:
             rejected += 1
             if len(errors) < 100:
-                errors.append({"row": row_number, "error": str(exc)})
+                errors.append({"row": row_number, "error": "invalid log row"})
             continue
         if len(batch) >= batch_size:
             result = collection.insert_many(batch, ordered=True)

@@ -74,8 +74,8 @@ def health():
 def create_event(event: dict):
     try:
         normalized = normalize(event)
-    except ValueError as exc:
-        raise HTTPException(422, str(exc)) from exc
+    except ValueError:
+        raise HTTPException(422, "invalid event payload")
     result = app.state.logs.insert_one(normalized)
     normalized["_id"] = result.inserted_id
     return serialize(normalized)
@@ -88,7 +88,7 @@ async def upload_logs(file: Annotated[UploadFile, File()]):
         raise HTTPException(413, "upload exceeds MAX_UPLOAD_BYTES")
     try:
         return ingest(app.state.logs, parse_upload(content, file.filename or ""))
-    except ValueError as exc:
+    except ValueError:
         raise HTTPException(422, "invalid upload payload")
 
 
@@ -107,8 +107,8 @@ def list_logs(
         return search(app.state.logs, start=start, end=end, source_ip=source_ip,
                       event_type=event_type, severity=severity, keyword=keyword,
                       limit=limit, cursor=cursor)
-    except ValueError as exc:
-        raise HTTPException(422, str(exc)) from exc
+    except ValueError:
+        raise HTTPException(422, "invalid query filters")
 
 
 @app.get("/api/devices")
