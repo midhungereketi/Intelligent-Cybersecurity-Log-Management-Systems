@@ -187,7 +187,7 @@ class MockCursor:
         if "FROM threats" in q:
             if "COUNT(*)" in q:
                 filtered = self.db.filter_threats(q, p)
-                return [{"total": len(filtered)}]
+                return [{"total": len(filtered), "cnt": len(filtered)}]
             if "WHERE threat_id = %s" in q:
                 tid = int(p[0])
                 return [t for t in self.db.threats if t["threat_id"] == tid]
@@ -229,6 +229,12 @@ class MockCursor:
 
         # SELECT alerts
         if "FROM alerts" in q:
+            if "GROUP BY status, severity" in q:
+                counts: dict[tuple[str, str], int] = {}
+                for a in self.db.alerts:
+                    key = (a["status"], a["severity"])
+                    counts[key] = counts.get(key, 0) + 1
+                return [{"status": k[0], "severity": k[1], "cnt": v} for k, v in counts.items()]
             if "COUNT(*)" in q:
                 filtered = self.db.filter_alerts(q, p)
                 return [{"total": len(filtered)}]
@@ -347,6 +353,140 @@ class MockCursor:
             self.db.sources.append(row)
             return [row]
 
+        # SELECT incidents
+        if "FROM incidents" in q:
+            if "GROUP BY status, severity" in q:
+                counts_inc: dict[tuple[str, str], int] = {}
+                for inc_item in self.db.incidents:
+                    k_inc = (inc_item["status"], inc_item["severity"])
+                    counts_inc[k_inc] = counts_inc.get(k_inc, 0) + 1
+                return [{"status": k[0], "severity": k[1], "cnt": v} for k, v in counts_inc.items()]
+            if "COUNT(*)" in q:
+                filtered_inc = self.db.filter_incidents(q, p)
+                return [{"total": len(filtered_inc)}]
+            if "WHERE i.incident_id = %s" in q or "WHERE incident_id = %s" in q:
+                iid = int(p[0])
+                return [i for i in self.db.get_incidents_with_users() if i["incident_id"] == iid]
+            return self.db.filter_incidents(q, p)
+
+        # INSERT incidents
+        if q.startswith("INSERT INTO incidents"):
+            new_id = self.db.next_incident_id()
+            now_utc = datetime.now(timezone.utc)
+            tags_val = p[8]
+            tags = tags_val if isinstance(tags_val, list) else json.loads(tags_val) if isinstance(tags_val, str) else []
+            ev_val = p[9]
+            evidence = ev_val if isinstance(ev_val, list) else json.loads(ev_val) if isinstance(ev_val, str) else []
+            inc = {
+                "incident_id": new_id,
+                "title": p[0],
+                "description": p[1],
+                "severity": p[2],
+                "status": p[3],
+                "assigned_to": int(p[4]) if p[4] is not None else None,
+                "created_by": int(p[5]) if p[5] is not None else None,
+                "alert_id": int(p[6]) if p[6] is not None else None,
+                "source_ip": p[7],
+                "tags": tags,
+                "evidence": evidence,
+                "created_at": p[10] if len(p) > 10 else now_utc,
+                "updated_at": p[11] if len(p) > 11 else now_utc,
+                "resolved_at": None,
+            }
+            self.db.incidents.append(inc)
+            return [inc]
+
+        # UPDATE incidents
+        if q.startswith("UPDATE incidents"):
+            iid = int(p[-1])
+            inc = next((i for i in self.db.incidents if i["incident_id"] == iid), None)
+            if not inc:
+                return []
+            param_idx = 0
+            if "title = %s" in q:
+                inc["title"] = p[param_idx]
+                param_idx += 1
+            if "description = %s" in q:
+                inc["description"] = p[param_idx]
+                param_idx += 1
+            if "severity = %s" in q:
+                inc["severity"] = p[param_idx]
+                param_idx += 1
+            if "status = %s" in q:
+                inc["status"] = p[param_idx]
+                param_idx += 1
+            if "resolved_at = %s" in q:
+                inc["resolved_at"] = p[param_idx]
+                param_idx += 1
+            if "assigned_to = %s" in q:
+                inc["assigned_to"] = int(p[param_idx]) if p[param_idx] is not None else None
+                param_idx += 1
+            if "tags = %s" in q:
+                tg = p[param_idx]
+                inc["tags"] = tg if isinstance(tg, list) else json.loads(tg) if isinstance(tg, str) else []
+                param_idx += 1
+            if "updated_at = %s" in q:
+                inc["updated_at"] = p[param_idx]
+            return [inc]
+
+        # SELECT actions
+        if "FROM actions" in q:
+            if "WHERE a.incident_id = %s" in q or "WHERE incident_id = %s" in q:
+                iid = int(p[0])
+                acts = [a for a in self.db.actions if a["incident_id"] == iid]
+                res_act = []
+                for a in acts:
+                    d = dict(a)
+                    user = next((u for u in self.db.users if u["user_id"] == a.get("performed_by")), None)
+                    d["performed_by_username"] = user["username"] if user else None
+                    res_act.append(d)
+                res_act.sort(key=lambda x: x["performed_at"])
+                return res_act
+            return list(self.db.actions)
+
+        # INSERT actions
+        if q.startswith("INSERT INTO actions"):
+            new_id = self.db.next_action_id()
+            now_utc = datetime.now(timezone.utc)
+            meta_val = p[4]
+            metadata = meta_val if isinstance(meta_val, dict) else json.loads(meta_val) if isinstance(meta_val, str) else {}
+            act = {
+                "action_id": new_id,
+                "incident_id": int(p[0]),
+                "action_type": p[1],
+                "action_details": p[2],
+                "performed_by": int(p[3]) if p[3] is not None else None,
+                "metadata": metadata,
+                "performed_at": p[5] if len(p) > 5 else now_utc,
+            }
+            self.db.actions.append(act)
+            return [act]
+
+        # SELECT incident_alerts
+        if "FROM incident_alerts" in q:
+            if "WHERE ia.incident_id = %s" in q or "WHERE incident_id = %s" in q:
+                iid = int(p[0])
+                links = [ia for ia in self.db.incident_alerts if ia["incident_id"] == iid]
+                res_alerts = []
+                for link in links:
+                    aid = link["alert_id"]
+                    al = next((a for a in self.db.get_alerts_with_rules() if a["alert_id"] == aid), None)
+                    if al:
+                        d = dict(al)
+                        d["linked_at"] = link["linked_at"]
+                        res_alerts.append(d)
+                return res_alerts
+            if "WHERE incident_id = %s AND alert_id = %s" in q:
+                iid, aid = int(p[0]), int(p[1])
+                return [ia for ia in self.db.incident_alerts if ia["incident_id"] == iid and ia["alert_id"] == aid]
+            return list(self.db.incident_alerts)
+
+        # INSERT incident_alerts
+        if q.startswith("INSERT INTO incident_alerts"):
+            iid, aid, linked_at = int(p[0]), int(p[1]), p[2]
+            self.db.incident_alerts.append({"incident_id": iid, "alert_id": aid, "linked_at": linked_at})
+            return []
+
         return []
 
 
@@ -429,6 +569,11 @@ class MockDatabase:
         self.processed_events: set[tuple[str, int]] = set()
         self.devices = []
         self.sources = []
+        self.incidents = []
+        self.actions = []
+        self.incident_alerts = []
+        self._incident_counter = 400
+        self._action_counter = 500
 
     def get_connection(self) -> MockConnection:
         return MockConnection(self)
@@ -449,6 +594,14 @@ class MockDatabase:
         self._alert_counter += 1
         return self._alert_counter
 
+    def next_incident_id(self) -> int:
+        self._incident_counter += 1
+        return self._incident_counter
+
+    def next_action_id(self) -> int:
+        self._action_counter += 1
+        return self._action_counter
+
     def get_users_with_roles(self) -> list[dict[str, Any]]:
         res = []
         for u in self.users:
@@ -464,6 +617,17 @@ class MockDatabase:
             rule = next((r for r in self.rules if r["rule_id"] == a["rule_id"]), None)
             d = dict(a)
             d["rule_name"] = rule["rule_name"] if rule else None
+            res.append(d)
+        return res
+
+    def get_incidents_with_users(self) -> list[dict[str, Any]]:
+        res = []
+        for inc in self.incidents:
+            d = dict(inc)
+            assignee = next((u for u in self.users if u["user_id"] == inc.get("assigned_to")), None)
+            creator = next((u for u in self.users if u["user_id"] == inc.get("created_by")), None)
+            d["assigned_to_username"] = assignee["username"] if assignee else None
+            d["created_by_username"] = creator["username"] if creator else None
             res.append(d)
         return res
 
@@ -504,3 +668,25 @@ class MockDatabase:
             offset = int(params[-1])
             alerts = alerts[offset : offset + limit]
         return alerts
+
+    def filter_incidents(self, query: str, params: list[Any]) -> list[dict[str, Any]]:
+        incidents = self.get_incidents_with_users()
+        for p in params:
+            if isinstance(p, str) and p in {"OPEN", "INVESTIGATING", "CONTAINED", "RESOLVED", "CLOSED"}:
+                incidents = [i for i in incidents if i["status"] == p]
+            elif isinstance(p, str) and p in {"LOW", "MEDIUM", "HIGH", "CRITICAL"}:
+                incidents = [i for i in incidents if i["severity"] == p]
+            elif isinstance(p, int):
+                if "assigned_to = %s" in query:
+                    incidents = [i for i in incidents if i.get("assigned_to") == p]
+                elif "alert_id = %s" in query:
+                    incidents = [
+                        i for i in incidents
+                        if i.get("alert_id") == p or any(ia["incident_id"] == i["incident_id"] and ia["alert_id"] == p for ia in self.incident_alerts)
+                    ]
+        incidents.sort(key=lambda a: a["created_at"], reverse=True)
+        if "LIMIT %s OFFSET %s" in query:
+            limit = int(params[-2])
+            offset = int(params[-1])
+            incidents = incidents[offset : offset + limit]
+        return incidents

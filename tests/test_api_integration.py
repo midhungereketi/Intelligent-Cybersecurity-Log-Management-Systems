@@ -243,6 +243,81 @@ class APIIntegrationTests(unittest.TestCase):
         resp_devices = self.client.get("/api/devices")
         self.assertEqual(resp_devices.status_code, 200)
 
+    def test_full_lifecycle_with_member3_incidents_and_actions(self):
+        # 1. Ingest Member 1 logs
+        raw_events = list(generate(count=50, seed=123))
+        rows = [(idx + 1, ev) for idx, ev in enumerate(raw_events)]
+        ingest_res = ingest(self.logs_collection, rows)
+        self.assertEqual(ingest_res["inserted"], 50)
+
+        # 2. Run Member 2 detection
+        resp_detect = self.client.post(
+            "/api/detection/run",
+            json={"limit": 1000},
+            headers={"Authorization": f"Bearer {self.analyst_token}"},
+        )
+        self.assertEqual(resp_detect.status_code, 200)
+
+        # 3. List generated alerts
+        resp_alerts = self.client.get(
+            "/api/alerts?status=OPEN",
+            headers={"Authorization": f"Bearer {self.analyst_token}"},
+        )
+        self.assertEqual(resp_alerts.status_code, 200)
+        alerts_list = resp_alerts.json()["items"]
+        self.assertGreaterEqual(len(alerts_list), 1)
+        target_alert = alerts_list[0]
+        alert_id = target_alert["alert_id"]
+
+        # 4. Member 3: Create Incident from Alert
+        resp_inc = self.client.post(
+            "/api/incidents",
+            json={
+                "title": f"Incident from {target_alert['title']}",
+                "description": "Triggered by automated detection pipeline",
+                "severity": target_alert["severity"],
+                "alert_id": alert_id,
+                "assigned_to": 2,
+            },
+            headers={"Authorization": f"Bearer {self.analyst_token}"},
+        )
+        self.assertEqual(resp_inc.status_code, 201)
+        inc_data = resp_inc.json()
+        incident_id = inc_data["incident_id"]
+        self.assertEqual(inc_data["assigned_to"], 2)
+
+        # 5. Member 3: Log containment action
+        resp_act = self.client.post(
+            f"/api/incidents/{incident_id}/actions",
+            json={
+                "action_type": "CONTAINMENT",
+                "action_details": "Applied ACL rule blocking source IP at ingress edge router.",
+            },
+            headers={"Authorization": f"Bearer {self.analyst_token}"},
+        )
+        self.assertEqual(resp_act.status_code, 201)
+
+        # 6. Member 3: Update status to RESOLVED
+        resp_res = self.client.patch(
+            f"/api/incidents/{incident_id}",
+            json={"status": "RESOLVED"},
+            headers={"Authorization": f"Bearer {self.analyst_token}"},
+        )
+        self.assertEqual(resp_res.status_code, 200)
+        self.assertEqual(resp_res.json()["status"], "RESOLVED")
+
+        # 7. Check analytics dashboard
+        resp_dash = self.client.get(
+            "/api/analytics/dashboard",
+            headers={"Authorization": f"Bearer {self.analyst_token}"},
+        )
+        self.assertEqual(resp_dash.status_code, 200)
+        dash = resp_dash.json()
+        self.assertEqual(dash["logs"]["total"], 50)
+        self.assertGreaterEqual(dash["alerts"]["total"], 1)
+        self.assertGreaterEqual(dash["incidents"]["total"], 1)
+        self.assertGreaterEqual(dash["incidents"]["resolved"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -11,17 +11,22 @@ class SQLSchemaTests(unittest.TestCase):
         cls.repo_root = Path(__file__).resolve().parents[1]
         cls.migration_001 = cls.repo_root / "sql" / "001_devices_and_sources.postgres.sql"
         cls.migration_002 = cls.repo_root / "sql" / "002_auth_and_detection.postgres.sql"
+        cls.migration_003 = cls.repo_root / "sql" / "003_incidents_and_actions.postgres.sql"
 
     def test_migration_files_exist(self):
         self.assertTrue(self.migration_001.is_file(), "001_devices_and_sources.postgres.sql must exist")
         self.assertTrue(self.migration_002.is_file(), "002_auth_and_detection.postgres.sql must exist")
+        self.assertTrue(self.migration_003.is_file(), "003_incidents_and_actions.postgres.sql must exist")
 
     def test_non_destructive_migrations(self):
         content_001 = self.migration_001.read_text(encoding="utf-8")
         content_002 = self.migration_002.read_text(encoding="utf-8")
+        content_003 = self.migration_003.read_text(encoding="utf-8")
         self.assertNotIn("DROP TABLE", content_001.upper())
         self.assertNotIn("DROP TABLE", content_002.upper())
+        self.assertNotIn("DROP TABLE", content_003.upper())
         self.assertNotIn("DROP DATABASE", content_002.upper())
+        self.assertNotIn("DROP DATABASE", content_003.upper())
 
     def test_002_defines_required_tables(self):
         sql = self.migration_002.read_text(encoding="utf-8")
@@ -30,6 +35,27 @@ class SQLSchemaTests(unittest.TestCase):
             with self.subTest(table=tbl):
                 pattern = rf"CREATE TABLE (?:IF NOT EXISTS )?{tbl}\b"
                 self.assertRegex(sql, re.compile(pattern, re.IGNORECASE))
+
+    def test_003_defines_required_tables(self):
+        sql = self.migration_003.read_text(encoding="utf-8")
+        required_tables = ["incidents", "incident_alerts", "actions"]
+        for tbl in required_tables:
+            with self.subTest(table=tbl):
+                pattern = rf"CREATE TABLE (?:IF NOT EXISTS )?{tbl}\b"
+                self.assertRegex(sql, re.compile(pattern, re.IGNORECASE))
+
+    def test_incidents_table_constraints(self):
+        sql = self.migration_003.read_text(encoding="utf-8")
+        self.assertRegex(sql, re.compile(r"severity\s+VARCHAR\(\d+\)\s+NOT NULL\s+CHECK\s*\(\s*severity\s+IN", re.IGNORECASE))
+        self.assertRegex(sql, re.compile(r"status\s+VARCHAR\(\d+\)\s+NOT NULL\s+DEFAULT\s+'OPEN'", re.IGNORECASE))
+        self.assertRegex(sql, re.compile(r"assigned_to\s+BIGINT\s+REFERENCES\s+users\s*\(\s*user_id\s*\)", re.IGNORECASE))
+        self.assertRegex(sql, re.compile(r"alert_id\s+BIGINT\s+REFERENCES\s+alerts\s*\(\s*alert_id\s*\)", re.IGNORECASE))
+
+    def test_actions_table_constraints(self):
+        sql = self.migration_003.read_text(encoding="utf-8")
+        self.assertRegex(sql, re.compile(r"incident_id\s+BIGINT\s+NOT NULL\s+REFERENCES\s+incidents", re.IGNORECASE))
+        self.assertRegex(sql, re.compile(r"action_type\s+VARCHAR\(\d+\)\s+NOT NULL\s+CHECK\s*\(\s*action_type\s+IN", re.IGNORECASE))
+        self.assertRegex(sql, re.compile(r"performed_by\s+BIGINT\s+REFERENCES\s+users\s*\(\s*user_id\s*\)", re.IGNORECASE))
 
     def test_users_table_constraints(self):
         sql = self.migration_002.read_text(encoding="utf-8")

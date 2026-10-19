@@ -26,6 +26,8 @@ from .logs import ensure_indexes, ingest, normalize, parse_upload, search, seria
 from .routes_auth import router as auth_router
 from .routes_rules import router as rules_router
 from .routes_threats_alerts import router as threats_alerts_router
+from .routes_incidents_actions import router as incidents_actions_router
+from .routes_analytics import router as analytics_router
 
 logger = logging.getLogger("app.main")
 
@@ -79,6 +81,8 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(rules_router)
 app.include_router(threats_alerts_router)
+app.include_router(incidents_actions_router)
+app.include_router(analytics_router)
 
 
 def _sql_connection():
