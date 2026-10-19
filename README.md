@@ -4,23 +4,22 @@ This repository contains the Member 1 data pipeline for a three-member Database 
 
 The other members can add authentication, detection, alerts, analytics, and incident handling using the API described below.
 
-For teammate and AI-agent handoff, see [Member 1 Handoff Report](docs/MEMBER1_HANDOFF.md).
+For teammate and AI-agent handoff, see [Member 1 Handoff Report](docs/MEMBER1_HANDOFF.md) and [Member 2 Handoff Report](docs/MEMBER2_HANDOFF.md).
 
-## Member 1 deliverables
+## Member deliverables
 
-| Area | Implementation |
-| --- | --- |
-| Ingestion | Single-event API and CSV, JSON, or JSONL upload with validation and batches of 1,000 |
-| Log storage | MongoDB `logs` collection with UTC timestamps and optional device/source IDs |
-| Search | Time, IP, event type, severity, and keyword filters with stable cursor pagination |
-| Indexes | Timestamp, source IP/time, event type/time, severity/time, and message text |
-| Sample data | Deterministic generator with failed-login, port-scan, and activity-burst patterns |
-| Performance | Indexed versus collection-scan benchmark; does not drop indexes |
-| SQL metadata | PostgreSQL `device` and `log_source` tables and creation/list APIs |
+| Area | Member | Implementation |
+| --- | --- | --- |
+| Ingestion & Search | Member 1 | Single-event API and CSV/JSON/JSONL upload with MongoDB indexing and benchmark |
+| SQL Device Metadata | Member 1 | PostgreSQL `device` and `log_source` tables and APIs |
+| Authentication & RBAC | Member 2 | Argon2id hashing, RFC 7519 HS256 JWT, rate limiting, and user management APIs |
+| Relational Security Schema | Member 2 | PostgreSQL `roles`, `users`, `rules`, `threats`, `alerts`, `processed_detection_events` |
+| Security Detection Engine | Member 2 | Failed logins, port scan probes, excessive activity detection with idempotent alert generation |
+| Threat & Alert Management | Member 2 | Filterable, paginated alert & threat APIs with status transitions (acknowledge/resolve) |
 
 ## Setup
 
-Requires Python 3.11+, MongoDB, and PostgreSQL for device/source endpoints. The log API can run without PostgreSQL; its metadata endpoints return 503 until `POSTGRES_DSN` is configured. The SQL script targets PostgreSQL. The review document also mentions Oracle 11g, so confirm the required SQL engine with the faculty before using the SQL migration.
+Requires Python 3.11+, MongoDB, and PostgreSQL. Apply the SQL migrations in order: `sql/001_devices_and_sources.postgres.sql` then `sql/002_auth_and_detection.postgres.sql`.
 
 ```powershell
 python -m venv .venv
@@ -63,16 +62,18 @@ The ingestion API does not check whether optional `source_id` or `device_id` val
 | `GET /api/logs` | Search and paginate logs |
 | `GET /api/devices` / `POST /api/devices` | List and create devices |
 | `GET /api/sources` / `POST /api/sources` | List and create log sources |
+| `POST /api/auth/login` | Authenticate user, returns HS256 JWT access token |
+| `POST /api/auth/logout` | Revoke current user's session token |
+| `GET /api/auth/me` | Retrieve profile of currently authenticated user |
+| `GET /api/users` / `POST /api/users` / `PATCH /api/users/{id}` | User management (Administrator only) |
+| `GET /api/rules` / `POST /api/rules` / `PATCH /api/rules/{id}` | Detection rule management and threshold configuration |
+| `GET /api/threats` / `GET /api/threats/{id}` | Threat records with correlated alerts and evidence |
+| `GET /api/alerts` / `GET /api/alerts/{id}` | Security alerts with status, severity, and evidence |
+| `POST /api/alerts/{id}/acknowledge` | Acknowledge active alert (Analyst / Admin) |
+| `POST /api/alerts/{id}/resolve` | Resolve alert (Analyst / Admin) |
+| `POST /api/detection/run` | Execute bounded security detection run |
 
-For `GET /api/logs`, supported query parameters are `start`, `end`, `source_ip`, `event_type`, `severity`, `keyword`, `limit` (1–200), and `cursor`. The response contains `items` and `next_cursor`. Pass `next_cursor` unchanged in the next request with the same filters. The default limit is 50. Uploaded rows that fail validation are counted in `rejected`; up to 100 row errors are returned.
-
-Example:
-
-```text
-GET /api/logs?source_ip=198.51.100.10&start=2026-10-01T00:00:00Z&limit=50
-```
-
-The current API has no authentication because Member 2 owns that module. Add their authentication and role checks before exposing this service beyond the local project environment.
+Protected endpoints require the `Authorization: Bearer <token>` header obtained from `/api/auth/login`.
 
 ## Synthetic data and benchmark
 

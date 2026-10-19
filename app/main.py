@@ -1,5 +1,6 @@
-"""HTTP contract for Member 1. Member 2 can add authentication middleware later."""
+"""HTTP contract for Member 1 and Member 2 backend features."""
 
+import logging
 from contextlib import asynccontextmanager
 from typing import Annotated
 
@@ -10,8 +11,47 @@ from pydantic import BaseModel, Field
 from psycopg.rows import dict_row
 from pymongo import MongoClient
 
-from .config import max_upload_bytes, mongo_database, mongo_uri, postgres_dsn
+from .auth import hash_password
+from .config import (
+    admin_bootstrap_email,
+    admin_bootstrap_password,
+    admin_bootstrap_username,
+    max_upload_bytes,
+    mongo_database,
+    mongo_uri,
+    postgres_dsn,
+)
+from .db import get_db_connection
 from .logs import ensure_indexes, ingest, normalize, parse_upload, search, serialize
+from .routes_auth import router as auth_router
+from .routes_rules import router as rules_router
+from .routes_threats_alerts import router as threats_alerts_router
+
+logger = logging.getLogger("app.main")
+
+
+def _bootstrap_admin():
+    username = admin_bootstrap_username()
+    password = admin_bootstrap_password()
+    if not username or not password:
+        return
+    email = admin_bootstrap_email() or f"{username}@localhost"
+    try:
+        with get_db_connection() as conn:
+            admin_role = conn.execute("SELECT role_id FROM roles WHERE role_name = 'ADMIN'").fetchone()
+            if not admin_role:
+                return
+            existing = conn.execute("SELECT user_id FROM users WHERE username = %s OR email = %s", (username, email)).fetchone()
+            if not existing:
+                hashed = hash_password(password)
+                conn.execute(
+                    """INSERT INTO users (username, email, password_hash, role_id, is_active)
+                       VALUES (%s, %s, %s, %s, TRUE)""",
+                    (username, email, hashed, admin_role["role_id"]),
+                )
+                logger.info("Bootstrapped initial administrator account: %s", username)
+    except Exception as exc:
+        logger.debug("Admin bootstrap skipped or failed: %s", exc)
 
 
 @asynccontextmanager
@@ -22,28 +62,27 @@ async def lifespan(application: FastAPI):
     try:
         client.admin.command("ping")
         ensure_indexes(application.state.logs)
+        _bootstrap_admin()
         yield
     finally:
         client.close()
 
 
-app = FastAPI(title="Cybersecurity Log API - Member 1", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="Cybersecurity Log Management & Detection System", version="2.0.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:5173"],
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
+app.include_router(auth_router)
+app.include_router(rules_router)
+app.include_router(threats_alerts_router)
+
 
 def _sql_connection():
-    dsn = postgres_dsn()
-    if not dsn:
-        raise HTTPException(503, "POSTGRES_DSN is not configured")
-    try:
-        return psycopg.connect(dsn, row_factory=dict_row)
-    except psycopg.OperationalError as exc:
-        raise HTTPException(503, "PostgreSQL is unavailable") from exc
+    return get_db_connection()
 
 
 class DeviceIn(BaseModel):

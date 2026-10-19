@@ -2,7 +2,7 @@ name: Member 1 tests
 
 on:
   push:
-    branches: [main, member1-log-pipeline]
+    branches: [main, member1-log-pipeline, member2-shraavanth]
   pull_request:
 
 permissions:

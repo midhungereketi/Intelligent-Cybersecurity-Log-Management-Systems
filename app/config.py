@@ -15,3 +15,35 @@ def postgres_dsn() -> str | None:
 
 def max_upload_bytes() -> int:
     return int(os.getenv("MAX_UPLOAD_BYTES", "25000000"))
+
+
+def jwt_secret_key() -> str:
+    return os.getenv("JWT_SECRET_KEY", "academic-cybersecurity-prototype-secret-key-change-in-production")
+
+
+def jwt_algorithm() -> str:
+    return os.getenv("JWT_ALGORITHM", "HS256")
+
+
+def jwt_expire_minutes() -> int:
+    return int(os.getenv("JWT_EXPIRE_MINUTES", "60"))
+
+
+def admin_bootstrap_username() -> str | None:
+    return os.getenv("ADMIN_USERNAME")
+
+
+def admin_bootstrap_password() -> str | None:
+    return os.getenv("ADMIN_PASSWORD")
+
+
+def admin_bootstrap_email() -> str | None:
+    return os.getenv("ADMIN_EMAIL")
+
+
+def login_rate_limit_max() -> int:
+    return int(os.getenv("LOGIN_RATE_LIMIT_MAX", "5"))
+
+
+def login_rate_limit_window_seconds() -> int:
+    return int(os.getenv("LOGIN_RATE_LIMIT_WINDOW", "300"))
