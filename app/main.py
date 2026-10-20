@@ -2,20 +2,21 @@
 
 import logging
 from contextlib import asynccontextmanager
-from typing import Annotated
+from typing import Annotated, Any
 
 import psycopg
-from fastapi import FastAPI, File, HTTPException, Query, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from psycopg.rows import dict_row
 from pymongo import MongoClient
 
-from .auth import hash_password
+from .auth import hash_password, require_admin, require_analyst_or_admin
 from .config import (
     admin_bootstrap_email,
     admin_bootstrap_password,
     admin_bootstrap_username,
+    jwt_secret_key,
     max_upload_bytes,
     mongo_database,
     mongo_uri,
@@ -56,6 +57,8 @@ def _bootstrap_admin():
 
 @asynccontextmanager
 async def lifespan(application: FastAPI):
+    # Fail fast if required production JWT signing secret is missing
+    jwt_secret_key()
     client = MongoClient(mongo_uri(), serverSelectionTimeoutMS=3000)
     application.state.mongo = client
     application.state.logs = client[mongo_database()].logs
@@ -110,7 +113,10 @@ def health():
 
 
 @app.post("/api/logs/events", status_code=201)
-def create_event(event: dict):
+def create_event(
+    event: dict,
+    current_user: Annotated[dict[str, Any], Depends(require_analyst_or_admin)] = None,
+):
     try:
         normalized = normalize(event)
     except ValueError:
@@ -121,7 +127,10 @@ def create_event(event: dict):
 
 
 @app.post("/api/logs/upload")
-async def upload_logs(file: Annotated[UploadFile, File()]):
+async def upload_logs(
+    file: Annotated[UploadFile, File()],
+    current_user: Annotated[dict[str, Any], Depends(require_analyst_or_admin)] = None,
+):
     content = await file.read(max_upload_bytes() + 1)
     if len(content) > max_upload_bytes():
         raise HTTPException(413, "upload exceeds MAX_UPLOAD_BYTES")
@@ -141,6 +150,7 @@ def list_logs(
     keyword: str | None = None,
     limit: Annotated[int, Query(ge=1, le=200)] = 50,
     cursor: str | None = None,
+    current_user: Annotated[dict[str, Any], Depends(require_analyst_or_admin)] = None,
 ):
     try:
         return search(app.state.logs, start=start, end=end, source_ip=source_ip,
@@ -151,13 +161,18 @@ def list_logs(
 
 
 @app.get("/api/devices")
-def list_devices():
+def list_devices(
+    current_user: Annotated[dict[str, Any], Depends(require_analyst_or_admin)] = None,
+):
     with _sql_connection() as conn:
         return conn.execute("SELECT * FROM device ORDER BY device_id").fetchall()
 
 
 @app.post("/api/devices", status_code=201)
-def create_device(payload: DeviceIn):
+def create_device(
+    payload: DeviceIn,
+    admin_user: Annotated[dict[str, Any], Depends(require_admin)] = None,
+):
     try:
         with _sql_connection() as conn:
             return conn.execute(
@@ -174,7 +189,10 @@ def create_device(payload: DeviceIn):
 
 
 @app.get("/api/sources")
-def list_sources(device_id: int | None = None):
+def list_sources(
+    device_id: int | None = None,
+    current_user: Annotated[dict[str, Any], Depends(require_analyst_or_admin)] = None,
+):
     with _sql_connection() as conn:
         if device_id is None:
             return conn.execute("SELECT * FROM log_source ORDER BY source_id").fetchall()
@@ -182,7 +200,10 @@ def list_sources(device_id: int | None = None):
 
 
 @app.post("/api/sources", status_code=201)
-def create_source(payload: SourceIn):
+def create_source(
+    payload: SourceIn,
+    admin_user: Annotated[dict[str, Any], Depends(require_admin)] = None,
+):
     try:
         with _sql_connection() as conn:
             return conn.execute(
@@ -195,3 +216,4 @@ def create_source(payload: SourceIn):
         raise HTTPException(409, "device does not exist or source name is duplicated") from exc
     except psycopg.DataError as exc:
         raise HTTPException(422, "invalid source field") from exc
+

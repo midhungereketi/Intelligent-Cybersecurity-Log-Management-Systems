@@ -75,6 +75,13 @@ CREATE TABLE IF NOT EXISTS processed_detection_events (
     PRIMARY KEY (event_id, rule_id)
 );
 
+CREATE TABLE IF NOT EXISTS detection_checkpoints (
+    checkpoint_name VARCHAR(100) PRIMARY KEY,
+    last_timestamp TIMESTAMPTZ,
+    last_event_id VARCHAR(64),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Indexes for performance and constraint protection:
 CREATE INDEX IF NOT EXISTS users_role_idx ON users(role_id);
 CREATE INDEX IF NOT EXISTS rules_type_enabled_idx ON rules(rule_type, is_enabled);

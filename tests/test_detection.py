@@ -3,6 +3,7 @@
 import unittest
 from datetime import datetime, timedelta, timezone
 from bson import ObjectId
+import mongomock
 
 from app.db import reset_db_override, set_db_override
 from app.detection import (
@@ -11,7 +12,9 @@ from app.detection import (
     detect_failed_logins,
     detect_port_scans,
     execute_detection,
+    get_checkpoint,
     process_match,
+    save_checkpoint,
 )
 from tests.mock_db import MockDatabase
 
@@ -233,6 +236,149 @@ class DetectionUnitTests(unittest.TestCase):
         second_alert = next(a for a in self.mock_db.alerts if a["alert_id"] == second_alert_id)
         self.assertEqual(second_alert["status"], "OPEN")
         self.assertEqual(first_alert["status"], "RESOLVED")
+
+    def test_alert_replay_after_resolution_creates_no_duplicate(self):
+        """Phase 6 regression test: Replaying resolved events must NOT create a duplicate alert."""
+        mongo_client = mongomock.MongoClient()
+        coll = mongo_client.cybersecurity_logs.logs
+
+        # Step 1: Ingest qualifying events and run detection -> Alert #1 created
+        logs = [
+            _make_log("LOGIN_FAILED", "198.51.100.99", self.base_time + timedelta(seconds=i * 5), username="target_user")
+            for i in range(6)
+        ]
+        coll.insert_many(logs)
+
+        res1 = execute_detection(coll, limit=100, use_checkpoint=False)
+        self.assertEqual(res1["alerts_created"], 1)
+        self.assertEqual(len(self.mock_db.alerts), 1)
+        first_alert = self.mock_db.alerts[0]
+        self.assertEqual(first_alert["status"], "OPEN")
+        first_alert_id = first_alert["alert_id"]
+
+        # Step 2: Analyst acknowledges and resolves the alert
+        first_alert["status"] = "RESOLVED"
+
+        # Step 3 & 4: Detection runs AGAIN on the exact same logs -> NO duplicate alert created!
+        res2 = execute_detection(coll, limit=100, use_checkpoint=False)
+        self.assertEqual(res2["alerts_created"], 0)
+        self.assertEqual(res2["alerts_updated"], 0)
+        self.assertEqual(res2["alerts_unchanged"], 1)
+        self.assertEqual(len(self.mock_db.alerts), 1, "Alert count must remain 1; no duplicate alert created on replay")
+        self.assertEqual(self.mock_db.alerts[0]["alert_id"], first_alert_id)
+        self.assertEqual(self.mock_db.alerts[0]["status"], "RESOLVED")
+
+        # Step 5: A genuinely new qualifying attack episode arrives 1 hour later
+        later_base = self.base_time + timedelta(hours=1)
+        new_attack_logs = [
+            _make_log("LOGIN_FAILED", "198.51.100.99", later_base + timedelta(seconds=i * 5), username="target_user")
+            for i in range(6)
+        ]
+        coll.insert_many(new_attack_logs)
+
+        # Step 6: Detection runs -> New alert is created for the new episode!
+        res3 = execute_detection(coll, limit=100, use_checkpoint=False)
+        self.assertEqual(res3["alerts_created"], 1)
+        self.assertEqual(len(self.mock_db.alerts), 2, "Second alert must be created for the new episode")
+
+        alerts_by_id = {a["alert_id"]: a for a in self.mock_db.alerts}
+        self.assertEqual(alerts_by_id[first_alert_id]["status"], "RESOLVED")
+        new_alert = next(a for a in self.mock_db.alerts if a["alert_id"] != first_alert_id)
+        self.assertEqual(new_alert["status"], "OPEN")
+
+        # Run detection again: replay of all logs produces NO additional alerts
+        res4 = execute_detection(coll, limit=100, use_checkpoint=False)
+        self.assertEqual(res4["alerts_created"], 0)
+        self.assertEqual(len(self.mock_db.alerts), 2)
+
+    def test_large_dataset_pagination_and_checkpoints(self):
+        """Phase 5 regression test: Datasets larger than batch limit with events at beginning, middle, and end."""
+        mongo_client = mongomock.MongoClient()
+        coll = mongo_client.cybersecurity_logs.logs
+
+        # Create 180 total logs (with batch_size = 50, this spans 4 pages)
+        all_logs = []
+        # Beginning: 6 failed logins at indices 2..7 from 198.51.100.11
+        for i in range(10):
+            if 2 <= i <= 7:
+                all_logs.append(_make_log("LOGIN_FAILED", "198.51.100.11", self.base_time + timedelta(seconds=i)))
+            else:
+                all_logs.append(_make_log("ACCESS", "10.0.0.1", self.base_time + timedelta(seconds=i)))
+
+        # Routine logs up to index 70
+        for i in range(10, 70):
+            all_logs.append(_make_log("ACCESS", "10.0.0.1", self.base_time + timedelta(seconds=i)))
+
+        # Middle: 6 failed logins at indices 70..75 from 198.51.100.22
+        for i in range(70, 76):
+            all_logs.append(_make_log("LOGIN_FAILED", "198.51.100.22", self.base_time + timedelta(seconds=i)))
+
+        # Routine logs up to index 150
+        for i in range(76, 150):
+            all_logs.append(_make_log("ACCESS", "10.0.0.1", self.base_time + timedelta(seconds=i)))
+
+        # End: 6 failed logins at indices 150..155 from 198.51.100.33
+        for i in range(150, 156):
+            all_logs.append(_make_log("LOGIN_FAILED", "198.51.100.33", self.base_time + timedelta(seconds=i)))
+
+        # Final routine logs up to index 180
+        for i in range(156, 180):
+            all_logs.append(_make_log("ACCESS", "10.0.0.1", self.base_time + timedelta(seconds=i)))
+
+        coll.insert_many(all_logs)
+        self.assertEqual(coll.count_documents({}), 180)
+
+        # Run detection with batch_size=50 and limit=500 -> Paginates through all 180 logs!
+        res = execute_detection(coll, limit=500, batch_size=50, checkpoint_name="pipeline_test", use_checkpoint=True)
+        self.assertEqual(res["status"], "success")
+        self.assertEqual(res["logs_scanned"], 180)
+        self.assertEqual(res["alerts_created"], 3, "Must detect suspicious events at beginning, middle, and end")
+
+        detected_ips = {a["source_ip"] for a in self.mock_db.alerts}
+        self.assertEqual(detected_ips, {"198.51.100.11", "198.51.100.22", "198.51.100.33"})
+
+        # Checkpoint should be saved
+        conn = self.mock_db.get_connection()
+        cp = get_checkpoint(conn, "pipeline_test")
+        self.assertIsNotNone(cp)
+        self.assertIsNotNone(cp["last_timestamp"])
+
+        # Second run immediately without new logs -> Checkpoint starts from watermark, 0 new alerts
+        res2 = execute_detection(coll, limit=500, batch_size=50, checkpoint_name="pipeline_test", use_checkpoint=True)
+        self.assertEqual(res2["alerts_created"], 0)
+        self.assertEqual(len(self.mock_db.alerts), 3)
+
+        # Late-arriving new logs added after the initial run
+        later_base = self.base_time + timedelta(hours=1)
+        new_logs = [
+            _make_log("LOGIN_FAILED", "198.51.100.44", later_base + timedelta(seconds=i))
+            for i in range(6)
+        ]
+        coll.insert_many(new_logs)
+
+        # Third run: picks up new logs and creates a 4th alert
+        res3 = execute_detection(coll, limit=500, batch_size=50, checkpoint_name="pipeline_test", use_checkpoint=True)
+        self.assertEqual(res3["alerts_created"], 1)
+        self.assertEqual(len(self.mock_db.alerts), 4)
+        latest_alert = next(a for a in self.mock_db.alerts if a["source_ip"] == "198.51.100.44")
+        self.assertEqual(latest_alert["status"], "OPEN")
+
+    def test_duplicate_timestamps_handled_safely_in_pagination(self):
+        """Verify that multiple records sharing the exact same timestamp are paginated stably."""
+        mongo_client = mongomock.MongoClient()
+        coll = mongo_client.cybersecurity_logs.logs
+
+        # 30 logs sharing the exact same timestamp
+        same_time = self.base_time
+        batch = [
+            _make_log("LOGIN_FAILED", f"198.51.100.{100 + i}", same_time)
+            for i in range(30)
+        ]
+        coll.insert_many(batch)
+
+        # Paginate with tiny batch size of 10
+        res = execute_detection(coll, limit=100, batch_size=10, use_checkpoint=False)
+        self.assertEqual(res["logs_scanned"], 30)
 
 
 if __name__ == "__main__":

@@ -313,6 +313,38 @@ class MockCursor:
             self.db.processed_events.add((eid, rid))
             return []
 
+        # detection_checkpoints
+        if "FROM detection_checkpoints" in q:
+            if "WHERE checkpoint_name = %s" in q:
+                cname = str(p[0])
+                cp = self.db.checkpoints.get(cname)
+                return [dict(cp)] if cp else []
+            return list(self.db.checkpoints.values())
+        if q.startswith("INSERT INTO detection_checkpoints"):
+            cname = str(p[0])
+            last_ts = p[1]
+            last_eid = str(p[2]) if p[2] is not None else None
+            updated_at = p[3]
+            self.db.checkpoints[cname] = {
+                "checkpoint_name": cname,
+                "last_timestamp": last_ts,
+                "last_event_id": last_eid,
+                "updated_at": updated_at,
+            }
+            return []
+        if q.startswith("UPDATE detection_checkpoints"):
+            last_ts = p[0]
+            last_eid = str(p[1]) if p[1] is not None else None
+            updated_at = p[2]
+            cname = str(p[3])
+            self.db.checkpoints[cname] = {
+                "checkpoint_name": cname,
+                "last_timestamp": last_ts,
+                "last_event_id": last_eid,
+                "updated_at": updated_at,
+            }
+            return []
+
         # devices & sources
         if "FROM device" in q:
             return list(self.db.devices)
@@ -427,6 +459,7 @@ class MockDatabase:
         self.threats = []
         self.alerts = []
         self.processed_events: set[tuple[str, int]] = set()
+        self.checkpoints: dict[str, dict[str, Any]] = {}
         self.devices = []
         self.sources = []
 

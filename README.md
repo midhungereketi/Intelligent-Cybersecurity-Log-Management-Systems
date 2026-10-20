@@ -12,10 +12,10 @@ For teammate and AI-agent handoff, see [Member 1 Handoff Report](docs/MEMBER1_HA
 | --- | --- | --- |
 | Ingestion & Search | Member 1 | Single-event API and CSV/JSON/JSONL upload with MongoDB indexing and benchmark |
 | SQL Device Metadata | Member 1 | PostgreSQL `device` and `log_source` tables and APIs |
-| Authentication & RBAC | Member 2 | Argon2id hashing, RFC 7519 HS256 JWT, rate limiting, and user management APIs |
-| Relational Security Schema | Member 2 | PostgreSQL `roles`, `users`, `rules`, `threats`, `alerts`, `processed_detection_events` |
-| Security Detection Engine | Member 2 | Failed logins, port scan probes, excessive activity detection with idempotent alert generation |
-| Threat & Alert Management | Member 2 | Filterable, paginated alert & threat APIs with status transitions (acknowledge/resolve) |
+| Authentication & RBAC | Member 2 | Argon2id hashing, RFC 7519 HS256 JWT, rate limiting, and secured Member 1 & 2 APIs |
+| Relational Security Schema | Member 2 | PostgreSQL `roles`, `users`, `rules`, `threats`, `alerts`, `processed_detection_events`, `detection_checkpoints` |
+| Security Detection Engine | Member 2 | Failed logins, port scan probes, excessive activity detection with checkpointing & pagination |
+| Threat & Alert Management | Member 2 | Filterable, paginated alert & threat APIs with status transitions and replay deduplication |
 
 ## Setup
 
@@ -27,13 +27,23 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-Set `MONGO_URI`, `MONGO_DATABASE`, and `POSTGRES_DSN` as environment variables. The app does not automatically read `.env`; `.env.example` provides sample values to load through your shell or environment manager. Create the SQL database and run `sql/001_devices_and_sources.postgres.sql` with `psql` or a PostgreSQL client.
+Set environment variables before starting the application:
+- `JWT_SECRET_KEY`: Mandatory secure secret key (minimum 32 characters). The app fails fast on startup if this is missing.
+- `MONGO_URI` and `MONGO_DATABASE`: MongoDB connection string and database name.
+- `POSTGRES_DSN`: PostgreSQL connection DSN.
 
+See `.env.example` for sample environment definitions. Create the SQL database and run the migrations in order:
+```powershell
+psql -d cybersecurity -f sql/001_devices_and_sources.postgres.sql
+psql -d cybersecurity -f sql/002_auth_and_detection.postgres.sql
+```
+
+Start the API:
 ```powershell
 uvicorn app.main:app --reload
 ```
 
-Open `http://127.0.0.1:8000/docs` for interactive API documentation. Starting the API checks MongoDB connectivity and creates the required indexes.
+Open `http://127.0.0.1:8000/docs` for interactive OpenAPI documentation.
 
 ## Log format
 
@@ -96,9 +106,20 @@ Start with 1,000 records and increase gradually according to available RAM and d
 
 Member 2 can use `source_ip`, `event_type`, `timestamp`, `username`, and destination fields for detection rules, then store alert evidence using MongoDB log IDs as strings in SQL. SQL foreign keys cannot reference MongoDB documents. Member 3 can call `GET /api/logs` for the search table and use the metadata endpoints for device/source selection. Analytics endpoints should use MongoDB aggregation on the same normalized fields.
 
-Run the module tests with:
+## Verification and automated tests
+
+Install development dependencies and run the complete test suite (46 tests):
 
 ```powershell
 pip install -r requirements-dev.txt
+python -m compileall -q app scripts tests
 python -m unittest discover -s tests -v
 ```
+
+Execute the full 12-step end-to-end integration demonstration:
+
+```powershell
+python scripts/e2e_integration_demo.py
+```
+
+For database coursework considerations and the PostgreSQL vs Oracle 11g demonstration plan, see [PostgreSQL vs Oracle Analysis](docs/POSTGRES_VS_ORACLE_ANALYSIS.md).
