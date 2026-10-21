@@ -27,8 +27,11 @@ export default function LogsView() {
     source_ip: '',
     event_type: '',
     severity: '',
+    start: '',
+    end: '',
     limit: 50,
   });
+  const [timeRangeError, setTimeRangeError] = useState(null);
 
   // Upload modal state
   const [showUploadModal, setShowUploadModal] = useState(false);
@@ -81,8 +84,41 @@ export default function LogsView() {
 
   const handleFilterSubmit = (e) => {
     e.preventDefault();
+    setTimeRangeError(null);
+    // Validate time range
+    if (filters.start && filters.end && filters.start > filters.end) {
+      setTimeRangeError('Start time must not be after end time.');
+      return;
+    }
     setCursorHistory([]);
     fetchLogs(null);
+  };
+
+  // EMPTY_FILTERS is declared outside handlers so Reset never uses stale state
+  const EMPTY_FILTERS = {
+    keyword: '',
+    source_ip: '',
+    event_type: '',
+    severity: '',
+    start: '',
+    end: '',
+    limit: 50,
+  };
+
+  const handleReset = () => {
+    setTimeRangeError(null);
+    setFilters(EMPTY_FILTERS);
+    setCursorHistory([]);
+    // Pass the cleared filters directly to avoid reading stale state
+    setLoading(true);
+    setError(null);
+    api.listLogs({ limit: 50 })
+      .then((res) => {
+        setLogs(res.items || []);
+        setNextCursor(res.next_cursor || null);
+      })
+      .catch((err) => setError(err.message || 'Failed to search logs'))
+      .finally(() => setLoading(false));
   };
 
   const handleNextPage = () => {
@@ -203,23 +239,61 @@ export default function LogsView() {
             </select>
           </div>
 
+          {/* Time range filters */}
+          <div style={{ flex: '1 1 200px' }}>
+            <label className="form-label">Start Time (UTC)</label>
+            <input
+              id="log-filter-start"
+              type="datetime-local"
+              className="form-control"
+              value={filters.start ? filters.start.slice(0, 16) : ''}
+              onChange={(e) => {
+                const v = e.target.value;
+                setFilters({ ...filters, start: v ? v + ':00Z' : '' });
+                setTimeRangeError(null);
+              }}
+              style={{ colorScheme: 'dark' }}
+            />
+          </div>
+
+          <div style={{ flex: '1 1 200px' }}>
+            <label className="form-label">End Time (UTC)</label>
+            <input
+              id="log-filter-end"
+              type="datetime-local"
+              className="form-control"
+              value={filters.end ? filters.end.slice(0, 16) : ''}
+              onChange={(e) => {
+                const v = e.target.value;
+                setFilters({ ...filters, end: v ? v + ':00Z' : '' });
+                setTimeRangeError(null);
+              }}
+              style={{ colorScheme: 'dark' }}
+            />
+          </div>
+
           <div style={{ display: 'flex', gap: '8px' }}>
             <button type="submit" className="btn btn-primary" disabled={loading}>
               <Search size={15} />
               <span>Search</span>
             </button>
-            <button 
-              type="button" 
-              className="btn btn-secondary" 
-              onClick={() => {
-                setFilters({ keyword: '', source_ip: '', event_type: '', severity: '', limit: 50 });
-                fetchLogs(null);
-              }}
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleReset}
             >
-              Reset
+              <RefreshCw size={14} />
+              <span>Reset</span>
             </button>
           </div>
         </form>
+
+        {timeRangeError && (
+          <div style={{ marginTop: '8px', fontSize: '0.82rem', color: 'var(--rose-danger)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Filter size={14} />
+            {timeRangeError}
+          </div>
+        )}
       </div>
 
       {error && (

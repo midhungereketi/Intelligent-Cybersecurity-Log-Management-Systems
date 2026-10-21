@@ -45,6 +45,11 @@ class MockCursor:
             if "WHERE u.user_id = %s" in q or "WHERE user_id = %s" in q:
                 uid = int(p[0])
                 return [u for u in self.db.get_users_with_roles() if u["user_id"] == uid]
+            # /api/users/assignable — only active users, return minimal fields
+            if "WHERE u.is_active = TRUE" in q:
+                active = [u for u in self.db.get_users_with_roles() if u.get("is_active")]
+                active.sort(key=lambda u: u["username"])
+                return active
             return self.db.get_users_with_roles()
 
         # INSERT users

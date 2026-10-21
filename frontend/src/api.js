@@ -191,6 +191,7 @@ export const api = {
 
   // User Management (Member 2 Admin)
   listUsers: () => request('/api/users'),
+  listAssignableUsers: () => request('/api/users/assignable'),
   createUser: (payload) =>
     request('/api/users', {
       method: 'POST',

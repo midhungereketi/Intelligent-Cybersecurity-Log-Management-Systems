@@ -186,16 +186,34 @@ def get_events_timeline(
     current_user: Annotated[dict[str, Any], Depends(require_analyst_or_admin)],
     limit: Annotated[int, Query(ge=5, le=50)] = 24,
 ):
-    """Time-series timeline of log events aggregated by hour or day."""
+    """Time-series timeline of log events aggregated by hour.
+
+    Handles both MongoDB Date objects (stored by Member 1's normalizer via
+    ``logs.normalize()``) and ISO-8601 string timestamps.  Invalid or missing
+    timestamps are filtered out before grouping so they never corrupt the
+    bucket key.
+    """
     logs_col = getattr(request.app.state, "logs", None)
     if logs_col is None:
         return []
 
     try:
-        pipeline = [
+        # Phase 1: attempt the native Date aggregation path.
+        # $dateToString works when the field is a BSON Date (the production
+        # case written by logs.normalize).  mongomock also supports it for
+        # datetime values.
+        pipeline_date: list[dict[str, Any]] = [
+            # Discard documents without a timestamp or with a non-Date type
+            {"$match": {"timestamp": {"$type": "date"}}},
             {
                 "$project": {
-                    "bucket": {"$substr": ["$timestamp", 0, 13]},  # YYYY-MM-DDTHH
+                    # Format as "YYYY-MM-DDTHH" so each bucket spans one hour
+                    "bucket": {
+                        "$dateToString": {
+                            "format": "%Y-%m-%dT%H",
+                            "date": "$timestamp",
+                        }
+                    },
                     "severity": "$severity",
                 }
             },
@@ -220,18 +238,91 @@ def get_events_timeline(
             {"$sort": {"_id": -1}},
             {"$limit": limit},
         ]
-        results = list(logs_col.aggregate(pipeline))
-        results.sort(key=lambda x: x["_id"])
+
+        try:
+            results = list(logs_col.aggregate(pipeline_date))
+        except Exception as dt_exc:
+            logger.debug("Date-timestamp aggregation failed: %s", dt_exc)
+            results = []
+
+        # Phase 2: also aggregate any string-timestamped documents (legacy or
+        # test data). Matches ISO-8601 strings starting with YYYY-MM-DDTHH.
+        pipeline_string: list[dict[str, Any]] = [
+            {
+                "$match": {
+                    "timestamp": {
+                        "$type": "string",
+                        "$regex": r"^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}",
+                    }
+                }
+            },
+            {
+                "$project": {
+                    "bucket": {"$substr": ["$timestamp", 0, 13]},
+                    "severity": "$severity",
+                }
+            },
+            {
+                "$group": {
+                    "_id": "$bucket",
+                    "total": {"$sum": 1},
+                    "critical": {
+                        "$sum": {"$cond": [{"$eq": ["$severity", "CRITICAL"]}, 1, 0]}
+                    },
+                    "high": {
+                        "$sum": {"$cond": [{"$eq": ["$severity", "HIGH"]}, 1, 0]}
+                    },
+                    "medium": {
+                        "$sum": {"$cond": [{"$eq": ["$severity", "MEDIUM"]}, 1, 0]}
+                    },
+                    "low": {
+                        "$sum": {"$cond": [{"$eq": ["$severity", "LOW"]}, 1, 0]}
+                    },
+                }
+            },
+            {"$sort": {"_id": -1}},
+            {"$limit": limit},
+        ]
+
+        try:
+            string_results = list(logs_col.aggregate(pipeline_string))
+        except Exception as str_exc:
+            logger.debug("String-timestamp aggregation skipped: %s", str_exc)
+            string_results = []
+
+        # Merge both result sets by bucket key
+        merged: dict[str, dict[str, Any]] = {}
+        for r in results + string_results:
+            key = r["_id"]
+            if not key or not isinstance(key, str) or len(key) < 13:
+                continue
+            if key in merged:
+                merged[key]["total"] += r["total"]
+                merged[key]["critical"] += r["critical"]
+                merged[key]["high"] += r["high"]
+                merged[key]["medium"] += r["medium"]
+                merged[key]["low"] += r["low"]
+            else:
+                merged[key] = {
+                    "total": r["total"],
+                    "critical": r["critical"],
+                    "high": r["high"],
+                    "medium": r["medium"],
+                    "low": r["low"],
+                }
+
+        # Sort chronologically and apply the overall limit
+        sorted_keys = sorted(merged.keys())[-limit:]
         return [
             {
-                "time": r["_id"] + ":00Z" if len(r["_id"]) == 13 else r["_id"],
-                "total": r["total"],
-                "critical": r["critical"],
-                "high": r["high"],
-                "medium": r["medium"],
-                "low": r["low"],
+                "time": key + ":00Z",
+                "total": merged[key]["total"],
+                "critical": merged[key]["critical"],
+                "high": merged[key]["high"],
+                "medium": merged[key]["medium"],
+                "low": merged[key]["low"],
             }
-            for r in results
+            for key in sorted_keys
         ]
     except Exception as exc:
         logger.warning("Failed to aggregate events timeline: %s", exc)

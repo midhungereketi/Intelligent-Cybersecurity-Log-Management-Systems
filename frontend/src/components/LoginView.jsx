@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Shield, Lock, User, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Shield, Lock, User, AlertCircle, ArrowRight, Info } from 'lucide-react';
 import { api, setStoredToken, setStoredUser } from '../api';
 
 export default function LoginView({ onLoginSuccess }) {
-  const [username, setUsername] = useState('superadmin');
-  const [password, setPassword] = useState('AdminStrongPass123!');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -23,12 +23,6 @@ export default function LoginView({ onLoginSuccess }) {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handlePrefill = (u, p) => {
-    setUsername(u);
-    setPassword(p);
-    setError(null);
   };
 
   return (
@@ -67,7 +61,7 @@ export default function LoginView({ onLoginSuccess }) {
             CyberShield <span style={{ color: 'var(--cyan-glow)' }}>SOC</span>
           </h1>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            Intelligent Log Management & Incident Investigation
+            Intelligent Log Management &amp; Incident Investigation
           </p>
         </div>
 
@@ -83,12 +77,14 @@ export default function LoginView({ onLoginSuccess }) {
             <label className="form-label">Username</label>
             <div style={{ position: 'relative' }}>
               <input
+                id="login-username"
                 type="text"
                 className="form-control"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Enter username"
                 required
+                autoComplete="username"
                 style={{ paddingLeft: '38px' }}
               />
               <User size={16} color="var(--text-dim)" style={{ position: 'absolute', left: '12px', top: '12px' }} />
@@ -99,12 +95,14 @@ export default function LoginView({ onLoginSuccess }) {
             <label className="form-label">Password</label>
             <div style={{ position: 'relative' }}>
               <input
+                id="login-password"
                 type="password"
                 className="form-control"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
                 required
+                autoComplete="current-password"
                 style={{ paddingLeft: '38px' }}
               />
               <Lock size={16} color="var(--text-dim)" style={{ position: 'absolute', left: '12px', top: '12px' }} />
@@ -113,6 +111,7 @@ export default function LoginView({ onLoginSuccess }) {
 
           <button
             type="submit"
+            id="login-submit"
             className="btn btn-primary"
             style={{ width: '100%', padding: '11px', fontSize: '0.95rem' }}
             disabled={loading}
@@ -122,25 +121,31 @@ export default function LoginView({ onLoginSuccess }) {
           </button>
         </form>
 
-        <div style={{ marginTop: '28px', paddingTop: '20px', borderTop: '1px solid var(--border-subtle)' }}>
-          <p style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textAlign: 'center', marginBottom: '10px' }}>
-            Select role credentials for testing:
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-            <button
-              type="button"
-              className="btn btn-secondary btn-sm"
-              onClick={() => handlePrefill('admin_user', 'AdminSecurePass123!')}
-            >
-              ADMIN Demo
-            </button>
-            <button
-              type="button"
-              className="btn btn-secondary btn-sm"
-              onClick={() => handlePrefill('analyst_user', 'AnalystSecurePass123!')}
-            >
-              ANALYST Demo
-            </button>
+        {/* Local setup guidance — no credentials are hardcoded here. */}
+        <div style={{ marginTop: '24px', paddingTop: '18px', borderTop: '1px solid var(--border-subtle)' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: '8px',
+            padding: '12px 14px',
+            background: 'rgba(6, 182, 212, 0.06)',
+            border: '1px solid rgba(6, 182, 212, 0.2)',
+            borderRadius: 'var(--radius-sm)',
+          }}>
+            <Info size={15} color="var(--cyan-glow)" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', lineHeight: '1.55' }}>
+              <strong style={{ color: 'var(--text-main)', display: 'block', marginBottom: '4px' }}>
+                Local development setup
+              </strong>
+              Copy <code style={{ color: 'var(--cyan-glow)' }}>.env.example</code> to{' '}
+              <code style={{ color: 'var(--cyan-glow)' }}>.env</code> and set{' '}
+              <code style={{ color: 'var(--cyan-glow)' }}>ADMIN_USERNAME</code>,{' '}
+              <code style={{ color: 'var(--cyan-glow)' }}>ADMIN_PASSWORD</code>, and{' '}
+              <code style={{ color: 'var(--cyan-glow)' }}>ADMIN_EMAIL</code>.
+              The backend bootstraps the admin account automatically on first startup.
+              Use the admin account to create analyst accounts via{' '}
+              <code style={{ color: 'var(--cyan-glow)' }}>POST /api/users</code>.
+            </div>
           </div>
         </div>
       </div>

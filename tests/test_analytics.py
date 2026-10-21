@@ -137,6 +137,35 @@ class AnalyticsTests(unittest.TestCase):
         self.assertIn("total", first)
         self.assertIn("high", first)
 
+    def test_events_timeline_date_objects(self):
+        # Insert logs with Python datetime objects (as normalized by logs.normalize)
+        self.mock_logs.insert_many([
+            {
+                "timestamp": datetime(2026, 10, 2, 14, 15, tzinfo=timezone.utc),
+                "source_ip": "10.0.0.1",
+                "event_type": "LOGIN_SUCCESS",
+                "severity": "LOW",
+                "message": "Auth ok",
+            },
+            {
+                "timestamp": datetime(2026, 10, 2, 14, 45, tzinfo=timezone.utc),
+                "source_ip": "10.0.0.2",
+                "event_type": "FAILED_LOGIN",
+                "severity": "CRITICAL",
+                "message": "Auth failed",
+            },
+        ])
+        res = self.client.get("/api/analytics/events-timeline", headers=self.headers)
+        self.assertEqual(res.status_code, 200)
+        items = res.json()
+        self.assertGreaterEqual(len(items), 2)
+        # Check that the 2026-10-02T14 bucket exists and aggregated properly
+        bucket_14 = next((i for i in items if i["time"] == "2026-10-02T14:00Z"), None)
+        self.assertIsNotNone(bucket_14)
+        self.assertEqual(bucket_14["total"], 2)
+        self.assertEqual(bucket_14["critical"], 1)
+        self.assertEqual(bucket_14["low"], 1)
+
     def test_top_sources(self):
         res = self.client.get("/api/analytics/top-sources", headers=self.headers)
         self.assertEqual(res.status_code, 200)

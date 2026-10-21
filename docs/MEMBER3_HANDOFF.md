@@ -96,11 +96,11 @@ Authorization: Bearer <access_token>
 The frontend is housed in `frontend/` and built with Vite + React:
 - **`src/api.js`**: Centralized API client with automatic token attachment, storage sync, and 401 interceptor.
 - **`src/index.css`**: Cybersecurity dark mode design system (deep slate `#0a0e17`, neon cyan `#06b6d4`, emerald `#10b981`, amber `#f59e0b`, rose `#f43f5e`, glassmorphism cards, badges, and responsive layouts).
-- **`src/components/LoginView.jsx`**: Authenticates against Member 2's `/api/auth/login` (supports demo credentials for `ADMIN` and `ANALYST`).
-- **`src/components/DashboardView.jsx`**: SOC overview with real-time KPI cards, interactive SVG timeline charts, top attacker IP rankings, live alert feeds, and "Trigger Detection Pass" button.
-- **`src/components/LogsView.jsx`**: Indexed MongoDB log search, cursor pagination, batch log file upload (`.csv`, `.json`, `.jsonl`, `.ndjson`), and single-event injection.
+- **`src/components/LoginView.jsx`**: Authenticates against Member 2's `/api/auth/login` (clean interface with configuration guidance from `.env`).
+- **`src/components/DashboardView.jsx`**: SOC overview with real-time KPI cards, interactive SVG timeline charts (supporting both ISO strings and BSON Date timestamps), top attacker IP rankings, live alert feeds, and "Trigger Detection Pass" button.
+- **`src/components/LogsView.jsx`**: Indexed MongoDB log search, cursor pagination, start/end UTC time filtering with validation, batch log file upload (`.csv`, `.json`, `.jsonl`, `.ndjson`), and single-event injection.
 - **`src/components/AlertsView.jsx`**: Member 2 alert listing, status filtering, acknowledgment/resolution actions, evidence inspection, and one-click "Escalate to Incident" button.
-- **`src/components/IncidentsView.jsx`**: Member 3 incident investigation workspace, multi-status progression (`OPEN` -> `INVESTIGATING` -> `CONTAINED` -> `RESOLVED`), analyst assignment, linked alert correlation, and response action history timeline.
+- **`src/components/IncidentsView.jsx`**: Member 3 incident investigation workspace, multi-status progression (`OPEN` -> `INVESTIGATING` -> `CONTAINED` -> `RESOLVED`), analyst assignment via `/api/users/assignable`, linked alert correlation, and response action history timeline.
 - **`src/components/DetectionView.jsx`**: Rule catalog inspection and manual detection batch execution.
 - **`src/components/AdminView.jsx`**: Administrative suite consuming existing user management (`/api/users`), rule threshold tuning (`/api/rules`), device registry (`/api/devices`), and log source configuration (`/api/sources`).
 
@@ -109,7 +109,7 @@ The frontend is housed in `frontend/` and built with Vite + React:
 ## 6. Verification and Test Results
 
 ### 1. Backend Automated Tests
-All 49 unit and integration tests pass:
+All 68 unit and integration tests pass:
 ```powershell
 python -m unittest discover -s tests -v
 ```
@@ -119,9 +119,10 @@ Output:
 - `test_detection`: 9/9 passed.
 - `test_logs`: 8/8 passed.
 - `test_incidents_actions`: 6/6 passed.
-- `test_analytics`: 4/4 passed.
+- `test_analytics`: 5/5 passed (including dual-pipeline Date and string timestamp timeline tests).
+- `test_member3_regression`: 19/19 passed (timeline Date/string/invalid handling, time range filters, reset state, assignable users RBAC).
 - `test_api_integration`: 4/4 passed (including full Member 1 -> 2 -> 3 end-to-end lifecycle).
-- **Result:** `Ran 49 tests in 5.5s ... OK`.
+- **Result:** `Ran 68 tests in 5.2s ... OK`.
 
 ### 2. Python Compilation
 ```powershell
@@ -129,30 +130,38 @@ python -m compileall -q app scripts tests
 ```
 - **Result:** Clean compilation, 0 errors.
 
-### 3. Frontend Production Build
+### 3. Frontend Production Build & Lint
 ```powershell
 cd frontend
+npm run lint
 npm run build
 ```
-- **Result:** `✓ built in 1.28s`, 0 errors.
+- **Result:** `oxlint`: 0 errors. `vite build`: `✓ built in 1.17s`, 0 errors.
 
 ---
 
 ## 7. How to Run Locally
+
+### Environment Setup
+Copy `.env.example` to `.env` and set your credentials:
+```env
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=YourSecurePassword123!
+ADMIN_EMAIL=admin@example.com
+```
 
 ### Start Backend API
 ```powershell
 # In repository root
 uvicorn app.main:app --reload --port 8000
 ```
-Interactive API documentation: `http://127.0.0.1:8000/docs`
+Interactive API documentation: `http://127.0.0.1:8000/docs`  
+On first startup, the initial administrator account will be automatically bootstrapped from your `.env` configuration. Analysts can be created via the Admin View (`POST /api/users`).
 
 ### Start Frontend Application
 ```powershell
 cd frontend
 npm run dev
 ```
-Open browser at: `http://localhost:5173`
-Log in with either:
-- **Admin:** `superadmin` / `AdminStrongPass123!`
-- **Analyst:** `tier1analyst` / `AnalystStrongPass123!`
+Open browser at: `http://localhost:5173`  
+Log in with your administrator credentials configured in `.env`.

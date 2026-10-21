@@ -17,6 +17,7 @@ from .auth import (
     hash_password,
     record_login_failure,
     require_admin,
+    require_analyst_or_admin,
     reset_login_rate_limit,
     revoke_token,
     verify_password,
@@ -149,6 +150,26 @@ def list_users(admin_user: Annotated[dict[str, Any], Depends(require_admin)]):
                ORDER BY u.user_id"""
         ).fetchall()
         return [_sanitize_user(r) for r in rows]
+
+
+@router.get("/api/users/assignable")
+def list_assignable_users(
+    current_user: Annotated[dict[str, Any], Depends(require_analyst_or_admin)],
+):
+    """Return the minimum user info needed to populate assignee dropdowns.
+
+    Accessible to both ADMIN and ANALYST roles.  Only active users are
+    returned, and only ``user_id`` and ``username`` are exposed — no
+    password hashes, emails, tokens, or other sensitive fields.
+    """
+    with get_db_connection() as conn:
+        rows = conn.execute(
+            """SELECT u.user_id, u.username
+               FROM users u
+               WHERE u.is_active = TRUE
+               ORDER BY u.username"""
+        ).fetchall()
+        return [{"user_id": r["user_id"], "username": r["username"]} for r in rows]
 
 
 @router.post("/api/users", status_code=201)

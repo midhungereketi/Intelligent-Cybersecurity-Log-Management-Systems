@@ -1,0 +1,110 @@
+name: Member 3 – Incidents, Analytics & Frontend
+
+on:
+  push:
+    branches:
+      - main
+      - member3-lakshman
+      - member1-log-pipeline
+      - member2-shraavanth
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  # ──────────────────────────────────────────────
+  # Backend: unit + integration tests (Python 3.12)
+  # ──────────────────────────────────────────────
+  backend-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: cybersecurity_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      POSTGRES_DSN: postgresql://postgres:postgres@localhost:5432/cybersecurity_test
+      MONGO_URI: mongodb://localhost:27017
+      MONGO_DATABASE: cybersecurity_logs_test
+      JWT_SECRET_KEY: ci-test-secret-key-not-for-production
+      ADMIN_USERNAME: ci_admin
+      ADMIN_PASSWORD: CiAdminTest123!
+      ADMIN_EMAIL: ci_admin@localhost
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install Python dependencies
+        run: pip install -r requirements-dev.txt
+
+      # ── Run SQL migrations 001 → 002 → 003 against real PostgreSQL ──
+      - name: Apply migration 001 (devices & sources)
+        run: psql "$POSTGRES_DSN" -f sql/001_devices_and_sources.postgres.sql
+
+      - name: Apply migration 002 (auth, rules, threats, alerts)
+        run: psql "$POSTGRES_DSN" -f sql/002_auth_and_detection.postgres.sql
+
+      - name: Apply migration 003 (incidents & actions) — Member 3 schema
+        run: psql "$POSTGRES_DSN" -f sql/003_incidents_and_actions.postgres.sql
+
+      # Idempotency check: re-applying 003 must succeed (all tables use IF NOT EXISTS)
+      - name: Verify migration 003 is idempotent
+        run: psql "$POSTGRES_DSN" -f sql/003_incidents_and_actions.postgres.sql
+
+      # ── Compile check ──
+      - name: Compile Python source
+        run: python -m compileall -q app scripts tests
+
+      # ── Unit + integration tests (use mongomock, mock PostgreSQL) ──
+      - name: Run backend test suite
+        run: python -m unittest discover -s tests -v
+
+      # ── SQL schema structural tests against real PostgreSQL ──
+      - name: Run SQL schema tests
+        run: python -m unittest tests.test_sql_schema -v
+
+  # ──────────────────────────────────────────────
+  # Frontend: lint + build (Node 22 / Vite)
+  # ──────────────────────────────────────────────
+  frontend-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Run frontend linter (oxlint)
+        run: npm run lint
+
+      - name: Build frontend production bundle
+        run: npm run build

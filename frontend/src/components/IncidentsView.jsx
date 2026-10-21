@@ -59,13 +59,15 @@ export default function IncidentsView({ prefillAlert, onClearPrefill }) {
   // Available users for assignment
   const [users, setUsers] = useState([]);
 
-  // Fetch users for assignment dropdowns
+  // Fetch users for assignment dropdowns.
+  // Uses /api/users/assignable which is accessible to both ADMIN and ANALYST.
+  // Returns only user_id and username — no sensitive fields are exposed.
   const fetchUsers = async () => {
     try {
-      const res = await api.listUsers();
+      const res = await api.listAssignableUsers();
       setUsers(res || []);
     } catch {
-      // Non-critical if non-admin
+      // Non-critical: assignee dropdown will be empty if this fails
     }
   };
 

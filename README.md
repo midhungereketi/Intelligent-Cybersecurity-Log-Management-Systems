@@ -16,28 +16,52 @@ For teammate and AI-agent handoff, see [Member 1 Handoff Report](docs/MEMBER1_HA
 | Relational Security Schema | Member 2 | PostgreSQL `roles`, `users`, `rules`, `threats`, `alerts`, `processed_detection_events` |
 | Security Detection Engine | Member 2 | Failed logins, port scan probes, excessive activity detection with idempotent alert generation |
 | Threat & Alert Management | Member 2 | Filterable, paginated alert & threat APIs with status transitions (acknowledge/resolve) |
+| Incident & Action History | Member 3 | PostgreSQL `incidents`, `actions`, `incident_alerts`, lifecycle transitions, analyst assignment |
+| Analytics & Metrics | Member 3 | Cross-database metrics, hourly event timeline, attacker IP rankings, log-type distributions |
+| React SOC Console | Member 3 | Interactive dark-theme SOC dashboard with real-time analytics, log search, alert escalation, incident investigation |
 
 ## Setup
 
-Requires Python 3.11+, MongoDB, and PostgreSQL. Apply the SQL migrations in order: `sql/001_devices_and_sources.postgres.sql` then `sql/002_auth_and_detection.postgres.sql`.
+Requires Python 3.11+, MongoDB, PostgreSQL, and Node.js 18+. Apply the SQL migrations in order:
+1. `sql/001_devices_and_sources.postgres.sql`
+2. `sql/002_auth_and_detection.postgres.sql`
+3. `sql/003_incidents_and_actions.postgres.sql`
 
 ```powershell
+# 1. Backend environment setup
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
+pip install -r requirements-dev.txt
+
+# 2. Copy and configure environment variables
+Copy-Item .env.example .env
+# Edit .env with your MONGO_URI, POSTGRES_DSN, ADMIN_USERNAME, ADMIN_PASSWORD
+
+# 3. Apply SQL migrations
+psql $env:POSTGRES_DSN -f sql/001_devices_and_sources.postgres.sql
+psql $env:POSTGRES_DSN -f sql/002_auth_and_detection.postgres.sql
+psql $env:POSTGRES_DSN -f sql/003_incidents_and_actions.postgres.sql
+
+# 4. Start backend
+uvicorn app.main:app --reload --port 8000
 ```
 
-Set `MONGO_URI`, `MONGO_DATABASE`, and `POSTGRES_DSN` as environment variables. The app does not automatically read `.env`; `.env.example` provides sample values to load through your shell or environment manager. Create the SQL database and run `sql/001_devices_and_sources.postgres.sql` with `psql` or a PostgreSQL client.
+Open `http://127.0.0.1:8000/docs` for interactive API documentation. Starting the API checks MongoDB connectivity, creates the required indexes, and bootstraps the initial administrator account from `.env`.
+
+### Frontend Setup
 
 ```powershell
-uvicorn app.main:app --reload
+cd frontend
+npm install
+npm run dev
 ```
 
-Open `http://127.0.0.1:8000/docs` for interactive API documentation. Starting the API checks MongoDB connectivity and creates the required indexes.
+Open `http://localhost:5173` to access the Security Operations Center dashboard.
 
 ## Log format
 
-Each record requires `timestamp` (ISO 8601 with a timezone), `source_ip`, `event_type`, `severity`, and `message`. Severity is one of `LOW`, `MEDIUM`, `HIGH`, or `CRITICAL`. Optional fields are `source_id`, `device_id`, `username`, `log_source`, `destination_ip`, and `destination_port`. Timestamps are stored in UTC. Unknown fields are discarded during normalization.
+Each record requires `timestamp` (ISO 8601 with a timezone or BSON Date), `source_ip`, `event_type`, `severity`, and `message`. Severity is one of `LOW`, `MEDIUM`, `HIGH`, or `CRITICAL`. Optional fields are `source_id`, `device_id`, `username`, `log_source`, `destination_ip`, and `destination_port`. Timestamps are stored in UTC. Unknown fields are discarded during normalization.
 
 ```json
 {
@@ -54,24 +78,33 @@ The ingestion API does not check whether optional `source_id` or `device_id` val
 
 ## API contract
 
-| Method and path | Purpose |
-| --- | --- |
-| `GET /health` | Check MongoDB connection |
-| `POST /api/logs/events` | Insert one JSON event |
-| `POST /api/logs/upload` | Upload a multipart file named `file`; maximum 25 MB by default |
-| `GET /api/logs` | Search and paginate logs |
-| `GET /api/devices` / `POST /api/devices` | List and create devices |
-| `GET /api/sources` / `POST /api/sources` | List and create log sources |
-| `POST /api/auth/login` | Authenticate user, returns HS256 JWT access token |
-| `POST /api/auth/logout` | Revoke current user's session token |
-| `GET /api/auth/me` | Retrieve profile of currently authenticated user |
-| `GET /api/users` / `POST /api/users` / `PATCH /api/users/{id}` | User management (Administrator only) |
-| `GET /api/rules` / `POST /api/rules` / `PATCH /api/rules/{id}` | Detection rule management and threshold configuration |
-| `GET /api/threats` / `GET /api/threats/{id}` | Threat records with correlated alerts and evidence |
-| `GET /api/alerts` / `GET /api/alerts/{id}` | Security alerts with status, severity, and evidence |
-| `POST /api/alerts/{id}/acknowledge` | Acknowledge active alert (Analyst / Admin) |
-| `POST /api/alerts/{id}/resolve` | Resolve alert (Analyst / Admin) |
-| `POST /api/detection/run` | Execute bounded security detection run |
+| Method and path | Purpose | Access |
+| --- | --- | --- |
+| `GET /health` | Check MongoDB connection | Public |
+| `POST /api/logs/events` | Insert one JSON event | Analyst / Admin |
+| `POST /api/logs/upload` | Upload a multipart file named `file`; max 25 MB | Analyst / Admin |
+| `GET /api/logs` | Search, time-filter (UTC start/end), and paginate logs | Analyst / Admin |
+| `GET /api/devices` / `POST /api/devices` | List and create devices | Analyst / Admin |
+| `GET /api/sources` / `POST /api/sources` | List and create log sources | Analyst / Admin |
+| `POST /api/auth/login` | Authenticate user, returns HS256 JWT access token | Public |
+| `POST /api/auth/logout` | Revoke current user's session token | Authenticated |
+| `GET /api/auth/me` | Retrieve profile of currently authenticated user | Authenticated |
+| `GET /api/users` / `POST /api/users` / `PATCH /api/users/{id}` | User management | Administrator only |
+| `GET /api/users/assignable` | Minimal active user list (user_id, username) for assignee dropdowns | Analyst / Admin |
+| `GET /api/rules` / `POST /api/rules` / `PATCH /api/rules/{id}` | Detection rule management and threshold configuration | Analyst / Admin |
+| `GET /api/threats` / `GET /api/threats/{id}` | Threat records with correlated alerts and evidence | Analyst / Admin |
+| `GET /api/alerts` / `GET /api/alerts/{id}` | Security alerts with status, severity, and evidence | Analyst / Admin |
+| `POST /api/alerts/{id}/acknowledge` | Acknowledge active alert | Analyst / Admin |
+| `POST /api/alerts/{id}/resolve` | Resolve alert | Analyst / Admin |
+| `POST /api/detection/run` | Execute bounded security detection run | Analyst / Admin |
+| `GET /api/incidents` / `POST /api/incidents` | List, filter, and create security incidents | Analyst / Admin |
+| `GET /api/incidents/{id}` / `PATCH /api/incidents/{id}` | Get incident details and update status/assignment | Analyst / Admin |
+| `GET /api/incidents/{id}/actions` / `POST /api/incidents/{id}/actions` | Response action audit timeline and recording | Analyst / Admin |
+| `POST /api/incidents/{id}/link-alert` | Associate alert with incident | Analyst / Admin |
+| `GET /api/analytics/dashboard` | Unified metrics overview across MongoDB and PostgreSQL | Analyst / Admin |
+| `GET /api/analytics/events-timeline` | Hourly time-bucketed event counts (Date and ISO strings) | Analyst / Admin |
+| `GET /api/analytics/top-sources` | Attacker IP rankings by volume and max severity | Analyst / Admin |
+| `GET /api/analytics/event-types` | Event type distribution | Analyst / Admin |
 
 Protected endpoints require the `Authorization: Bearer <token>` header obtained from `/api/auth/login`.
 
