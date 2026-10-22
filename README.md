@@ -5,6 +5,7 @@ This repository contains the Member 1 data pipeline for a three-member Database 
 The other members can add authentication, detection, alerts, analytics, and incident handling using the API described below.
 
 For teammate and AI-agent handoff, see [Member 1 Handoff Report](docs/MEMBER1_HANDOFF.md).
+The live PostgreSQL/MongoDB check and one-million-log index benchmark are recorded in [Member 1 Verification](docs/MEMBER1_VERIFICATION.md).
 
 ## Member 1 deliverables
 
