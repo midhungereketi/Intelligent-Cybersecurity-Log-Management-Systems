@@ -6,6 +6,7 @@ The other members can add authentication, detection, alerts, analytics, and inci
 
 For teammate and AI-agent handoff, see [Member 1 Handoff Report](docs/MEMBER1_HANDOFF.md).
 The live PostgreSQL/MongoDB check and one-million-log index benchmark are recorded in [Member 1 Verification](docs/MEMBER1_VERIFICATION.md).
+The current tasks for Shraavanth and Lakshman are in [Team Remaining Work](docs/TEAM_REMAINING_WORK.md).
 
 ## Member 1 deliverables
 

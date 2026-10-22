@@ -12,6 +12,8 @@
 
 This report is for the other two members and their AI agents. It describes the code that exists, its tested behavior, the interfaces to use, and the decisions the team still needs to make. Use the repository source as the authority if this report and code ever differ.
 
+**Current team status (22 October 2026):** Members 2 and 3 have since implemented their modules on separate branches. See [Team Remaining Work](TEAM_REMAINING_WORK.md) for the current integration and verification tasks; the original handoff sections below describe the Member 1 API contract.
+
 ## What Member 1 completed
 
 | Deliverable | Location | Current behavior |
