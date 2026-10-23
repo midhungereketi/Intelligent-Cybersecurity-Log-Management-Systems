@@ -2,9 +2,12 @@
 
 ## Detailed implementation and workflow report
 
-**Team:** G. Midhun (Member 1), P. Satya Mani Shraavanth (Member 2), M. Lakshman Sai (Member 3)  
-**Course:** BCSE302L Database Systems Lab  
-**Repository:** https://github.com/midhungereketi/Intelligent-Cybersecurity-Log-Management-Systems  
+**Team:** G. Midhun (Member 1), P. Satya Mani Shraavanth (Member 2), M. Lakshman Sai (Member 3)
+
+**Course:** BCSE302L Database Systems Lab
+
+**Repository:** https://github.com/midhungereketi/Intelligent-Cybersecurity-Log-Management-Systems
+
 **Report date:** 24 October 2026
 
 This report explains the implemented three-member prototype, traces the Review I requirements and Review II database criteria to working artifacts, and gives a repeatable demonstration workflow. The application has passed its automated checks on GitHub `main`. The separate Oracle 11g Review II script is prepared and checked structurally, but a live Oracle execution result has not yet been captured. This distinction matters for an honest final submission.
