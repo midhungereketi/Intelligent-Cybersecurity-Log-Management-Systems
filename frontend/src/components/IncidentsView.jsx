@@ -224,10 +224,10 @@ export default function IncidentsView({ prefillAlert, onClearPrefill }) {
   return (
     <div>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+      <div className="view-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', color: '#fff' }}>
-            Incident Management & Response Actions
+          <h1 style={{ fontSize: '1.75rem', color: 'var(--text-main)' }}>
+            Investigations
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '4px' }}>
             Incident triage, team assignment, forensic investigation notes, and containment action timeline.
@@ -370,7 +370,7 @@ export default function IncidentsView({ prefillAlert, onClearPrefill }) {
                   <span className={`badge badge-${incidentDetail.severity.toLowerCase()}`}>{incidentDetail.severity}</span>
                   <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Incident #{incidentDetail.incident_id}</span>
                 </div>
-                <h2 style={{ fontSize: '1.25rem', color: '#fff' }}>{incidentDetail.title}</h2>
+                <h2 style={{ fontSize: '1.25rem', color: 'var(--text-main)' }}>{incidentDetail.title}</h2>
               </div>
               <button className="btn btn-secondary btn-sm" onClick={() => setActiveIncidentId(null)}>
                 <X size={15} />

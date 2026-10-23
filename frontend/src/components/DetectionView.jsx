@@ -43,11 +43,11 @@ export default function DetectionView() {
   return (
     <div>
       {/* Title */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+      <div className="view-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', color: '#fff' }}>Automated Detection Engine</h1>
+          <h1 style={{ fontSize: '1.75rem', color: 'var(--text-main)' }}>Detection rules</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '4px' }}>
-            Multi-rule pattern evaluation across MongoDB normalized logs with deterministic alert deduplication.
+            Scan incoming activity with your team's active security rules.
           </p>
         </div>
         <button className="btn btn-secondary" onClick={fetchRules} disabled={loading}>
@@ -124,7 +124,7 @@ export default function DetectionView() {
       </div>
 
       {/* Rules Catalog */}
-      <h3 style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '16px' }}>Configured Detection Algorithms</h3>
+      <h3 style={{ fontSize: '1.2rem', color: 'var(--text-main)', marginBottom: '16px' }}>Configured detection algorithms</h3>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
         {rules.map((rule) => (
           <div key={rule.rule_id} className="card">
@@ -133,7 +133,7 @@ export default function DetectionView() {
                 <span className={`badge badge-${rule.severity?.toLowerCase()}`} style={{ marginBottom: '6px' }}>
                   {rule.severity}
                 </span>
-                <h4 style={{ fontSize: '1.05rem', color: '#fff' }}>{rule.rule_name}</h4>
+                <h4 style={{ fontSize: '1.05rem', color: 'var(--text-main)' }}>{rule.rule_name}</h4>
               </div>
               <span className={`badge ${rule.is_enabled ? 'badge-low' : 'badge-closed'}`}>
                 {rule.is_enabled ? 'Active' : 'Disabled'}

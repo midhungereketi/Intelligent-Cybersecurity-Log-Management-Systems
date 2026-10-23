@@ -88,6 +88,7 @@ export default function App() {
         <Navbar 
           currentUser={currentUser} 
           onLogout={handleLogout} 
+          activeTab={activeTab}
         />
 
         <main className="page-body">
@@ -114,7 +115,7 @@ export default function App() {
             <DetectionView />
           )}
 
-          {activeTab === 'admin' && currentUser.role === 'ADMIN' && (
+          {activeTab === 'admin' && currentUser.role_name === 'ADMIN' && (
             <AdminView />
           )}
         </main>

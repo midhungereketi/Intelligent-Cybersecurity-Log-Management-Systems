@@ -107,11 +107,11 @@ export default function AlertsView({ onPromoteToIncident }) {
   return (
     <div>
       {/* Title & Tabs */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+      <div className="view-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', color: '#fff' }}>Threat Detection & Alerts</h1>
+          <h1 style={{ fontSize: '1.75rem', color: 'var(--text-main)' }}>Threats & alerts</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '4px' }}>
-            Automated security rule matches, deduplication keys, threat correlation, and evidence tracking.
+            Review suspicious activity, trace its evidence and take action.
           </p>
         </div>
         <button 
@@ -361,7 +361,7 @@ export default function AlertsView({ onPromoteToIncident }) {
               </div>
               <div style={{ background: 'rgba(255,255,255,0.02)', padding: '10px', borderRadius: 'var(--radius-sm)' }}>
                 <span className="form-label" style={{ fontSize: '0.7rem' }}>Occurrence Count</span>
-                <strong style={{ color: '#fff', fontSize: '1.1rem' }}>{selectedAlert.occurrence_count}x</strong>
+                <strong style={{ color: 'var(--text-main)', fontSize: '1.1rem' }}>{selectedAlert.occurrence_count}x</strong>
               </div>
             </div>
 
@@ -383,7 +383,7 @@ export default function AlertsView({ onPromoteToIncident }) {
                 <div style={{
                   maxHeight: '160px',
                   overflowY: 'auto',
-                  background: '#090d16',
+                  background: '#f4f7f0',
                   padding: '12px',
                   borderRadius: 'var(--radius-sm)',
                   fontSize: '0.8rem',

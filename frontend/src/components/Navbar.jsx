@@ -1,47 +1,21 @@
-import React from 'react';
-import { Shield, ShieldAlert, User, LogOut, Activity } from 'lucide-react';
+import { ChevronRight, CircleUserRound, LogOut } from 'lucide-react';
 
-export default function Navbar({ currentUser, onLogout }) {
+export default function Navbar({ currentUser, onLogout, activeTab }) {
+  const titles = {
+    dashboard: 'Overview', logs: 'Log explorer', alerts: 'Threats & alerts',
+    incidents: 'Investigations', detection: 'Detection rules', admin: 'Administration',
+  };
   return (
     <header className="top-navbar">
-      <div className="nav-brand">
-        <div className="brand-icon">
-          <Shield size={20} color="#04101c" />
-        </div>
-        <span>CyberShield <span style={{ color: 'var(--cyan-glow)', fontWeight: 400 }}>SOC</span></span>
-      </div>
-
+      <div className="nav-crumbs"><span>WORKSPACE</span><ChevronRight size={14} /><strong>{titles[activeTab] || 'Overview'}</strong></div>
       <div className="nav-right">
-        <div className="system-status">
-          <span className="status-dot"></span>
-          <span>SOC Operational</span>
+        <div className="system-status"><span className="status-dot" /> SECURE SESSION</div>
+        <div className="top-nav-divider" />
+        <div className="user-profile-badge">
+          <div className="user-avatar"><CircleUserRound size={18} /></div>
+          <div className="user-copy"><strong>{currentUser?.username}</strong><small>{currentUser?.role_name}</small></div>
         </div>
-
-        {currentUser && (
-          <div className="user-profile-badge">
-            <User size={16} color="var(--cyan-glow)" />
-            <div>
-              <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>{currentUser.username}</span>
-              <span 
-                className={`badge ${currentUser.role === 'ADMIN' ? 'badge-critical' : 'badge-open'}`}
-                style={{ marginLeft: '8px', fontSize: '0.65rem', padding: '1px 6px' }}
-              >
-                {currentUser.role}
-              </span>
-            </div>
-          </div>
-        )}
-
-        {currentUser && (
-          <button 
-            className="btn btn-secondary btn-sm" 
-            onClick={onLogout}
-            title="Log Out"
-          >
-            <LogOut size={15} />
-            <span>Sign Out</span>
-          </button>
-        )}
+        <button className="btn btn-secondary btn-sm nav-signout" onClick={onLogout} title="Sign out" aria-label="Sign out"><LogOut size={16} /></button>
       </div>
     </header>
   );

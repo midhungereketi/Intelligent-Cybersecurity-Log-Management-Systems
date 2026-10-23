@@ -169,11 +169,11 @@ export default function AdminView() {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+      <div className="view-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', color: '#fff' }}>Administrator Control Console</h1>
+          <h1 style={{ fontSize: '1.75rem', color: 'var(--text-main)' }}>Administration</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '4px' }}>
-            Multi-tier administrative management for Users, Detection Rules, Devices, and Ingestion Sources.
+            Manage team access, detection rules, devices and log sources.
           </p>
         </div>
         <button className="btn btn-secondary" onClick={fetchData} disabled={loading}>

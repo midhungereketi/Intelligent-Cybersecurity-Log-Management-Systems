@@ -68,11 +68,11 @@ export default function DashboardView({ onNavigate }) {
   return (
     <div>
       {/* Header with Title and Action Bar */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+      <div className="view-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', color: '#fff' }}>Security Operations Center Dashboard</h1>
+          <h1 style={{ fontSize: '1.75rem', color: 'var(--text-main)' }}>Your security overview</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '4px' }}>
-            Central intelligence, live ingestion monitoring, automated alert correlation, and incident tracking.
+            Your live picture of logs, detections and active investigations.
           </p>
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>

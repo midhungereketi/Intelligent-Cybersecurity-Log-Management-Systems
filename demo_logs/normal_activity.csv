@@ -1,0 +1,81 @@
+timestamp,source_ip,destination_ip,destination_port,event_type,severity,message,username,log_source
+2026-10-23T22:02:00Z,192.0.2.29,203.0.113.10,443,ACCESS,LOW,alice accessed the reporting portal,alice,web-gateway
+2026-10-23T22:02:06Z,192.0.2.43,203.0.113.10,443,ACCESS,LOW,bob accessed the reporting portal,bob,web-gateway
+2026-10-23T22:02:12Z,192.0.2.15,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,alice,web-gateway
+2026-10-23T22:02:18Z,192.0.2.42,203.0.113.10,443,ACCESS,LOW,eva accessed the reporting portal,eva,web-gateway
+2026-10-23T22:02:24Z,192.0.2.35,203.0.113.10,443,ACCESS,LOW,charlie accessed the reporting portal,charlie,web-gateway
+2026-10-23T22:02:30Z,192.0.2.40,203.0.113.10,443,ACCESS,LOW,bob accessed the reporting portal,bob,web-gateway
+2026-10-23T22:02:36Z,192.0.2.27,203.0.113.10,443,ACCESS,LOW,diana accessed the reporting portal,diana,web-gateway
+2026-10-23T22:02:42Z,192.0.2.28,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for charlie,charlie,web-gateway
+2026-10-23T22:02:48Z,192.0.2.36,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for alice,alice,web-gateway
+2026-10-23T22:02:54Z,192.0.2.29,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,bob,web-gateway
+2026-10-23T22:03:00Z,192.0.2.18,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,bob,web-gateway
+2026-10-23T22:03:06Z,192.0.2.33,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for alice,alice,web-gateway
+2026-10-23T22:03:12Z,192.0.2.12,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for eva,eva,web-gateway
+2026-10-23T22:03:18Z,192.0.2.30,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,charlie,web-gateway
+2026-10-23T22:03:24Z,192.0.2.35,203.0.113.10,443,ACCESS,LOW,alice accessed the reporting portal,alice,web-gateway
+2026-10-23T22:03:30Z,192.0.2.41,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for diana,diana,web-gateway
+2026-10-23T22:03:36Z,192.0.2.17,203.0.113.10,443,ACCESS,LOW,eva accessed the reporting portal,eva,web-gateway
+2026-10-23T22:03:42Z,192.0.2.21,203.0.113.10,443,ACCESS,LOW,diana accessed the reporting portal,diana,web-gateway
+2026-10-23T22:03:48Z,192.0.2.10,203.0.113.10,443,ACCESS,LOW,bob accessed the reporting portal,bob,web-gateway
+2026-10-23T22:03:54Z,192.0.2.36,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for alice,alice,web-gateway
+2026-10-23T22:04:00Z,192.0.2.21,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for eva,eva,web-gateway
+2026-10-23T22:04:06Z,192.0.2.43,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for diana,diana,web-gateway
+2026-10-23T22:04:12Z,192.0.2.36,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for charlie,charlie,web-gateway
+2026-10-23T22:04:18Z,192.0.2.29,203.0.113.10,443,ACCESS,LOW,bob accessed the reporting portal,bob,web-gateway
+2026-10-23T22:04:24Z,192.0.2.13,203.0.113.10,443,FIREWALL_BLOCK,MEDIUM,Firewall blocked an unsolicited inbound request,bob,web-gateway
+2026-10-23T22:04:30Z,192.0.2.38,203.0.113.10,443,ACCESS,LOW,bob accessed the reporting portal,bob,web-gateway
+2026-10-23T22:04:36Z,192.0.2.26,203.0.113.10,443,ACCESS,LOW,diana accessed the reporting portal,diana,web-gateway
+2026-10-23T22:04:42Z,192.0.2.23,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for bob,bob,web-gateway
+2026-10-23T22:04:48Z,192.0.2.43,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,bob,web-gateway
+2026-10-23T22:04:54Z,192.0.2.34,203.0.113.10,443,ACCESS,LOW,eva accessed the reporting portal,eva,web-gateway
+2026-10-23T22:05:00Z,192.0.2.42,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,bob,web-gateway
+2026-10-23T22:05:06Z,192.0.2.30,203.0.113.10,443,ACCESS,LOW,diana accessed the reporting portal,diana,web-gateway
+2026-10-23T22:05:12Z,192.0.2.34,203.0.113.10,443,ACCESS,LOW,diana accessed the reporting portal,diana,web-gateway
+2026-10-23T22:05:18Z,192.0.2.26,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for charlie,charlie,web-gateway
+2026-10-23T22:05:24Z,192.0.2.33,203.0.113.10,443,FIREWALL_BLOCK,MEDIUM,Firewall blocked an unsolicited inbound request,charlie,web-gateway
+2026-10-23T22:05:30Z,192.0.2.44,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,charlie,web-gateway
+2026-10-23T22:05:36Z,192.0.2.16,203.0.113.10,443,ACCESS,LOW,charlie accessed the reporting portal,charlie,web-gateway
+2026-10-23T22:05:42Z,192.0.2.42,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for bob,bob,web-gateway
+2026-10-23T22:05:48Z,192.0.2.14,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,alice,web-gateway
+2026-10-23T22:05:54Z,192.0.2.35,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for diana,diana,web-gateway
+2026-10-23T22:06:00Z,192.0.2.42,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,alice,web-gateway
+2026-10-23T22:06:06Z,192.0.2.38,203.0.113.10,443,ACCESS,LOW,bob accessed the reporting portal,bob,web-gateway
+2026-10-23T22:06:12Z,192.0.2.16,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for diana,diana,web-gateway
+2026-10-23T22:06:18Z,192.0.2.11,203.0.113.10,443,ACCESS,LOW,charlie accessed the reporting portal,charlie,web-gateway
+2026-10-23T22:06:24Z,192.0.2.38,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,bob,web-gateway
+2026-10-23T22:06:30Z,192.0.2.13,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for alice,alice,web-gateway
+2026-10-23T22:06:36Z,192.0.2.35,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for diana,diana,web-gateway
+2026-10-23T22:06:42Z,192.0.2.33,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,diana,web-gateway
+2026-10-23T22:06:48Z,192.0.2.32,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,diana,web-gateway
+2026-10-23T22:06:54Z,192.0.2.25,203.0.113.10,443,ACCESS,LOW,diana accessed the reporting portal,diana,web-gateway
+2026-10-23T22:07:00Z,192.0.2.25,203.0.113.10,443,ACCESS,LOW,charlie accessed the reporting portal,charlie,web-gateway
+2026-10-23T22:07:06Z,192.0.2.36,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,alice,web-gateway
+2026-10-23T22:07:12Z,192.0.2.19,203.0.113.10,443,ACCESS,LOW,eva accessed the reporting portal,eva,web-gateway
+2026-10-23T22:07:18Z,192.0.2.34,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for alice,alice,web-gateway
+2026-10-23T22:07:24Z,192.0.2.43,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for bob,bob,web-gateway
+2026-10-23T22:07:30Z,192.0.2.10,203.0.113.10,443,ACCESS,LOW,alice accessed the reporting portal,alice,web-gateway
+2026-10-23T22:07:36Z,192.0.2.12,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for alice,alice,web-gateway
+2026-10-23T22:07:42Z,192.0.2.26,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,bob,web-gateway
+2026-10-23T22:07:48Z,192.0.2.10,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for charlie,charlie,web-gateway
+2026-10-23T22:07:54Z,192.0.2.28,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for diana,diana,web-gateway
+2026-10-23T22:08:00Z,192.0.2.24,203.0.113.10,443,ACCESS,LOW,charlie accessed the reporting portal,charlie,web-gateway
+2026-10-23T22:08:06Z,192.0.2.33,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for eva,eva,web-gateway
+2026-10-23T22:08:12Z,192.0.2.44,203.0.113.10,443,ACCESS,LOW,eva accessed the reporting portal,eva,web-gateway
+2026-10-23T22:08:18Z,192.0.2.19,203.0.113.10,443,FIREWALL_BLOCK,MEDIUM,Firewall blocked an unsolicited inbound request,eva,web-gateway
+2026-10-23T22:08:24Z,192.0.2.43,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for alice,alice,web-gateway
+2026-10-23T22:08:30Z,192.0.2.22,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for alice,alice,web-gateway
+2026-10-23T22:08:36Z,192.0.2.23,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for eva,eva,web-gateway
+2026-10-23T22:08:42Z,192.0.2.29,203.0.113.10,443,FIREWALL_BLOCK,MEDIUM,Firewall blocked an unsolicited inbound request,alice,web-gateway
+2026-10-23T22:08:48Z,192.0.2.30,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for bob,bob,web-gateway
+2026-10-23T22:08:54Z,192.0.2.44,203.0.113.10,443,FIREWALL_BLOCK,MEDIUM,Firewall blocked an unsolicited inbound request,eva,web-gateway
+2026-10-23T22:09:00Z,192.0.2.16,203.0.113.10,443,ACCESS,LOW,charlie accessed the reporting portal,charlie,web-gateway
+2026-10-23T22:09:06Z,192.0.2.28,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for bob,bob,web-gateway
+2026-10-23T22:09:12Z,192.0.2.21,203.0.113.10,443,ACCESS,LOW,charlie accessed the reporting portal,charlie,web-gateway
+2026-10-23T22:09:18Z,192.0.2.41,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for bob,bob,web-gateway
+2026-10-23T22:09:24Z,192.0.2.14,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,diana,web-gateway
+2026-10-23T22:09:30Z,192.0.2.43,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,alice,web-gateway
+2026-10-23T22:09:36Z,192.0.2.19,203.0.113.10,443,FIREWALL_BLOCK,MEDIUM,Firewall blocked an unsolicited inbound request,eva,web-gateway
+2026-10-23T22:09:42Z,192.0.2.21,203.0.113.10,443,LOGIN_SUCCESS,LOW,Successful sign-in for eva,eva,web-gateway
+2026-10-23T22:09:48Z,192.0.2.26,203.0.113.10,443,ACCESS,LOW,eva accessed the reporting portal,eva,web-gateway
+2026-10-23T22:09:54Z,192.0.2.31,203.0.113.10,443,CONNECTION,LOW,Allowed outbound HTTPS connection,charlie,web-gateway

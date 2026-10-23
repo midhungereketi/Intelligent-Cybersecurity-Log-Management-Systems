@@ -169,11 +169,11 @@ export default function LogsView() {
   return (
     <div>
       {/* Page Title & Actions */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
+      <div className="view-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', color: '#fff' }}>Log Search & Ingestion</h1>
+          <h1 style={{ fontSize: '1.75rem', color: 'var(--text-main)' }}>Explore your logs</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '4px' }}>
-            MongoDB indexed query engine with multi-format batch ingestion and cursor pagination.
+            Search, filter and upload security events across your environment.
           </p>
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
@@ -403,7 +403,7 @@ export default function LogsView() {
               </button>
             </div>
             <pre style={{
-              background: '#090d16',
+              background: '#f4f7f0',
               padding: '16px',
               borderRadius: 'var(--radius-sm)',
               overflowX: 'auto',

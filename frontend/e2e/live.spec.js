@@ -15,10 +15,10 @@ test('analyst can investigate suspicious uploaded logs through the browser', asy
   await page.goto('/');
   await page.locator('#login-username').fill(process.env.ADMIN_USERNAME);
   await page.locator('#login-password').fill(process.env.ADMIN_PASSWORD);
-  await page.getByRole('button', { name: 'Sign In to Operations Console' }).click();
-  await expect(page.getByRole('heading', { name: 'Security Operations Center Dashboard' })).toBeVisible();
+  await page.getByRole('button', { name: 'Enter workspace' }).click();
+  await expect(page.getByRole('heading', { name: 'Your security overview' })).toBeVisible();
 
-  await page.getByRole('button', { name: 'Log Explorer & Ingest' }).click();
+  await page.getByRole('button', { name: 'Log explorer' }).click();
   await page.getByRole('button', { name: 'Upload Log File' }).click();
   await page.locator('input[type="file"]').setInputFiles({
     name: 'browser-attack.jsonl',
@@ -33,15 +33,15 @@ test('analyst can investigate suspicious uploaded logs through the browser', asy
   await page.getByRole('button', { name: 'Search', exact: true }).click();
   await expect(page.locator('tbody tr')).toHaveCount(6);
 
-  await page.getByRole('button', { name: 'Detection Engine' }).click();
+  await page.getByRole('button', { name: 'Detection rules' }).click();
   await page.getByRole('button', { name: 'Trigger Detection Scan' }).click();
   await expect(page.getByText('New Alerts Created: 1')).toBeVisible();
 
-  await page.getByRole('button', { name: 'Threats & Alerts' }).click();
+  await page.getByRole('button', { name: 'Threats & alerts' }).click();
   const alertRow = page.locator('tbody tr').filter({ hasText: attackIp }).first();
   await expect(alertRow).toBeVisible();
   await alertRow.getByRole('button', { name: 'Escalate' }).click();
-  await expect(page.getByRole('heading', { name: 'Incident Management & Response Actions' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Investigations' })).toBeVisible();
   await expect(page.getByText('Linked to Originating Alert')).toBeVisible();
   await page.getByRole('button', { name: 'Create Incident' }).click();
   await expect(page.getByText('Correlated Security Alerts (1)')).toBeVisible();
@@ -51,6 +51,6 @@ test('analyst can investigate suspicious uploaded logs through the browser', asy
   await page.getByRole('button', { name: 'Log Response Action' }).click();
   await expect(page.getByText('Browser E2E triage completed')).toBeVisible();
 
-  await page.getByRole('button', { name: 'SOC Dashboard' }).click();
-  await expect(page.getByRole('heading', { name: 'Security Operations Center Dashboard' })).toBeVisible();
+  await page.getByRole('button', { name: 'Overview' }).click();
+  await expect(page.getByRole('heading', { name: 'Your security overview' })).toBeVisible();
 });
