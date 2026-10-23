@@ -1,5 +1,7 @@
 # Member 3 Handoff Report
 
+> Historical member handoff. The integrated implementation and current verification are documented in the [final project report](FINAL_PROJECT_REPORT.md).
+
 **Project:** Intelligent Cybersecurity Log Management System  
 **Owner:** Lakshman Sai (Member 3)  
 **Branch:** `member3--lakshman`  

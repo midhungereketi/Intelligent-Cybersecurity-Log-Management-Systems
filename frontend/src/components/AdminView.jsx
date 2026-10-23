@@ -193,19 +193,19 @@ export default function AdminView() {
       <div className="tabs">
         <button className={`tab-btn ${activeTab === 'users' ? 'active' : ''}`} onClick={() => setActiveTab('users')}>
           <Users size={16} />
-          <span>Users & RBAC (Member 2)</span>
+          <span>Users & RBAC</span>
         </button>
         <button className={`tab-btn ${activeTab === 'rules' ? 'active' : ''}`} onClick={() => setActiveTab('rules')}>
           <Sliders size={16} />
-          <span>Detection Rules (Member 2)</span>
+          <span>Detection Rules</span>
         </button>
         <button className={`tab-btn ${activeTab === 'devices' ? 'active' : ''}`} onClick={() => setActiveTab('devices')}>
           <Server size={16} />
-          <span>Devices (Member 1)</span>
+          <span>Devices</span>
         </button>
         <button className={`tab-btn ${activeTab === 'sources' ? 'active' : ''}`} onClick={() => setActiveTab('sources')}>
           <HardDrive size={16} />
-          <span>Log Sources (Member 1)</span>
+          <span>Log Sources</span>
         </button>
       </div>
 
@@ -461,7 +461,7 @@ export default function AdminView() {
         <div className="modal-overlay" onClick={() => setShowDeviceModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3 className="card-title">Register Network Device (Member 1)</h3>
+              <h3 className="card-title">Register Network Device</h3>
               <button className="btn btn-secondary btn-sm" onClick={() => setShowDeviceModal(false)}><X size={16} /></button>
             </div>
             <form onSubmit={handleCreateDevice}>
@@ -513,7 +513,7 @@ export default function AdminView() {
         <div className="modal-overlay" onClick={() => setShowSourceModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3 className="card-title">Register Log Source (Member 1)</h3>
+              <h3 className="card-title">Register Log Source</h3>
               <button className="btn btn-secondary btn-sm" onClick={() => setShowSourceModal(false)}><X size={16} /></button>
             </div>
             <form onSubmit={handleCreateSource}>

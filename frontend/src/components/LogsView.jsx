@@ -426,7 +426,7 @@ export default function LogsView() {
             <div className="modal-header">
               <h3 className="card-title">
                 <Upload size={18} color="var(--cyan-glow)" />
-                <span>Upload Batch Log File (Member 1 Ingestion)</span>
+                <span>Upload Batch Log File</span>
               </h3>
               <button className="btn btn-secondary btn-sm" onClick={() => setShowUploadModal(false)}>
                 <X size={16} />

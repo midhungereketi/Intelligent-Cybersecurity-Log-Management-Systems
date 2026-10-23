@@ -145,7 +145,7 @@ export default function DashboardView({ onNavigate }) {
         <div className="stat-card stat-warning">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <div className="stat-label">Member 3 Incidents</div>
+              <div className="stat-label">Incidents</div>
               <div className="stat-value" style={{ color: '#fcd34d' }}>{summary?.incidents?.total ?? 0}</div>
             </div>
             <LifeBuoy size={24} color="var(--amber-warning)" />

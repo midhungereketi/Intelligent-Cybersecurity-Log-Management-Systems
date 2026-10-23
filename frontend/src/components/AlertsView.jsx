@@ -275,7 +275,7 @@ export default function AlertsView({ onPromoteToIncident }) {
                           )}
                           <button 
                             className="btn btn-primary btn-sm"
-                            title="Promote to Incident (Member 3)"
+                            title="Promote to Incident"
                             onClick={() => handlePromote(alert)}
                           >
                             <LifeBuoy size={13} />
@@ -432,7 +432,7 @@ export default function AlertsView({ onPromoteToIncident }) {
                   onClick={() => handlePromote(selectedAlert)}
                 >
                   <LifeBuoy size={15} />
-                  <span>Promote to Incident (Member 3)</span>
+                  <span>Promote to Incident</span>
                 </button>
               </div>
             </div>

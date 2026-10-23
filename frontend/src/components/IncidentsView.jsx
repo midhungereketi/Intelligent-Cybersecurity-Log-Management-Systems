@@ -230,7 +230,7 @@ export default function IncidentsView({ prefillAlert, onClearPrefill }) {
             Incident Management & Response Actions
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '4px' }}>
-            Member 3 Core: Incident triage, team assignment, forensic investigation notes, and containment action timeline.
+            Incident triage, team assignment, forensic investigation notes, and containment action timeline.
           </p>
         </div>
         <button className="btn btn-primary" onClick={() => setShowCreateModal(true)}>

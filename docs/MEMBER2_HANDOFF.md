@@ -1,5 +1,7 @@
 # Member 2 Handoff & Security Hardening Report
 
+> Historical member handoff. The integrated implementation and current verification are documented in the [final project report](FINAL_PROJECT_REPORT.md).
+
 **Project:** Intelligent Cybersecurity Log Management System  
 **Owner:** Shraavanth (Member 2 — Security, RBAC, Detection & Backend Integration)  
 **Branch:** `member2-shraavanth`  

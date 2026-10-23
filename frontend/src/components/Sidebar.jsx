@@ -45,11 +45,6 @@ export default function Sidebar({ activeTab, onSelectTab, currentUser }) {
             >
               <Icon size={18} />
               <span>{item.label}</span>
-              {item.highlight && (
-                <span className="badge badge-critical" style={{ marginLeft: 'auto', fontSize: '0.65rem', padding: '1px 5px' }}>
-                  M3
-                </span>
-              )}
             </button>
           );
         })}
@@ -57,7 +52,7 @@ export default function Sidebar({ activeTab, onSelectTab, currentUser }) {
 
       <div className="sidebar-footer">
         <p>Intelligent Cybersecurity System</p>
-        <p style={{ marginTop: '4px', color: 'var(--cyan-glow)' }}>Member 3 Architecture v2.0</p>
+        <p style={{ marginTop: '4px', color: 'var(--cyan-glow)' }}>Security Operations Console</p>
       </div>
     </aside>
   );
