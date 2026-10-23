@@ -2,7 +2,7 @@
 
 This three-member Database Systems project stores security logs in MongoDB, keeps users, alerts, and incidents in PostgreSQL, and provides a React Security Operations Center dashboard. It supports indexed log search, suspicious activity detection, alert triage, and incident response.
 
-See the [detailed project report](docs/DETAILED_PROJECT_REPORT.md) for architecture, the complete operating workflow, requirements traceability, review criteria, tests, and demonstration steps. The [Member 1](docs/MEMBER1_HANDOFF.md), [Member 2](docs/MEMBER2_HANDOFF.md), and [Member 3](docs/MEMBER3_HANDOFF.md) handoffs preserve each member's implementation history. The [million-log benchmark](docs/MEMBER1_VERIFICATION.md) records measured indexed search performance.
+Start with the [plain-language PDF guide](output/pdf/Cybersecurity_Log_Project_Explained_Simply.pdf) for the project concept, workflow, database terms, team roles, and review demo. See the [detailed project report](docs/DETAILED_PROJECT_REPORT.md) for architecture, the complete operating workflow, requirements traceability, review criteria, tests, and demonstration steps. The [Member 1](docs/MEMBER1_HANDOFF.md), [Member 2](docs/MEMBER2_HANDOFF.md), and [Member 3](docs/MEMBER3_HANDOFF.md) handoffs preserve each member's implementation history. The [million-log benchmark](docs/MEMBER1_VERIFICATION.md) records measured indexed search performance.
 
 ## Member deliverables
 
