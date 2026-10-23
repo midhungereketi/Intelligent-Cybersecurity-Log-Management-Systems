@@ -1,9 +1,10 @@
 """Tests for authentication, Argon2id hashing, JWT validation, rate limiting, and RBAC."""
 
+import os
 import time
 import unittest
 from datetime import datetime, timezone
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 from fastapi import HTTPException
 from fastapi.testclient import TestClient
@@ -22,6 +23,7 @@ from app.auth import (
     revoke_token,
     verify_password,
 )
+from app.config import jwt_secret_key
 from app.db import reset_db_override, set_db_override
 from app.main import app
 from tests.mock_db import MockDatabase
@@ -229,6 +231,49 @@ class AuthUnitTests(unittest.TestCase):
             headers={"Authorization": f"Bearer {admin_token}"},
         )
         self.assertEqual(resp_self_demote.status_code, 400)
+
+    def test_missing_production_secret_prevents_startup(self):
+        # When JWT_SECRET_KEY is absent or empty, jwt_secret_key() must fail fast with RuntimeError
+        with patch.dict(os.environ, {}, clear=True):
+            with self.assertRaises(RuntimeError) as ctx:
+                jwt_secret_key()
+            self.assertIn("JWT_SECRET_KEY", str(ctx.exception))
+
+        with patch.dict(os.environ, {"JWT_SECRET_KEY": "   "}):
+            with self.assertRaises(RuntimeError) as ctx:
+                jwt_secret_key()
+            self.assertIn("JWT_SECRET_KEY", str(ctx.exception))
+
+    def test_configured_secret_loaded_correctly(self):
+        test_secret = "custom-configured-production-secret-key-12345"
+        with patch.dict(os.environ, {"JWT_SECRET_KEY": test_secret}):
+            self.assertEqual(jwt_secret_key(), test_secret)
+
+    def test_tokens_signed_with_incorrect_secret_rejected(self):
+        # Create a token signed with an alien secret key
+        alien_secret = "alien-untrusted-secret-key-9999999999999"
+        with patch.dict(os.environ, {"JWT_SECRET_KEY": alien_secret}):
+            foreign_token = create_access_token(user_id=1, username="admin_user", role_name="ADMIN")
+
+        # In current environment (with our real test secret), decoding must reject with 401
+        with self.assertRaises(HTTPException) as ctx:
+            decode_access_token(foreign_token)
+        self.assertEqual(ctx.exception.status_code, 401)
+        self.assertIn("signature", ctx.exception.detail.lower())
+
+        # Also via HTTP client endpoint
+        resp = self.client.get("/api/auth/me", headers={"Authorization": f"Bearer {foreign_token}"})
+        self.assertEqual(resp.status_code, 401)
+
+    def test_existing_valid_auth_flows_continue_to_work(self):
+        # End-to-end auth flow with securely configured secret
+        resp_login = self.client.post("/api/auth/login", json={"username": "admin_user", "password": self.admin_pwd})
+        self.assertEqual(resp_login.status_code, 200)
+        token = resp_login.json()["access_token"]
+
+        resp_me = self.client.get("/api/auth/me", headers={"Authorization": f"Bearer {token}"})
+        self.assertEqual(resp_me.status_code, 200)
+        self.assertEqual(resp_me.json()["username"], "admin_user")
 
 
 if __name__ == "__main__":

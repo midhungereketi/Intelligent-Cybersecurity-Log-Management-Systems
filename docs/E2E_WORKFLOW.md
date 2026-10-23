@@ -38,20 +38,27 @@ graph LR
 
 ### Step 1: Environment Preparation & Migrations
 1. Ensure MongoDB and PostgreSQL 16 are running locally or in Docker.
-2. Configure `.env` from `.env.example`:
-   ```bash
-   cp .env.example .env
-   ```
-   Set:
-   ```env
-   MONGO_URI=mongodb://localhost:27017
-   MONGO_DATABASE=cybersecurity_logs
-   POSTGRES_DSN=postgresql://postgres:postgres@localhost:5432/cybersecurity_db
-   ADMIN_USERNAME=admin
-   ADMIN_PASSWORD=AdminSecurePass123!
-   ADMIN_EMAIL=admin@cyber.local
-   JWT_SECRET=your-32-byte-base64-or-hex-secret
-   ```
+2. Configure environment variables (in `.env` or shell session). Mandatory variables:
+   - PowerShell:
+     ```powershell
+     $env:JWT_SECRET_KEY = "your-secure-random-secret-key-at-least-32-chars"
+     $env:MONGO_URI = "mongodb://localhost:27017"
+     $env:MONGO_DATABASE = "cybersecurity_logs"
+     $env:POSTGRES_DSN = "postgresql://postgres:postgres@localhost:5432/cybersecurity"
+     $env:ADMIN_USERNAME = "admin"
+     $env:ADMIN_PASSWORD = "AdminSecurePass123!"
+     $env:ADMIN_EMAIL = "admin@cyber.local"
+     ```
+   - Bash:
+     ```bash
+     export JWT_SECRET_KEY="your-secure-random-secret-key-at-least-32-chars"
+     export MONGO_URI="mongodb://localhost:27017"
+     export MONGO_DATABASE="cybersecurity_logs"
+     export POSTGRES_DSN="postgresql://postgres:postgres@localhost:5432/cybersecurity"
+     export ADMIN_USERNAME="admin"
+     export ADMIN_PASSWORD="AdminSecurePass123!"
+     export ADMIN_EMAIL="admin@cyber.local"
+     ```
 3. Apply SQL migrations sequentially:
    ```bash
    psql $POSTGRES_DSN -f sql/001_devices_and_sources.postgres.sql

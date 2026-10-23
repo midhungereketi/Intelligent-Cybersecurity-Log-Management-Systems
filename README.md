@@ -12,10 +12,10 @@ For teammate and AI-agent handoff, see [Member 1 Handoff Report](docs/MEMBER1_HA
 | --- | --- | --- |
 | Ingestion & Search | Member 1 | Single-event API and CSV/JSON/JSONL upload with MongoDB indexing and benchmark |
 | SQL Device Metadata | Member 1 | PostgreSQL `device` and `log_source` tables and APIs |
-| Authentication & RBAC | Member 2 | Argon2id hashing, RFC 7519 HS256 JWT, rate limiting, and user management APIs |
-| Relational Security Schema | Member 2 | PostgreSQL `roles`, `users`, `rules`, `threats`, `alerts`, `processed_detection_events` |
-| Security Detection Engine | Member 2 | Failed logins, port scan probes, excessive activity detection with idempotent alert generation |
-| Threat & Alert Management | Member 2 | Filterable, paginated alert & threat APIs with status transitions (acknowledge/resolve) |
+| Authentication & RBAC | Member 2 | Argon2id hashing, RFC 7519 HS256 JWT, rate limiting, and secured Member 1 & 2 APIs |
+| Relational Security Schema | Member 2 | PostgreSQL `roles`, `users`, `rules`, `threats`, `alerts`, `processed_detection_events`, `detection_checkpoints` |
+| Security Detection Engine | Member 2 | Failed logins, port scan probes, excessive activity detection with checkpointing & pagination |
+| Threat & Alert Management | Member 2 | Filterable, paginated alert & threat APIs with status transitions and replay deduplication |
 | Incident & Action History | Member 3 | PostgreSQL `incidents`, `actions`, `incident_alerts`, lifecycle transitions, analyst assignment |
 | Analytics & Metrics | Member 3 | Cross-database metrics, hourly event timeline, attacker IP rankings, log-type distributions |
 | React SOC Console | Member 3 | Interactive dark-theme SOC dashboard with real-time analytics, log search, alert escalation, incident investigation |
@@ -23,6 +23,19 @@ For teammate and AI-agent handoff, see [Member 1 Handoff Report](docs/MEMBER1_HA
 ## Setup
 
 Requires Python 3.11+, MongoDB, PostgreSQL, and Node.js 18+. Apply the SQL migrations in order:
+1. `sql/001_devices_and_sources.postgres.sql`
+2. `sql/002_auth_and_detection.postgres.sql`
+3. `sql/003_incidents_and_actions.postgres.sql`
+
+### Environment Variables
+Configure the mandatory environment variables (see `.env.example`):
+- `JWT_SECRET_KEY`: Mandatory secure secret key (minimum 32 characters). The app fails fast on startup if this is missing.
+- `MONGO_URI` and `MONGO_DATABASE`: MongoDB connection string and database name (`cybersecurity_logs`).
+- `POSTGRES_DSN`: PostgreSQL connection DSN (`postgresql://user:password@localhost:5432/cybersecurity`).
+- `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_EMAIL`: Optional credentials for bootstrapping the initial administrator account.
+
+### Backend Setup
+Apply the SQL migrations in order:
 1. `sql/001_devices_and_sources.postgres.sql`
 2. `sql/002_auth_and_detection.postgres.sql`
 3. `sql/003_incidents_and_actions.postgres.sql`
@@ -36,7 +49,6 @@ pip install -r requirements-dev.txt
 
 # 2. Copy and configure environment variables
 Copy-Item .env.example .env
-# Edit .env with your MONGO_URI, POSTGRES_DSN, ADMIN_USERNAME, ADMIN_PASSWORD
 
 # 3. Apply SQL migrations
 psql $env:POSTGRES_DSN -f sql/001_devices_and_sources.postgres.sql
@@ -46,17 +58,14 @@ psql $env:POSTGRES_DSN -f sql/003_incidents_and_actions.postgres.sql
 # 4. Start backend
 uvicorn app.main:app --reload --port 8000
 ```
-
-Open `http://127.0.0.1:8000/docs` for interactive API documentation. Starting the API checks MongoDB connectivity, creates the required indexes, and bootstraps the initial administrator account from `.env`.
+Open `http://127.0.0.1:8000/docs` for interactive OpenAPI documentation. Starting the API checks MongoDB connectivity, creates the required indexes, and bootstraps the initial administrator account from `.env`.
 
 ### Frontend Setup
-
 ```powershell
 cd frontend
 npm install
 npm run dev
 ```
-
 Open `http://localhost:5173` to access the Security Operations Center dashboard.
 
 ## Log format
@@ -129,9 +138,20 @@ Start with 1,000 records and increase gradually according to available RAM and d
 
 Member 2 can use `source_ip`, `event_type`, `timestamp`, `username`, and destination fields for detection rules, then store alert evidence using MongoDB log IDs as strings in SQL. SQL foreign keys cannot reference MongoDB documents. Member 3 can call `GET /api/logs` for the search table and use the metadata endpoints for device/source selection. Analytics endpoints should use MongoDB aggregation on the same normalized fields.
 
-Run the module tests with:
+## Verification and automated tests
+
+Install development dependencies and run the complete test suite (46 tests):
 
 ```powershell
 pip install -r requirements-dev.txt
+python -m compileall -q app scripts tests
 python -m unittest discover -s tests -v
 ```
+
+Execute the full 12-step end-to-end integration demonstration:
+
+```powershell
+python scripts/e2e_integration_demo.py
+```
+
+For database coursework considerations and the PostgreSQL vs Oracle 11g demonstration plan, see [PostgreSQL vs Oracle Analysis](docs/POSTGRES_VS_ORACLE_ANALYSIS.md).

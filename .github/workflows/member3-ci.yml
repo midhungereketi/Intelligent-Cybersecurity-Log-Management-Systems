@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - member3-lakshman
+      - member3.1--lakshman
       - member1-log-pipeline
       - member2-shraavanth
   pull_request:
