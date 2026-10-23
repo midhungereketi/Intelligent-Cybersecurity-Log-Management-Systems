@@ -4,6 +4,7 @@
 -- Full event volume remains in MongoDB; SECURITY_LOG contains relational demo records.
 -- All addresses and records below are synthetic. No real credentials are included.
 
+WHENEVER SQLERROR EXIT SQL.SQLCODE ROLLBACK
 SET SERVEROUTPUT ON
 
 -- 1. DDL and constraints ----------------------------------------------------

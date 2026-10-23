@@ -16,6 +16,17 @@ BEGIN
         RAISE_APPLICATION_ERROR(-20101, 'Expected 12 Review II tables, found ' || v_count);
     END IF;
 
+    SELECT COUNT(*) INTO v_count FROM user_errors;
+    IF v_count <> 0 THEN
+        RAISE_APPLICATION_ERROR(-20108, 'PL/SQL compilation errors: ' || v_count);
+    END IF;
+
+    SELECT COUNT(*) INTO v_count FROM user_objects
+    WHERE object_type IN ('FUNCTION', 'PROCEDURE', 'TRIGGER') AND status = 'VALID';
+    IF v_count <> 5 THEN
+        RAISE_APPLICATION_ERROR(-20109, 'Expected 5 valid PL/SQL objects, found ' || v_count);
+    END IF;
+
     SELECT COUNT(*) INTO v_count FROM security_log;
     IF v_count <> 10 THEN
         RAISE_APPLICATION_ERROR(-20102, 'Expected 10 synthetic logs, found ' || v_count);

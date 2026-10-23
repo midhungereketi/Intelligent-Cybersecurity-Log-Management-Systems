@@ -1,0 +1,58 @@
+name: Oracle 11g Review II
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/oracle-review2.yml'
+      - 'sql/review2_oracle11g.sql'
+      - 'sql/review2_oracle11g_verify.sql'
+  pull_request:
+    paths:
+      - '.github/workflows/oracle-review2.yml'
+      - 'sql/review2_oracle11g.sql'
+      - 'sql/review2_oracle11g_verify.sql'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  oracle-11g:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start isolated Oracle 11g XE
+        run: |
+          docker run --rm -d --name review2-oracle \
+            -e ORACLE_PASSWORD=Review2_CI_Only_2026 \
+            -e APP_USER=review2_ci \
+            -e APP_USER_PASSWORD=Review2_CI_Only_2026 \
+            --health-cmd=healthcheck.sh \
+            --health-interval=10s --health-timeout=5s --health-retries=20 \
+            gvenzl/oracle-xe:11-slim
+      - name: Wait for Oracle 11g
+        run: |
+          for attempt in {1..90}; do
+            state=$(docker inspect --format '{{.State.Health.Status}}' review2-oracle)
+            if [ "$state" = healthy ]; then exit 0; fi
+            if [ "$state" = unhealthy ]; then docker logs --tail 100 review2-oracle; exit 1; fi
+            sleep 10
+          done
+          docker logs --tail 100 review2-oracle
+          exit 1
+      - name: Run Review II DDL, DML, queries, and assertions
+        run: |
+          docker cp sql/review2_oracle11g.sql review2-oracle:/tmp/review2_oracle11g.sql
+          docker cp sql/review2_oracle11g_verify.sql review2-oracle:/tmp/review2_oracle11g_verify.sql
+          docker exec review2-oracle bash -lc 'sqlplus -L -s review2_ci/Review2_CI_Only_2026@//localhost:1521/XE @/tmp/review2_oracle11g.sql' | tee oracle-setup.log
+          docker exec review2-oracle bash -lc 'sqlplus -L -s review2_ci/Review2_CI_Only_2026@//localhost:1521/XE @/tmp/review2_oracle11g_verify.sql' | tee oracle-verify.log
+          grep -q 'REVIEW II ORACLE CHECKS PASSED' oracle-verify.log
+      - name: Upload Oracle execution output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: review2-oracle-11g-output
+          path: oracle-*.log
+          if-no-files-found: ignore
