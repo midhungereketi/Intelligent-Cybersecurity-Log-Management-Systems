@@ -30,7 +30,7 @@ class SQLSchemaTests(unittest.TestCase):
 
     def test_002_defines_required_tables(self):
         sql = self.migration_002.read_text(encoding="utf-8")
-        required_tables = ["roles", "users", "rules", "threats", "alerts", "processed_detection_events"]
+        required_tables = ["roles", "users", "rules", "threats", "alerts", "processed_detection_events", "detection_checkpoints"]
         for tbl in required_tables:
             with self.subTest(table=tbl):
                 pattern = rf"CREATE TABLE (?:IF NOT EXISTS )?{tbl}\b"

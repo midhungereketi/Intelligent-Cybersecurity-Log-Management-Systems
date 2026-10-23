@@ -217,12 +217,12 @@ class APIIntegrationTests(unittest.TestCase):
         self.assertEqual(resp_create_rule.json()["severity"], "CRITICAL")
 
     def test_member1_endpoints_remain_functional(self):
-        # GET /health
+        # GET /health remains public
         resp_health = self.client.get("/health")
         self.assertEqual(resp_health.status_code, 200)
         self.assertEqual(resp_health.json(), {"status": "ok"})
 
-        # POST /api/logs/events
+        # Authorized Analyst access to POST /api/logs/events
         event_payload = {
             "timestamp": "2026-10-01T12:00:00Z",
             "source_ip": "198.51.100.99",
@@ -230,18 +230,141 @@ class APIIntegrationTests(unittest.TestCase):
             "severity": "LOW",
             "message": "Routine access",
         }
-        resp_event = self.client.post("/api/logs/events", json=event_payload)
+        resp_event = self.client.post(
+            "/api/logs/events",
+            json=event_payload,
+            headers={"Authorization": f"Bearer {self.analyst_token}"},
+        )
         self.assertEqual(resp_event.status_code, 201)
         self.assertEqual(resp_event.json()["source_ip"], "198.51.100.99")
 
-        # GET /api/logs
-        resp_logs = self.client.get("/api/logs?source_ip=198.51.100.99")
+        # Authorized Analyst access to GET /api/logs
+        resp_logs = self.client.get(
+            "/api/logs?source_ip=198.51.100.99",
+            headers={"Authorization": f"Bearer {self.analyst_token}"},
+        )
         self.assertEqual(resp_logs.status_code, 200)
         self.assertEqual(len(resp_logs.json()["items"]), 1)
 
-        # GET /api/devices
-        resp_devices = self.client.get("/api/devices")
+        # Authorized Analyst access to GET /api/devices
+        resp_devices = self.client.get(
+            "/api/devices",
+            headers={"Authorization": f"Bearer {self.analyst_token}"},
+        )
         self.assertEqual(resp_devices.status_code, 200)
+
+        # Authorized Analyst access to GET /api/sources
+        resp_sources = self.client.get(
+            "/api/sources",
+            headers={"Authorization": f"Bearer {self.analyst_token}"},
+        )
+        self.assertEqual(resp_sources.status_code, 200)
+
+    def test_unauthenticated_requests_denied_on_member1_endpoints(self):
+        event_payload = {
+            "timestamp": "2026-10-01T12:00:00Z",
+            "source_ip": "198.51.100.99",
+            "event_type": "ACCESS",
+            "severity": "LOW",
+            "message": "Routine access",
+        }
+        # Ingestion routes require auth
+        self.assertEqual(self.client.post("/api/logs/events", json=event_payload).status_code, 401)
+        self.assertEqual(self.client.post("/api/logs/upload", files={"file": ("t.json", b"[]")}).status_code, 401)
+        self.assertEqual(self.client.get("/api/logs").status_code, 401)
+
+        # Device/source management require auth
+        self.assertEqual(self.client.get("/api/devices").status_code, 401)
+        self.assertEqual(self.client.post("/api/devices", json={"device_name": "FW1", "device_type": "Firewall"}).status_code, 401)
+        self.assertEqual(self.client.get("/api/sources").status_code, 401)
+        self.assertEqual(self.client.post("/api/sources", json={"source_name": "S1", "source_type": "Syslog", "device_id": 1}).status_code, 401)
+
+    def test_invalid_or_expired_tokens_rejected(self):
+        # Invalid signature
+        bad_token = self.analyst_token[:-6] + "bad123"
+        self.assertEqual(
+            self.client.get("/api/logs", headers={"Authorization": f"Bearer {bad_token}"}).status_code,
+            401,
+        )
+
+        # Expired token
+        expired_token = create_access_token(2, "tier1analyst", "ANALYST", expires_delta_seconds=-30)
+        self.assertEqual(
+            self.client.get("/api/logs", headers={"Authorization": f"Bearer {expired_token}"}).status_code,
+            401,
+        )
+
+        # Malformed authorization header
+        self.assertEqual(
+            self.client.get("/api/logs", headers={"Authorization": "NotBearer xyz"}).status_code,
+            401,
+        )
+
+    def test_analyst_forbidden_from_admin_device_and_source_management(self):
+        device_payload = {
+            "device_name": "Core-Switch-01",
+            "ip_address": "10.0.0.1",
+            "device_type": "Switch",
+            "status": "ACTIVE",
+        }
+        # Analyst cannot create device -> 403 Forbidden
+        resp_analyst_dev = self.client.post(
+            "/api/devices",
+            json=device_payload,
+            headers={"Authorization": f"Bearer {self.analyst_token}"},
+        )
+        self.assertEqual(resp_analyst_dev.status_code, 403)
+
+        # Admin can create device -> 201 Created
+        resp_admin_dev = self.client.post(
+            "/api/devices",
+            json=device_payload,
+            headers={"Authorization": f"Bearer {self.admin_token}"},
+        )
+        self.assertEqual(resp_admin_dev.status_code, 201)
+        created_dev = resp_admin_dev.json()
+        device_id = created_dev["device_id"]
+
+        source_payload = {
+            "source_name": "Switch-Auth-Logs",
+            "source_type": "SYSLOG",
+            "ip_address": "10.0.0.1",
+            "device_id": device_id,
+        }
+        # Analyst cannot create source -> 403 Forbidden
+        resp_analyst_src = self.client.post(
+            "/api/sources",
+            json=source_payload,
+            headers={"Authorization": f"Bearer {self.analyst_token}"},
+        )
+        self.assertEqual(resp_analyst_src.status_code, 403)
+
+        # Admin can create source -> 201 Created
+        resp_admin_src = self.client.post(
+            "/api/sources",
+            json=source_payload,
+            headers={"Authorization": f"Bearer {self.admin_token}"},
+        )
+        self.assertEqual(resp_admin_src.status_code, 201)
+
+    def test_authorized_log_upload_and_ingestion(self):
+        json_content = json.dumps([
+            {
+                "timestamp": "2026-10-01T14:00:00Z",
+                "source_ip": "198.51.100.50",
+                "event_type": "ACCESS",
+                "severity": "LOW",
+                "message": "Authorized upload batch",
+            }
+        ]).encode("utf-8")
+
+        resp_upload = self.client.post(
+            "/api/logs/upload",
+            files={"file": ("batch.json", json_content, "application/json")},
+            headers={"Authorization": f"Bearer {self.analyst_token}"},
+        )
+        self.assertEqual(resp_upload.status_code, 200)
+        self.assertEqual(resp_upload.json()["inserted"], 1)
 
     def test_full_lifecycle_with_member3_incidents_and_actions(self):
         # 1. Ingest Member 1 logs

@@ -22,6 +22,9 @@ class DetectionRunRequest(BaseModel):
     end: str | None = None
     rule_ids: list[int] | None = None
     limit: int = Field(default=2000, ge=1, le=10000)
+    batch_size: int = Field(default=500, ge=1, le=2000)
+    checkpoint_name: str | None = "default"
+    use_checkpoint: bool = True
 
 
 def _format_threat(row: dict[str, Any]) -> dict[str, Any]:
@@ -326,5 +329,8 @@ def run_detection(
         end=payload.end,
         rule_ids=payload.rule_ids,
         limit=payload.limit,
+        batch_size=payload.batch_size,
+        checkpoint_name=payload.checkpoint_name,
+        use_checkpoint=payload.use_checkpoint,
     )
     return summary

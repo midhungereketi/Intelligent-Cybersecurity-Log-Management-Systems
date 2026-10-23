@@ -18,7 +18,13 @@ def max_upload_bytes() -> int:
 
 
 def jwt_secret_key() -> str:
-    return os.getenv("JWT_SECRET_KEY", "academic-cybersecurity-prototype-secret-key-change-in-production")
+    key = os.getenv("JWT_SECRET_KEY")
+    if not key or not key.strip():
+        raise RuntimeError(
+            "JWT_SECRET_KEY environment variable is not configured. "
+            "A secure secret key must be provided before starting the application."
+        )
+    return key.strip()
 
 
 def jwt_algorithm() -> str:

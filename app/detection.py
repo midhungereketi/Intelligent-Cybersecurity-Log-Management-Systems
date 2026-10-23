@@ -423,7 +423,6 @@ def process_match(conn: Any, match: DetectionMatch) -> dict[str, Any]:
         already_processed_ids = {r["event_id"] for r in processed_rows}
 
     new_event_ids = [eid for eid in qualifying_ids if eid not in already_processed_ids]
-
     now_utc = datetime.now(timezone.utc)
 
     if active_alert:
@@ -484,7 +483,23 @@ def process_match(conn: Any, match: DetectionMatch) -> dict[str, Any]:
         }
 
     else:
-        # If no active alert exists (or previous was RESOLVED), create a new OPEN alert!
+        # No active alert exists. Either this is the first alert, or the previous alert was RESOLVED.
+        # CRITICAL FIX FOR ALERT REPLAY (Phase 6):
+        # If all qualifying events were already processed in a previously resolved alert,
+        # rerunning detection on historical logs MUST NOT create a new duplicate alert!
+        if not new_event_ids:
+            return {
+                "action": "unchanged",
+                "alert_id": None,
+                "status": "RESOLVED",
+                "occurrence_count": 0,
+            }
+
+        new_event_id_set = set(new_event_ids)
+        new_evidence = [e for e in match.evidence if e.get("log_id") in new_event_id_set]
+        if not new_evidence:
+            new_evidence = match.evidence[:100]
+
         row = conn.execute(
             """INSERT INTO alerts (rule_id, threat_id, source_ip, severity, title,
                                   description, status, deduplication_key, evidence,
@@ -500,10 +515,10 @@ def process_match(conn: Any, match: DetectionMatch) -> dict[str, Any]:
                 match.title,
                 match.description,
                 match.deduplication_key,
-                json_param(match.evidence[:100]),
+                json_param(new_evidence[:100]),
                 match.first_seen_at,
                 match.last_seen_at,
-                len(match.qualifying_log_ids),
+                len(new_event_ids),
                 now_utc,
                 now_utc,
             ),
@@ -512,7 +527,7 @@ def process_match(conn: Any, match: DetectionMatch) -> dict[str, Any]:
         alert_id = row["alert_id"]
 
         # Record processed events for idempotency
-        for eid in match.qualifying_log_ids:
+        for eid in new_event_ids:
             conn.execute(
                 """INSERT INTO processed_detection_events (event_id, rule_id, alert_id)
                    VALUES (%s, %s, %s)
@@ -528,34 +543,126 @@ def process_match(conn: Any, match: DetectionMatch) -> dict[str, Any]:
         }
 
 
+def get_checkpoint(conn: Any, checkpoint_name: str = "default") -> dict[str, Any] | None:
+    """Retrieve the latest detection processing checkpoint for a given pipeline name."""
+    try:
+        row = conn.execute(
+            """SELECT checkpoint_name, last_timestamp, last_event_id, updated_at
+               FROM detection_checkpoints
+               WHERE checkpoint_name = %s""",
+            (checkpoint_name,),
+        ).fetchone()
+        return row
+    except Exception as exc:
+        logger.debug("Checkpoint retrieval failed: %s", exc)
+        return None
+
+
+def save_checkpoint(conn: Any, checkpoint_name: str, last_timestamp: datetime, last_event_id: str) -> None:
+    """Atomically record the progress watermark for a detection pipeline."""
+    now_utc = datetime.now(timezone.utc)
+    try:
+        conn.execute(
+            """INSERT INTO detection_checkpoints (checkpoint_name, last_timestamp, last_event_id, updated_at)
+               VALUES (%s, %s, %s, %s)
+               ON CONFLICT (checkpoint_name) DO UPDATE
+               SET last_timestamp = EXCLUDED.last_timestamp,
+                   last_event_id = EXCLUDED.last_event_id,
+                   updated_at = EXCLUDED.updated_at""",
+            (checkpoint_name, last_timestamp, str(last_event_id), now_utc),
+        )
+    except Exception as exc:
+        logger.warning("Failed to save detection checkpoint %s: %s", checkpoint_name, exc)
+
+
 def execute_detection(
     mongo_collection: Any,
-    start: datetime | None = None,
-    end: datetime | None = None,
+    start: datetime | str | None = None,
+    end: datetime | str | None = None,
     rule_ids: list[int] | None = None,
     limit: int = 5000,
+    batch_size: int = 500,
+    checkpoint_name: str | None = "default",
+    use_checkpoint: bool = True,
 ) -> dict[str, Any]:
-    """Execute the detection pipeline across enabled rules on candidate MongoDB logs."""
-    # Build MongoDB query for bounded time window
-    query: dict[str, Any] = {}
-    time_filter: dict[str, Any] = {}
-    if start:
-        time_filter["$gte"] = _to_utc_dt(start)
-    if end:
-        time_filter["$lte"] = _to_utc_dt(end)
-    if time_filter:
-        query["timestamp"] = time_filter
-
-    # Fetch logs from MongoDB
-    records = list(mongo_collection.find(query).sort("timestamp", 1).limit(limit))
-
+    """Execute the detection pipeline across enabled rules on candidate MongoDB logs with pagination and checkpoints."""
     alerts_created = 0
     alerts_updated = 0
     alerts_unchanged = 0
     matches_found = 0
+    total_logs_scanned = 0
 
     with db_transaction() as conn:
         rules = load_enabled_rules(conn, rule_ids)
+        if not rules:
+            return {
+                "status": "success",
+                "logs_scanned": 0,
+                "rules_evaluated": 0,
+                "matches_found": 0,
+                "alerts_created": 0,
+                "alerts_updated": 0,
+                "alerts_unchanged": 0,
+            }
+
+        max_window_seconds = max((r.time_window_seconds for r in rules), default=300)
+
+        # Checkpoint resolution
+        checkpoint_record = None
+        if use_checkpoint and checkpoint_name and not start:
+            checkpoint_record = get_checkpoint(conn, checkpoint_name)
+
+        time_filter: dict[str, Any] = {}
+        if start:
+            time_filter["$gte"] = _to_utc_dt(start)
+        elif checkpoint_record and checkpoint_record.get("last_timestamp"):
+            cp_ts = _to_utc_dt(checkpoint_record["last_timestamp"])
+            if cp_ts:
+                # Rewind by max rule time window for boundary continuity
+                time_filter["$gte"] = cp_ts - timedelta(seconds=max_window_seconds)
+
+        if end:
+            time_filter["$lte"] = _to_utc_dt(end)
+
+        base_clauses: list[dict[str, Any]] = []
+        if time_filter:
+            base_clauses.append({"timestamp": time_filter})
+
+        # Fetch records using deterministic cursor pagination
+        all_records: list[dict[str, Any]] = []
+        cursor_ts: datetime | None = None
+        cursor_id: Any = None
+        remaining = limit if limit > 0 else float("inf")
+
+        while remaining > 0:
+            fetch_count = int(min(batch_size, remaining))
+            query_clauses = list(base_clauses)
+            if cursor_ts is not None and cursor_id is not None:
+                query_clauses.append({
+                    "$or": [
+                        {"timestamp": {"$gt": cursor_ts}},
+                        {"timestamp": cursor_ts, "_id": {"$gt": cursor_id}},
+                    ]
+                })
+
+            query = {"$and": query_clauses} if query_clauses else {}
+            page = list(mongo_collection.find(query).sort([("timestamp", 1), ("_id", 1)]).limit(fetch_count))
+            if not page:
+                break
+
+            all_records.extend(page)
+            remaining -= len(page)
+
+            last_doc = page[-1]
+            cursor_ts = _to_utc_dt(last_doc.get("timestamp"))
+            cursor_id = last_doc.get("_id")
+
+            if len(page) < fetch_count:
+                break
+
+        total_logs_scanned = len(all_records)
+
+        # Run registered detectors on collected records
         for rule in rules:
             detector_fn = DETECTOR_REGISTRY.get(rule.rule_type)
             if not detector_fn:
@@ -563,7 +670,7 @@ def execute_detection(
                 continue
 
             try:
-                rule_matches = detector_fn(records, rule)
+                rule_matches = detector_fn(all_records, rule)
             except Exception as exc:
                 logger.error("Error executing detector for rule %d (%s): %s", rule.rule_id, rule.rule_name, exc)
                 continue
@@ -578,9 +685,17 @@ def execute_detection(
                 else:
                     alerts_unchanged += 1
 
+        # Advance checkpoint watermark upon successful processing
+        if all_records and use_checkpoint and checkpoint_name and not start:
+            last_record = all_records[-1]
+            last_ts = _to_utc_dt(last_record.get("timestamp"))
+            last_id = str(last_record.get("_id") or "")
+            if last_ts:
+                save_checkpoint(conn, checkpoint_name, last_ts, last_id)
+
     return {
         "status": "success",
-        "logs_scanned": len(records),
+        "logs_scanned": total_logs_scanned,
         "rules_evaluated": len(rules),
         "matches_found": matches_found,
         "alerts_created": alerts_created,
