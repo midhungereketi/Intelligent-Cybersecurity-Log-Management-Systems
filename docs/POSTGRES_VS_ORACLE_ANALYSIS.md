@@ -42,13 +42,9 @@ To satisfy academic requirements while ensuring application integrity, the team 
 - This reflects realistic, modern cybersecurity engineering architectures (similar to Elastic/OpenSearch + PostgreSQL or Splunk + relational metadata).
 - Automated tests run against real PostgreSQL or an accurate transactional mock (`MockDatabase`) verifying constraints, foreign keys, and unique indexes.
 
-### Tier 2: Academic Coursework Demonstration (Oracle Reference)
-- For syllabus compliance requiring Oracle DDL or PL/SQL scripts, an Oracle-compatible schema script is provided in `sql/` as a companion artifact:
-  - Sequence + trigger definitions for auto-incrementing surrogate keys.
-  - `NUMBER(1)` constraints for booleans.
-  - `VARCHAR2` columns for IP addresses and `CLOB` for evidence.
-  - Function-based index workarounds for partial deduplication.
-- If the course evaluator requires live Oracle execution during the viva/review, the Oracle script can be demonstrated in Oracle SQL Developer or Oracle Live SQL independently of the live FastAPI service.
+### Tier 2: Academic Coursework Demonstration (PostgreSQL)
+- The runnable PostgreSQL Review II scripts are `sql/004_review2_operations.postgres.sql` and `sql/review2_demo.postgres.sql`. They demonstrate DDL and constraints, meaningful DML and queries, a stored function, a stored procedure with an explicit cursor, and a status-audit trigger.
+- These scripts use PostgreSQL PL/pgSQL. They are not Oracle 11g PL/SQL and cannot be run unchanged in Oracle SQL Developer. If the evaluator explicitly mandates Oracle execution, an Oracle port remains a separate requirement.
 
 ---
 

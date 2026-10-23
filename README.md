@@ -34,6 +34,7 @@ Apply the SQL migrations in order:
 1. `sql/001_devices_and_sources.postgres.sql`
 2. `sql/002_auth_and_detection.postgres.sql`
 3. `sql/003_incidents_and_actions.postgres.sql`
+4. `sql/004_review2_operations.postgres.sql`
 
 ```powershell
 # 1. Backend environment setup
@@ -52,6 +53,7 @@ $env:POSTGRES_DSN = 'postgresql://postgres:postgres@localhost:5432/cybersecurity
 psql $env:POSTGRES_DSN -f sql/001_devices_and_sources.postgres.sql
 psql $env:POSTGRES_DSN -f sql/002_auth_and_detection.postgres.sql
 psql $env:POSTGRES_DSN -f sql/003_incidents_and_actions.postgres.sql
+psql $env:POSTGRES_DSN -f sql/004_review2_operations.postgres.sql
 
 # 5. Start backend
 uvicorn app.main:app --reload --port 8000
@@ -149,5 +151,7 @@ python scripts/e2e_integration_demo.py
 ```
 
 The GitHub Actions pipeline also verifies the full API lifecycle against real MongoDB 7 and PostgreSQL 16, runs the million-log indexed-search benchmark, and exercises login, upload, search, detection, alert escalation, incident action, and dashboard in Chromium against those databases. To run the browser test locally after starting MongoDB and PostgreSQL, applying migrations, and configuring `.env`, run `cd frontend`, `npx playwright install chromium`, and `npm run test:e2e`.
+
+For Review II, `sql/004_review2_operations.postgres.sql` adds an alert-status audit trigger, an incident risk-score function, and a procedure with an explicit cursor that refreshes incident priorities. `sql/review2_demo.postgres.sql` exercises insert/update/delete, joins, grouping, aggregation, a subquery, and those stored operations inside a rolled-back transaction. Run it with `psql $env:POSTGRES_DSN -v ON_ERROR_STOP=1 -f sql/review2_demo.postgres.sql` from the repository root.
 
 For database coursework considerations and the PostgreSQL vs Oracle 11g demonstration plan, see [PostgreSQL vs Oracle Analysis](docs/POSTGRES_VS_ORACLE_ANALYSIS.md).

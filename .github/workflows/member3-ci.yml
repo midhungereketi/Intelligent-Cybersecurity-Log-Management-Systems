@@ -57,7 +57,7 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements-dev.txt
 
-      # ── Run SQL migrations 001 → 002 → 003 against real PostgreSQL ──
+      # ── Run SQL migrations 001 → 004 against real PostgreSQL ──
       - name: Apply migration 001 (devices & sources)
         run: psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/001_devices_and_sources.postgres.sql
 
@@ -67,9 +67,15 @@ jobs:
       - name: Apply migration 003 (incidents & actions) — Member 3 schema
         run: psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/003_incidents_and_actions.postgres.sql
 
+      - name: Apply migration 004 (Review II SQL operations)
+        run: psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/004_review2_operations.postgres.sql
+
       # Idempotency check: re-applying 003 must succeed (all tables use IF NOT EXISTS)
       - name: Verify migration 003 is idempotent
         run: psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/003_incidents_and_actions.postgres.sql
+
+      - name: Verify migration 004 is idempotent
+        run: psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/004_review2_operations.postgres.sql
 
       # ── Compile check ──
       - name: Compile Python source
@@ -151,6 +157,9 @@ jobs:
           psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/001_devices_and_sources.postgres.sql
           psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/002_auth_and_detection.postgres.sql
           psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/003_incidents_and_actions.postgres.sql
+          psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/004_review2_operations.postgres.sql
+      - name: Exercise Review II DML, queries, function, trigger and cursor procedure
+        run: psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/review2_demo.postgres.sql
       - name: Verify real MongoDB, PostgreSQL, and API lifecycle
         run: python scripts/verify_full_live.py
 
@@ -204,6 +213,7 @@ jobs:
           psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/001_devices_and_sources.postgres.sql
           psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/002_auth_and_detection.postgres.sql
           psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/003_incidents_and_actions.postgres.sql
+          psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/004_review2_operations.postgres.sql
       - run: npm run test:e2e
         working-directory: frontend
       - uses: actions/upload-artifact@v4
