@@ -139,6 +139,7 @@ export default function LoginView({ onLoginSuccess }) {
               </strong>
               Copy <code style={{ color: 'var(--cyan-glow)' }}>.env.example</code> to{' '}
               <code style={{ color: 'var(--cyan-glow)' }}>.env</code> and set{' '}
+              <code style={{ color: 'var(--cyan-glow)' }}>JWT_SECRET_KEY</code>,{' '}
               <code style={{ color: 'var(--cyan-glow)' }}>ADMIN_USERNAME</code>,{' '}
               <code style={{ color: 'var(--cyan-glow)' }}>ADMIN_PASSWORD</code>, and{' '}
               <code style={{ color: 'var(--cyan-glow)' }}>ADMIN_EMAIL</code>.

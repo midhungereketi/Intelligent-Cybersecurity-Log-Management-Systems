@@ -12,6 +12,8 @@
 
 This report is for the other two members and their AI agents. It describes the code that exists, its tested behavior, the interfaces to use, and the decisions the team still needs to make. Use the repository source as the authority if this report and code ever differ.
 
+**Current team status (22 October 2026):** Members 2 and 3 have since implemented their modules on separate branches. See [Team Remaining Work](TEAM_REMAINING_WORK.md) for the current integration and verification tasks; the original handoff sections below describe the Member 1 API contract.
+
 ## What Member 1 completed
 
 | Deliverable | Location | Current behavior |
@@ -102,12 +104,13 @@ Useful commands:
 ```powershell
 pip install -r requirements-dev.txt
 python -m unittest discover -s tests -v
+python scripts/verify_member1_live.py
 python scripts/generate_logs.py --count 1000 --output sample.jsonl
 python scripts/generate_logs.py --count 1000000 --insert
 python scripts/benchmark.py --source-ip 198.51.100.10 --repeats 5 --output benchmark.json
 ```
 
-On Member 1's development environment, Python compilation and **8 tests passed**, the generator produced **1,000 JSONL rows**, and the GitHub Actions workflow passed on the pull request. Tests use an in-memory MongoDB stand-in. A live MongoDB and PostgreSQL integration run and a one-million-record benchmark have **not** been performed yet. Do not quote a performance improvement until the benchmark has been run on the team's machine and its dataset size and hardware have been recorded.
+Python compilation and **8 unit tests passed**. The [Member 1 live verification run](https://github.com/midhungereketi/Intelligent-Cybersecurity-Log-Management-Systems/actions/runs/39795002781) applied migration 001 to PostgreSQL 16, checked real MongoDB ingestion/search/indexes, inserted **1,000,000 synthetic logs**, and saved a search benchmark. The measured result and its environment are in [Member 1 Verification](MEMBER1_VERIFICATION.md), with the raw [benchmark JSON](benchmarks/member1_1m_2026-10-22.json). The live test uses temporary SQL records and cleans up its own MongoDB test events. Benchmark timings are specific to the GitHub runner and query; do not present them as universal performance guarantees.
 
 ## Handoff to Member 2 and their AI agent
 

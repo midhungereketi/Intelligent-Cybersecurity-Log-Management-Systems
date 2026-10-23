@@ -1,10 +1,8 @@
 # Intelligent Cybersecurity Log Management System
 
-This repository contains the Member 1 data pipeline for a three-member Database Systems project. It accepts security logs, stores them in MongoDB, supports indexed search, and provides a repeatable performance comparison. PostgreSQL tables and APIs manage device and log-source metadata.
+This three-member Database Systems project stores security logs in MongoDB, keeps users, alerts, and incidents in PostgreSQL, and provides a React Security Operations Center dashboard. It supports indexed log search, suspicious activity detection, alert triage, and incident response.
 
-The other members can add authentication, detection, alerts, analytics, and incident handling using the API described below.
-
-For teammate and AI-agent handoff, see [Member 1 Handoff Report](docs/MEMBER1_HANDOFF.md) and [Member 2 Handoff Report](docs/MEMBER2_HANDOFF.md).
+See the [Member 1](docs/MEMBER1_HANDOFF.md), [Member 2](docs/MEMBER2_HANDOFF.md), and [Member 3](docs/MEMBER3_HANDOFF.md) handoffs for module details. The [million-log benchmark](docs/MEMBER1_VERIFICATION.md) records measured indexed search performance.
 
 ## Member deliverables
 
@@ -29,7 +27,7 @@ Requires Python 3.11+, MongoDB, PostgreSQL, and Node.js 18+. Apply the SQL migra
 
 ### Environment Variables
 Configure the mandatory environment variables (see `.env.example`):
-- `JWT_SECRET_KEY`: Mandatory secure secret key (minimum 32 characters). The app fails fast on startup if this is missing.
+- `JWT_SECRET_KEY`: Mandatory random signing secret. Generate one with `python -c "import secrets; print(secrets.token_urlsafe(48))"`; the app fails fast if it is missing.
 - `MONGO_URI` and `MONGO_DATABASE`: MongoDB connection string and database name (`cybersecurity_logs`).
 - `POSTGRES_DSN`: PostgreSQL connection DSN (`postgresql://user:password@localhost:5432/cybersecurity`).
 - `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `ADMIN_EMAIL`: Optional credentials for bootstrapping the initial administrator account.
@@ -47,7 +45,7 @@ python -m venv .venv
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
 
-# 2. Copy and configure environment variables
+# 2. Copy .env.example and fill in JWT_SECRET_KEY and ADMIN_PASSWORD
 Copy-Item .env.example .env
 
 # 3. Apply SQL migrations
@@ -58,7 +56,7 @@ psql $env:POSTGRES_DSN -f sql/003_incidents_and_actions.postgres.sql
 # 4. Start backend
 uvicorn app.main:app --reload --port 8000
 ```
-Open `http://127.0.0.1:8000/docs` for interactive OpenAPI documentation. Starting the API checks MongoDB connectivity, creates the required indexes, and bootstraps the initial administrator account from `.env`.
+Open `http://127.0.0.1:8000/docs` for interactive OpenAPI documentation. The backend loads `.env` from the repository root without overriding variables already set in the shell. Startup checks MongoDB, creates the required indexes, and bootstraps the initial administrator account.
 
 ### Frontend Setup
 ```powershell
@@ -83,7 +81,7 @@ Each record requires `timestamp` (ISO 8601 with a timezone or BSON Date), `sourc
 }
 ```
 
-The ingestion API does not check whether optional `source_id` or `device_id` values exist in PostgreSQL. The team should decide whether to enforce this at the API boundary once SQL ownership and the log-source workflow are integrated.
+Optional `source_id` and `device_id` values are validated as positive integers but are not cross-checked against PostgreSQL when a log is ingested; use registered IDs when supplying them.
 
 ## API contract
 
@@ -93,8 +91,8 @@ The ingestion API does not check whether optional `source_id` or `device_id` val
 | `POST /api/logs/events` | Insert one JSON event | Analyst / Admin |
 | `POST /api/logs/upload` | Upload a multipart file named `file`; max 25 MB | Analyst / Admin |
 | `GET /api/logs` | Search, time-filter (UTC start/end), and paginate logs | Analyst / Admin |
-| `GET /api/devices` / `POST /api/devices` | List and create devices | Analyst / Admin |
-| `GET /api/sources` / `POST /api/sources` | List and create log sources | Analyst / Admin |
+| `GET /api/devices` / `POST /api/devices` | List devices (Analyst/Admin); create devices (Admin) | Role-based |
+| `GET /api/sources` / `POST /api/sources` | List sources (Analyst/Admin); create sources (Admin) | Role-based |
 | `POST /api/auth/login` | Authenticate user, returns HS256 JWT access token | Public |
 | `POST /api/auth/logout` | Revoke current user's session token | Authenticated |
 | `GET /api/auth/me` | Retrieve profile of currently authenticated user | Authenticated |
@@ -134,13 +132,9 @@ python scripts/benchmark.py --source-ip 198.51.100.10 --repeats 5 --output bench
 
 Start with 1,000 records and increase gradually according to available RAM and disk space. The benchmark reports the collection size, query, median time, and query plan for both a natural collection scan and the `source_ip_time` index. Run it after the dataset is loaded, on the same machine, and include the hardware and dataset size in the project report. `benchmark.json` contains environment-specific results and should not be committed as a universal performance claim.
 
-## Team integration points
-
-Member 2 can use `source_ip`, `event_type`, `timestamp`, `username`, and destination fields for detection rules, then store alert evidence using MongoDB log IDs as strings in SQL. SQL foreign keys cannot reference MongoDB documents. Member 3 can call `GET /api/logs` for the search table and use the metadata endpoints for device/source selection. Analytics endpoints should use MongoDB aggregation on the same normalized fields.
-
 ## Verification and automated tests
 
-Install development dependencies and run the complete test suite (46 tests):
+Install development dependencies and run the complete backend test suite:
 
 ```powershell
 pip install -r requirements-dev.txt
@@ -148,7 +142,7 @@ python -m compileall -q app scripts tests
 python -m unittest discover -s tests -v
 ```
 
-Execute the full 12-step end-to-end integration demonstration:
+Execute the 12-step mock-database integration demonstration:
 
 ```powershell
 python scripts/e2e_integration_demo.py

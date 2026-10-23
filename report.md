@@ -1,4 +1,4 @@
-# End-to-End Integration Demonstration Report
+# Mock-Database Integration Demonstration Report
 
 **Project:** Intelligent Cybersecurity Log Management Systems
 **Branch:** `member3.1--lakshman`
@@ -123,8 +123,7 @@ END-TO-END DEMONSTRATION COMPLETE: ALL 12 STEPS PASSED PERFECTLY
 ======================================================================
 ```
 
-## Next Steps
-- If you need to run the workflow against the **real** MongoDB instance instead of the mock, start the FastAPI server (`uvicorn app.main:app --reload`) after ensuring the `.env` file is loaded (the `JWT_SECRET_KEY` is set). Then execute the same script without the `mongomock` overrides.
-- All tests have already passed (`79 passed`). No further action is required unless you wish to modify behavior.
+## Scope
+This historical demonstration used `mongomock` and the in-memory PostgreSQL stand-in. `scripts/e2e_integration_demo.py` always enables those mocks; setting environment variables alone does not turn it into a live-database test. The separate `scripts/verify_full_live.py` runs the API lifecycle against real MongoDB and PostgreSQL after migrations 001–003.
 
 **Artifact:** This report is saved as `report.md` in the artifacts directory.

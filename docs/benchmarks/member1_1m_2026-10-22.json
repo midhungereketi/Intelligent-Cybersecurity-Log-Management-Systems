@@ -1,0 +1,202 @@
+{
+  "collection_count": 1000000,
+  "query": {
+    "source_ip": "198.51.100.10"
+  },
+  "repeats": 5,
+  "collection_scan": {
+    "hint": [
+      [
+        "$natural",
+        1
+      ]
+    ],
+    "median_ms": 188.4233389999963,
+    "execution_stats": {
+      "executionSuccess": true,
+      "nReturned": 50,
+      "executionTimeMillis": 203,
+      "totalKeysExamined": 0,
+      "totalDocsExamined": 1000000,
+      "executionStages": {
+        "stage": "SORT",
+        "nReturned": 50,
+        "executionTimeMillisEstimate": 12,
+        "works": 1000052,
+        "advanced": 50,
+        "needTime": 1000001,
+        "needYield": 0,
+        "saveState": 1000,
+        "restoreState": 1000,
+        "isEOF": 1,
+        "sortPattern": {
+          "timestamp": -1
+        },
+        "memLimit": 104857600,
+        "limitAmount": 50,
+        "type": "simple",
+        "totalDataSizeSorted": 16547,
+        "usedDisk": false,
+        "spills": 0,
+        "spilledDataStorageSize": 0,
+        "inputStage": {
+          "stage": "COLLSCAN",
+          "filter": {
+            "source_ip": {
+              "$eq": "198.51.100.10"
+            }
+          },
+          "nReturned": 25000,
+          "executionTimeMillisEstimate": 12,
+          "works": 1000001,
+          "advanced": 25000,
+          "needTime": 975000,
+          "needYield": 0,
+          "saveState": 1000,
+          "restoreState": 1000,
+          "isEOF": 1,
+          "direction": "forward",
+          "docsExamined": 1000000
+        }
+      }
+    },
+    "winning_plan": {
+      "stage": "SORT",
+      "sortPattern": {
+        "timestamp": -1
+      },
+      "memLimit": 104857600,
+      "limitAmount": 50,
+      "type": "simple",
+      "inputStage": {
+        "stage": "COLLSCAN",
+        "filter": {
+          "source_ip": {
+            "$eq": "198.51.100.10"
+          }
+        },
+        "direction": "forward"
+      }
+    }
+  },
+  "indexed": {
+    "hint": "source_ip_time",
+    "median_ms": 0.39639499999566397,
+    "execution_stats": {
+      "executionSuccess": true,
+      "nReturned": 50,
+      "executionTimeMillis": 0,
+      "totalKeysExamined": 50,
+      "totalDocsExamined": 50,
+      "executionStages": {
+        "stage": "LIMIT",
+        "nReturned": 50,
+        "executionTimeMillisEstimate": 0,
+        "works": 51,
+        "advanced": 50,
+        "needTime": 0,
+        "needYield": 0,
+        "saveState": 0,
+        "restoreState": 0,
+        "isEOF": 1,
+        "limitAmount": 50,
+        "inputStage": {
+          "stage": "FETCH",
+          "nReturned": 50,
+          "executionTimeMillisEstimate": 0,
+          "works": 50,
+          "advanced": 50,
+          "needTime": 0,
+          "needYield": 0,
+          "saveState": 0,
+          "restoreState": 0,
+          "isEOF": 0,
+          "docsExamined": 50,
+          "alreadyHasObj": 0,
+          "inputStage": {
+            "stage": "IXSCAN",
+            "nReturned": 50,
+            "executionTimeMillisEstimate": 0,
+            "works": 50,
+            "advanced": 50,
+            "needTime": 0,
+            "needYield": 0,
+            "saveState": 0,
+            "restoreState": 0,
+            "isEOF": 0,
+            "keyPattern": {
+              "source_ip": 1,
+              "timestamp": -1,
+              "_id": -1
+            },
+            "indexName": "source_ip_time",
+            "isMultiKey": false,
+            "multiKeyPaths": {
+              "source_ip": [],
+              "timestamp": [],
+              "_id": []
+            },
+            "isUnique": false,
+            "isSparse": false,
+            "isPartial": false,
+            "indexVersion": 2,
+            "direction": "forward",
+            "indexBounds": {
+              "source_ip": [
+                "[\"198.51.100.10\", \"198.51.100.10\"]"
+              ],
+              "timestamp": [
+                "[MaxKey, MinKey]"
+              ],
+              "_id": [
+                "[MaxKey, MinKey]"
+              ]
+            },
+            "keysExamined": 50,
+            "seeks": 1,
+            "dupsTested": 0,
+            "dupsDropped": 0
+          }
+        }
+      }
+    },
+    "winning_plan": {
+      "stage": "LIMIT",
+      "limitAmount": 50,
+      "inputStage": {
+        "stage": "FETCH",
+        "inputStage": {
+          "stage": "IXSCAN",
+          "keyPattern": {
+            "source_ip": 1,
+            "timestamp": -1,
+            "_id": -1
+          },
+          "indexName": "source_ip_time",
+          "isMultiKey": false,
+          "multiKeyPaths": {
+            "source_ip": [],
+            "timestamp": [],
+            "_id": []
+          },
+          "isUnique": false,
+          "isSparse": false,
+          "isPartial": false,
+          "indexVersion": 2,
+          "direction": "forward",
+          "indexBounds": {
+            "source_ip": [
+              "[\"198.51.100.10\", \"198.51.100.10\"]"
+            ],
+            "timestamp": [
+              "[MaxKey, MinKey]"
+            ],
+            "_id": [
+              "[MaxKey, MinKey]"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

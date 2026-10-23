@@ -2,7 +2,14 @@ name: Member 1 tests
 
 on:
   push:
-    branches: [main, member1-log-pipeline, member2-shraavanth]
+    branches: [main, member1-log-pipeline, member2-shraavanth, member3.1--lakshman, final-integration]
+    paths:
+      - '.github/workflows/member1-tests.yml'
+      - 'app/**'
+      - 'scripts/**'
+      - 'sql/**'
+      - 'tests/**'
+      - 'requirements*.txt'
   pull_request:
 
 permissions:
@@ -19,3 +26,55 @@ jobs:
       - run: pip install -r requirements-dev.txt
       - run: python -m compileall -q app scripts tests
       - run: python -m unittest discover -s tests -v
+
+  live-member1:
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/member1-log-pipeline' || github.ref == 'refs/heads/final-integration' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    services:
+      mongo:
+        image: mongo:7
+        ports:
+          - 27017:27017
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: cybersecurity_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      MONGO_URI: mongodb://localhost:27017
+      MONGO_DATABASE: cybersecurity_ci
+      POSTGRES_DSN: postgresql://postgres:postgres@localhost:5432/cybersecurity_ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-dev.txt
+      - name: Apply Member 1 PostgreSQL migration
+        run: psql "$POSTGRES_DSN" -v ON_ERROR_STOP=1 -f sql/001_devices_and_sources.postgres.sql
+      - name: Verify real MongoDB and PostgreSQL operations
+        run: python scripts/verify_member1_live.py
+      - name: Insert one million synthetic logs
+        run: python scripts/generate_logs.py --count 1000000 --insert
+      - name: Compare indexed search with collection scan
+        run: python scripts/benchmark.py --source-ip 198.51.100.10 --repeats 5 --output benchmark.json
+      - name: Record benchmark host
+        run: |
+          lscpu > benchmark-host.txt
+          free -h >> benchmark-host.txt
+          df -h . >> benchmark-host.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: member1-million-log-benchmark
+          path: |
+            benchmark.json
+            benchmark-host.txt
