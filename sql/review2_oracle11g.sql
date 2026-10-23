@@ -194,6 +194,7 @@ BEGIN
     END IF;
 END;
 /
+SHOW ERRORS TRIGGER trg_alert_incident
 
 CREATE OR REPLACE TRIGGER trg_incident_resolved
 BEFORE UPDATE OF status ON incident
@@ -206,6 +207,7 @@ BEGIN
     END IF;
 END;
 /
+SHOW ERRORS TRIGGER trg_incident_resolved
 
 -- 3. Meaningful synthetic data and DML -------------------------------------
 INSERT INTO role_def VALUES (1, 'ADMIN', 'Manages users and rules');
