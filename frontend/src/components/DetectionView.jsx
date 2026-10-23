@@ -114,9 +114,9 @@ export default function DetectionView() {
               <span>Execution Summary</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', fontSize: '0.85rem' }}>
-              <div>Scanned Events: <strong>{runResult.events_scanned}</strong></div>
+              <div>Scanned Events: <strong>{runResult.logs_scanned}</strong></div>
               <div>Rules Evaluated: <strong>{runResult.rules_evaluated}</strong></div>
-              <div>New Alerts Created: <strong style={{ color: 'var(--rose-danger)' }}>{runResult.alerts_generated}</strong></div>
+              <div>New Alerts Created: <strong style={{ color: 'var(--rose-danger)' }}>{runResult.alerts_created}</strong></div>
               <div>Alerts Incremented: <strong style={{ color: 'var(--amber-warning)' }}>{runResult.alerts_updated}</strong></div>
             </div>
           </div>

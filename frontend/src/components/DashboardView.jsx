@@ -99,9 +99,9 @@ export default function DashboardView({ onNavigate }) {
         <div className="alert-banner banner-success" style={{ marginBottom: '20px' }}>
           <CheckCircle2 size={18} />
           <span>
-            Detection pass complete: <strong>{detectResult.events_scanned}</strong> events scanned across 
+            Detection pass complete: <strong>{detectResult.logs_scanned}</strong> events scanned across 
             <strong> {detectResult.rules_evaluated}</strong> rules. 
-            Generated <strong>{detectResult.alerts_generated}</strong> new alert(s), 
+            Generated <strong>{detectResult.alerts_created}</strong> new alert(s), 
             updated <strong>{detectResult.alerts_updated}</strong> active alert(s).
           </span>
         </div>
