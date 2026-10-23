@@ -1,5 +1,7 @@
 # Member 1 Live Verification and Benchmark
 
+> Historical Member 1 benchmark report. The three-member integration is complete on `main`; see the [detailed project report](DETAILED_PROJECT_REPORT.md) for the current overall status.
+
 **Owner:** Midhun (Member 1)  
 **Branch:** `member1-log-pipeline`  
 **Verified commit:** `4dca3d2da3104802188d49bb4d89ff1552ef2cd5`  

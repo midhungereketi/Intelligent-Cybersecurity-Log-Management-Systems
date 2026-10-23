@@ -42,9 +42,9 @@ To satisfy academic requirements while ensuring application integrity, the team 
 - This reflects realistic, modern cybersecurity engineering architectures (similar to Elastic/OpenSearch + PostgreSQL or Splunk + relational metadata).
 - Automated tests run against real PostgreSQL or an accurate transactional mock (`MockDatabase`) verifying constraints, foreign keys, and unique indexes.
 
-### Tier 2: Academic Coursework Demonstration (PostgreSQL)
-- The runnable PostgreSQL Review II scripts are `sql/004_review2_operations.postgres.sql` and `sql/review2_demo.postgres.sql`. They demonstrate DDL and constraints, meaningful DML and queries, a stored function, a stored procedure with an explicit cursor, and a status-audit trigger.
-- These scripts use PostgreSQL PL/pgSQL. They are not Oracle 11g PL/SQL and cannot be run unchanged in Oracle SQL Developer. If the evaluator explicitly mandates Oracle execution, an Oracle port remains a separate requirement.
+### Tier 2: Academic Coursework Demonstration
+- The PostgreSQL Review II scripts are `sql/004_review2_operations.postgres.sql` and `sql/review2_demo.postgres.sql`. GitHub Actions executes them against real PostgreSQL 16. They demonstrate DDL and constraints, meaningful DML and queries, a stored function, a stored procedure with an explicit cursor, and a status-audit trigger.
+- A separate Oracle 11g implementation is supplied as `sql/review2_oracle11g.sql`, with an independent check script in `sql/review2_oracle11g_verify.sql`. It covers the relational model and Oracle PL/SQL rubric using a small synthetic dataset. Follow `sql/ORACLE_REVIEW2_GUIDE.md` to execute it in a clean Oracle schema. The Oracle script has not been verified against a live Oracle instance in this repository's CI and is not wired to the FastAPI application.
 
 ---
 

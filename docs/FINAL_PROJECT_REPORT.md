@@ -1,5 +1,7 @@
 # Final Project Report — Intelligent Cybersecurity Log Management System
 
+For the full workflow, requirement-by-requirement coverage, and submission evidence, see the [detailed project report](DETAILED_PROJECT_REPORT.md).
+
 **Team:** Midhun (Member 1), Shraavanth (Member 2), Lakshman (Member 3)  
 **Integrated branch:** `main`  
 **Date:** 24 October 2026
@@ -33,4 +35,4 @@ For a faculty demo, sign in as the bootstrap admin, upload a small JSONL sample 
 
 ## Scope note
 
-The runnable application uses PostgreSQL for SQL features. The [Oracle 11g analysis](POSTGRES_VS_ORACLE_ANALYSIS.md) is supplementary coursework material, not a second running database backend. Advanced machine learning is outside this implementation; suspicious activity detection uses explainable SQL-configured rules.
+The runnable application uses PostgreSQL for SQL features. A separate [Oracle 11g Review II script and verification guide](../sql/ORACLE_REVIEW2_GUIDE.md) cover the Oracle PL/SQL rubric with a small synthetic dataset; they have not been executed against a live Oracle instance in GitHub CI and do not form a second application backend. Advanced machine learning is outside this implementation; suspicious activity detection uses explainable SQL-configured rules.
