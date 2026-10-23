@@ -74,7 +74,10 @@ async function request(endpoint, options = {}) {
   }
 
   if (!response.ok) {
-    const errorMsg = data?.detail || (typeof data === 'string' ? data : `Request failed with status ${response.status}`);
+    const backendUnavailable = [502, 503, 504].includes(response.status) && !data;
+    const errorMsg = backendUnavailable
+      ? 'Backend unavailable. Start FastAPI, MongoDB, and PostgreSQL before signing in.'
+      : data?.detail || (typeof data === 'string' && data ? data : `Request failed with status ${response.status}`);
     const err = new Error(errorMsg);
     err.status = response.status;
     err.data = data;
