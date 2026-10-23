@@ -2,7 +2,7 @@
 
 This three-member Database Systems project stores security logs in MongoDB, keeps users, alerts, and incidents in PostgreSQL, and provides a React Security Operations Center dashboard. It supports indexed log search, suspicious activity detection, alert triage, and incident response.
 
-See the [Member 1](docs/MEMBER1_HANDOFF.md), [Member 2](docs/MEMBER2_HANDOFF.md), and [Member 3](docs/MEMBER3_HANDOFF.md) handoffs for module details. The [million-log benchmark](docs/MEMBER1_VERIFICATION.md) records measured indexed search performance.
+See the [final project report](docs/FINAL_PROJECT_REPORT.md) for the integrated architecture and verification results. The [Member 1](docs/MEMBER1_HANDOFF.md), [Member 2](docs/MEMBER2_HANDOFF.md), and [Member 3](docs/MEMBER3_HANDOFF.md) handoffs preserve each member's implementation history. The [million-log benchmark](docs/MEMBER1_VERIFICATION.md) records measured indexed search performance.
 
 ## Member deliverables
 
@@ -20,10 +20,7 @@ See the [Member 1](docs/MEMBER1_HANDOFF.md), [Member 2](docs/MEMBER2_HANDOFF.md)
 
 ## Setup
 
-Requires Python 3.11+, MongoDB, PostgreSQL, and Node.js 18+. Apply the SQL migrations in order:
-1. `sql/001_devices_and_sources.postgres.sql`
-2. `sql/002_auth_and_detection.postgres.sql`
-3. `sql/003_incidents_and_actions.postgres.sql`
+Requires Python 3.11+, MongoDB 7, PostgreSQL 16, and Node.js 22. Create an empty PostgreSQL database before applying the migrations below.
 
 ### Environment Variables
 Configure the mandatory environment variables (see `.env.example`):
@@ -48,12 +45,15 @@ pip install -r requirements-dev.txt
 # 2. Copy .env.example and fill in JWT_SECRET_KEY and ADMIN_PASSWORD
 Copy-Item .env.example .env
 
-# 3. Apply SQL migrations
+# 3. Set the same PostgreSQL DSN in this shell; psql does not load .env
+$env:POSTGRES_DSN = 'postgresql://postgres:postgres@localhost:5432/cybersecurity'
+
+# 4. Apply SQL migrations
 psql $env:POSTGRES_DSN -f sql/001_devices_and_sources.postgres.sql
 psql $env:POSTGRES_DSN -f sql/002_auth_and_detection.postgres.sql
 psql $env:POSTGRES_DSN -f sql/003_incidents_and_actions.postgres.sql
 
-# 4. Start backend
+# 5. Start backend
 uvicorn app.main:app --reload --port 8000
 ```
 Open `http://127.0.0.1:8000/docs` for interactive OpenAPI documentation. The backend loads `.env` from the repository root without overriding variables already set in the shell. Startup checks MongoDB, creates the required indexes, and bootstraps the initial administrator account.
@@ -61,7 +61,7 @@ Open `http://127.0.0.1:8000/docs` for interactive OpenAPI documentation. The bac
 ### Frontend Setup
 ```powershell
 cd frontend
-npm install
+npm ci
 npm run dev
 ```
 Open `http://localhost:5173` to access the Security Operations Center dashboard.
@@ -147,5 +147,7 @@ Execute the 12-step mock-database integration demonstration:
 ```powershell
 python scripts/e2e_integration_demo.py
 ```
+
+The GitHub Actions pipeline also verifies the full API lifecycle against real MongoDB 7 and PostgreSQL 16, runs the million-log indexed-search benchmark, and exercises login, upload, search, detection, alert escalation, incident action, and dashboard in Chromium against those databases. To run the browser test locally after starting MongoDB and PostgreSQL, applying migrations, and configuring `.env`, run `cd frontend`, `npx playwright install chromium`, and `npm run test:e2e`.
 
 For database coursework considerations and the PostgreSQL vs Oracle 11g demonstration plan, see [PostgreSQL vs Oracle Analysis](docs/POSTGRES_VS_ORACLE_ANALYSIS.md).

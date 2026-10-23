@@ -12,7 +12,7 @@
 
 This report is for the other two members and their AI agents. It describes the code that exists, its tested behavior, the interfaces to use, and the decisions the team still needs to make. Use the repository source as the authority if this report and code ever differ.
 
-**Current team status (22 October 2026):** Members 2 and 3 have since implemented their modules on separate branches. See [Team Remaining Work](TEAM_REMAINING_WORK.md) for the current integration and verification tasks; the original handoff sections below describe the Member 1 API contract.
+**Final team status (24 October 2026):** All three modules are integrated on `main`. See the [final project report](FINAL_PROJECT_REPORT.md). The original handoff sections below describe Member 1's pre-integration API and historical instructions.
 
 ## What Member 1 completed
 
@@ -97,7 +97,7 @@ The example ID and ingestion time above illustrate the format; they are not stor
 
 ## How to run and verify
 
-From the repository root, create a Python 3.11+ environment and install `requirements.txt`. Start MongoDB. Set `MONGO_URI` and `MONGO_DATABASE`, then run `uvicorn app.main:app --reload`. The API documentation will be at `http://127.0.0.1:8000/docs`. PostgreSQL is needed for `/api/devices` and `/api/sources`: create a database, run `sql/001_devices_and_sources.postgres.sql`, and set `POSTGRES_DSN`. `.env.example` contains sample values, but the app does not load `.env` automatically.
+From the repository root, create a Python 3.11+ environment and install `requirements.txt`. Start MongoDB. Set `MONGO_URI` and `MONGO_DATABASE`, then run `uvicorn app.main:app --reload`. The API documentation will be at `http://127.0.0.1:8000/docs`. PostgreSQL is needed for `/api/devices` and `/api/sources`: create a database, run `sql/001_devices_and_sources.postgres.sql`, and set `POSTGRES_DSN`. The integrated app now loads `.env` automatically; follow the README for all three migrations and current setup.
 
 Useful commands:
 
