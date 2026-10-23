@@ -199,9 +199,12 @@ SHOW ERRORS TRIGGER trg_alert_incident
 CREATE OR REPLACE TRIGGER trg_incident_resolved
 BEFORE UPDATE OF status ON incident
 FOR EACH ROW
+DECLARE
+    l_now_utc TIMESTAMP;
 BEGIN
     IF :NEW.status = 'RESOLVED' AND :OLD.status <> 'RESOLVED' THEN
-        :NEW.resolved_time := CAST(SYS_EXTRACT_UTC(SYSTIMESTAMP) AS TIMESTAMP);
+        SELECT SYS_EXTRACT_UTC(SYSTIMESTAMP) INTO l_now_utc FROM dual;
+        :NEW.resolved_time := l_now_utc;
     ELSIF :NEW.status <> 'RESOLVED' THEN
         :NEW.resolved_time := NULL;
     END IF;
