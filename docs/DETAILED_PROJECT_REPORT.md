@@ -10,7 +10,7 @@
 
 **Report date:** 24 October 2026
 
-This report explains the implemented three-member prototype, traces the Review I requirements and Review II database criteria to working artifacts, and gives a repeatable demonstration workflow. The application has passed its automated checks on GitHub `main`. The separate Oracle 11g Review II script is prepared and checked structurally, but a live Oracle execution result has not yet been captured. This distinction matters for an honest final submission.
+This report explains the implemented three-member prototype, traces the Review I requirements and Review II database criteria to working artifacts, and gives a repeatable demonstration workflow. The integrated application and the separate Oracle 11g Review II script have passed live database checks on GitHub `main`.
 
 ## 1. Problem and delivered scope
 
@@ -95,7 +95,7 @@ The Review I ER diagram includes optional ML_MODEL and PREDICTION entities, whil
 | Cursor and triggers | Explicit incident cursor and alert-status audit trigger | Failed-login cursor plus high-alert and incident-resolution triggers |
 | Viva explanation | Live CI evidence and this workflow | `sql/ORACLE_REVIEW2_GUIDE.md` explains run order, expected checks, and evidence capture |
 
-The PostgreSQL Review II demo **has passed against PostgreSQL 16** in GitHub Actions. The Oracle SQL is a separate, one-time script for a clean Oracle 11g schema. Its object counts and structure have been checked in source, but no Oracle database execution is recorded yet. Run both `sql/review2_oracle11g.sql` and `sql/review2_oracle11g_verify.sql` in SQL Developer and save the actual output before claiming an Oracle pass. The original Review I pages and the existing combined Review II PDF have not been edited for this report.
+The PostgreSQL Review II demo **passed against PostgreSQL 16** in GitHub Actions. The separate Oracle scripts **passed against Oracle XE 11g (11.2.0.2)** in an isolated GitHub Actions container: [Oracle execution run](https://github.com/midhungereketi/Intelligent-Cybersecurity-Log-Management-Systems/actions/runs/40022509813). The Oracle run created a clean schema, executed the DDL, DML, PL/SQL and review queries, then printed `REVIEW II ORACLE CHECKS PASSED`. It does not change the PostgreSQL application backend. The original Review I pages and the existing combined Review II PDF have not been edited for this report.
 
 ## 7. Measured and automated results
 
@@ -107,6 +107,7 @@ The PostgreSQL Review II demo **has passed against PostgreSQL 16** in GitHub Act
 | Frontend | Lint command and production build passed | Same Member 3 CI run, `frontend-build` job |
 | Review II PostgreSQL SQL | DML, join, aggregation, subquery, function, trigger, cursor procedure passed | Same Member 3 CI run, `live-system` job |
 | Million-log evaluation | Live verification and benchmark job passed on `main` | [Member 1 CI on main](https://github.com/midhungereketi/Intelligent-Cybersecurity-Log-Management-Systems/actions/runs/40018839393) |
+| Oracle 11g Review II | 12 tables, 10 logs, 5 valid PL/SQL objects, failed-login function, cursor replay, alert/incident triggers, and DML checks passed | [Oracle 11g CI on main](https://github.com/midhungereketi/Intelligent-Cybersecurity-Log-Management-Systems/actions/runs/40022509813), including downloadable SQL*Plus output |
 
 The recorded source-IP benchmark used one million synthetic records on a GitHub-hosted Linux runner with four visible virtual CPUs and 15 GiB RAM. The specific query returned 50 rows from 25,000 matching records. Across five measured requests, the indexed median was **0.396 ms** and a forced collection scan median was **188.423 ms**; the query plan examined 50 versus 1,000,000 documents. This is about 475 times faster for that query and runner, not a universal system-wide speed guarantee. See [raw benchmark data](benchmarks/member1_1m_2026-10-22.json).
 
@@ -153,16 +154,16 @@ Open `http://localhost:5173`; API documentation is at `http://127.0.0.1:8000/doc
 6. Escalate the alert, assign an analyst, record a response note/action, and show the incident and dashboard totals.
 7. Show the one-million-log benchmark report and explain the exact query, index, measured environment, and query plan.
 8. In PostgreSQL, run the rollback-only Review II demo and explain its function, cursor procedure, trigger, joins, and subquery.
-9. If faculty asks for Oracle PL/SQL, run the separate Oracle script and verification script in a clean Oracle 11g schema. Show actual output, not the expected values printed in the Review II PDF.
+9. Show the passing Oracle 11g CI run and its SQL*Plus output. If faculty wants a live lab demonstration, run the separate Oracle setup and verification scripts in a clean schema using the guide.
 
 ## 10. Completion boundary
 
-Within the Review I academic prototype scope, the integrated application and PostgreSQL Review II demonstration are implemented and passing. The Oracle 11g coursework artifact is prepared and packaged with a deterministic verification script. **An Oracle execution record is still required to state that the Oracle path is verified.** The project does not include enterprise deployment or trained ML because those were outside the stated scope.
+Within the stated Review I academic prototype scope, the integrated application, million-log benchmark, PostgreSQL Review II demonstration, and separate Oracle 11g coursework demonstration are implemented and passing. The Oracle evidence is a live CI run of XE 11g, not a claim that the FastAPI application uses Oracle. The project does not include enterprise deployment or trained ML because those were outside the stated scope. A faculty evaluation and any requested live presentation remain external academic steps.
 
-## 11. Oracle lab execution record
+## 11. Oracle 11g execution record and lab replay
 
-The Oracle path needs one clean run in your accessible Oracle 11g environment. Use a dedicated schema so the one-time DDL cannot collide with unrelated tables. In SQL Developer, open `sql/review2_oracle11g.sql`, enable DBMS Output, and choose **Run Script (F5)**. Confirm the 12 tables, four indexes, two triggers, one function, and two procedures compile without errors. The script inserts the synthetic records and runs the six review queries.
+The [Oracle 11g GitHub Actions run](https://github.com/midhungereketi/Intelligent-Cybersecurity-Log-Management-Systems/actions/runs/40022509813) succeeded on commit `e86bb94`. Its `oracle-11g` job started Oracle XE 11.2.0.2, created a dedicated `review2_ci` schema, ran `sql/review2_oracle11g.sql` and `sql/review2_oracle11g_verify.sql` through SQL*Plus, and uploaded the setup and verification output as an artifact. The output includes `Failed login count = 3` and `REVIEW II ORACLE CHECKS PASSED`. The verifier checks 12 tables, 10 sample logs, zero compilation errors, five valid PL/SQL objects, a deduplicated alert, a linked incident, the DELETE demonstration, and the resolved-time trigger.
 
-Next, run `sql/review2_oracle11g_verify.sql` in the same connection. A passing run prints `REVIEW II ORACLE CHECKS PASSED`; it also checks the failed-login count of three, one alert after detection replay, linked incident creation, DELETE behavior, and resolved-time trigger. The verification rolls back its temporary incident update. Capture the script output, any compilation messages, and representative query result screens for the faculty review.
+For a lab replay, use a dedicated clean Oracle 11g schema so the one-time DDL cannot collide with unrelated tables. In SQL Developer, open `sql/review2_oracle11g.sql`, enable DBMS Output, and choose **Run Script (F5)**. Then run `sql/review2_oracle11g_verify.sql` in the same connection. The verifier rolls back its temporary incident update. Save the actual output and representative query result screens for the faculty review.
 
-If either script reports an `ORA-` or `PLS-` error, record the exact message and line number, repair the script, then repeat from a clean schema. The expected values printed in the existing Review II PDF are not a substitute for actual execution output. Keep database passwords out of screenshots, the repository, and this report.
+If a lab run reports an `ORA-` or `PLS-` error, capture the exact message and line number and repeat from a clean schema after repair. Keep database passwords out of screenshots and the report.

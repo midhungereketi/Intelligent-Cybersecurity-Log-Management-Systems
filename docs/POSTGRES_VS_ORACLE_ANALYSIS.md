@@ -44,7 +44,7 @@ To satisfy academic requirements while ensuring application integrity, the team 
 
 ### Tier 2: Academic Coursework Demonstration
 - The PostgreSQL Review II scripts are `sql/004_review2_operations.postgres.sql` and `sql/review2_demo.postgres.sql`. GitHub Actions executes them against real PostgreSQL 16. They demonstrate DDL and constraints, meaningful DML and queries, a stored function, a stored procedure with an explicit cursor, and a status-audit trigger.
-- A separate Oracle 11g implementation is supplied as `sql/review2_oracle11g.sql`, with an independent check script in `sql/review2_oracle11g_verify.sql`. It covers the relational model and Oracle PL/SQL rubric using a small synthetic dataset. Follow `sql/ORACLE_REVIEW2_GUIDE.md` to execute it in a clean Oracle schema. The Oracle script has not been verified against a live Oracle instance in this repository's CI and is not wired to the FastAPI application.
+- A separate Oracle 11g implementation is supplied as `sql/review2_oracle11g.sql`, with an independent check script in `sql/review2_oracle11g_verify.sql`. It covers the relational model and Oracle PL/SQL rubric using a small synthetic dataset. Both scripts passed in a clean Oracle XE 11g schema in [GitHub CI](https://github.com/midhungereketi/Intelligent-Cybersecurity-Log-Management-Systems/actions/runs/40022509813). Follow `sql/ORACLE_REVIEW2_GUIDE.md` to replay it in a lab. It is not wired to the FastAPI application.
 
 ---
 

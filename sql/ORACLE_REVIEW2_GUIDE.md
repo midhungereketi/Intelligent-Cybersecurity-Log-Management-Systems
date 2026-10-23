@@ -2,6 +2,8 @@
 
 The production-style academic prototype runs on PostgreSQL and MongoDB. The separate [Oracle 11g script](review2_oracle11g.sql) demonstrates the Review II relational model and PL/SQL rubric with synthetic data. It does not replace PostgreSQL in the FastAPI application or synchronize its demo records with MongoDB.
 
+The scripts passed in an isolated Oracle XE 11g (11.2.0.2) schema in [GitHub Actions](https://github.com/midhungereketi/Intelligent-Cybersecurity-Log-Management-Systems/actions/runs/40022509813). Open the `oracle-11g` job and download its SQL*Plus output artifact for the actual execution record.
+
 Use a **clean, dedicated Oracle 11g schema**. `review2_oracle11g.sql` creates 12 tables, indexes, triggers, sequences, seed data, a failed-login count function, alert creation and cursor-scan procedures, and review queries. It is a one-time setup script: rerunning the whole file in the same schema will produce object-already-exists errors. Never run it in a schema containing valuable tables with these names.
 
 1. Open the dedicated connection in Oracle SQL Developer. Enable DBMS Output and use **Run Script (F5)**, not Run Statement, on `review2_oracle11g.sql`. SQL*Plus can also run `@review2_oracle11g.sql`.
@@ -11,4 +13,4 @@ Use a **clean, dedicated Oracle 11g schema**. `review2_oracle11g.sql` creates 12
 
 The verification checks 12 tables, 10 synthetic logs, three failed logins, detection replay without a duplicate alert, the high-alert incident trigger, the DELETE demonstration, and the resolved-time trigger. It deliberately uses sample IP ranges and placeholder password hashes. These users are **not** valid FastAPI login accounts.
 
-If an error occurs, capture the Oracle error text and line number. Do not claim an Oracle execution pass until the script and verification both complete successfully in Oracle 11g.
+If a lab replay produces an error, capture the Oracle error text and line number and repeat from a clean schema after repair.

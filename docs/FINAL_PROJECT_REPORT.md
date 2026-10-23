@@ -24,6 +24,7 @@ The project is a working React/FastAPI security operations console backed by Mon
 - Migration 004 adds an alert-status audit trigger, an incident risk-score function, and an explicit-cursor procedure for refreshing active incident priorities. A rollback-only SQL demonstration verifies insert/update/delete, joins, grouping, aggregation, a subquery, and these stored operations against real PostgreSQL.
 - Chromium browser automation uses the running FastAPI and Vite servers with those real databases. It checks login, upload, indexed search, detection results, alert escalation, incident creation and response action, and dashboard navigation.
 - The Member 1 live verification inserts **1,000,000 synthetic logs** and tests indexed queries. The recorded GitHub-run benchmark measured median **0.396 ms indexed** versus **188.423 ms collection scan** for its source-IP query. These times are specific to that CI runner and dataset; see [raw result](benchmarks/member1_1m_2026-10-22.json).
+- A separate [Oracle XE 11g CI run](https://github.com/midhungereketi/Intelligent-Cybersecurity-Log-Management-Systems/actions/runs/40022509813) passed the Review II DDL, DML, queries, function, procedures, cursor, and triggers in a dedicated schema. The verifier confirmed 12 tables, 10 logs, zero PL/SQL compilation errors, and the expected alert/incident behavior.
 
 The [mock demonstration report](../report.md) remains as a historical result. Live database and browser checks are separate from that mock run. The GitHub Actions status for the final `main` commit is the current execution record.
 
@@ -35,4 +36,4 @@ For a faculty demo, sign in as the bootstrap admin, upload a small JSONL sample 
 
 ## Scope note
 
-The runnable application uses PostgreSQL for SQL features. A separate [Oracle 11g Review II script and verification guide](../sql/ORACLE_REVIEW2_GUIDE.md) cover the Oracle PL/SQL rubric with a small synthetic dataset; they have not been executed against a live Oracle instance in GitHub CI and do not form a second application backend. Advanced machine learning is outside this implementation; suspicious activity detection uses explainable SQL-configured rules.
+The runnable application uses PostgreSQL for SQL features. A separate [Oracle 11g Review II script and verification guide](../sql/ORACLE_REVIEW2_GUIDE.md) cover the Oracle PL/SQL rubric with a small synthetic dataset and have passed against live Oracle XE 11g in GitHub CI; they do not form a second application backend. Advanced machine learning is outside this implementation; suspicious activity detection uses explainable SQL-configured rules.
