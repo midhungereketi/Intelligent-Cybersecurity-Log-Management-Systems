@@ -1,5 +1,6 @@
 """HTTP contract for Member 1 and Member 2 backend features."""
 
+import ipaddress
 import logging
 from contextlib import asynccontextmanager
 from typing import Annotated, Any
@@ -7,9 +8,10 @@ from typing import Annotated, Any
 import psycopg
 from fastapi import Depends, FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from psycopg.rows import dict_row
 from pymongo import MongoClient
+from pymongo.errors import PyMongoError
 
 from .auth import hash_password, require_admin, require_analyst_or_admin
 from .config import (
@@ -54,7 +56,8 @@ def _bootstrap_admin():
                 )
                 logger.info("Bootstrapped initial administrator account: %s", username)
     except Exception as exc:
-        logger.debug("Admin bootstrap skipped or failed: %s", exc)
+        # e.g. ADMIN_PASSWORD shorter than 8 characters, or migrations not applied
+        logger.warning("Admin bootstrap failed: %s", exc)
 
 
 @asynccontextmanager
@@ -92,6 +95,22 @@ def _sql_connection():
     return get_db_connection()
 
 
+def _blank_to_none(value: Any) -> Any:
+    """Forms send "" for untouched optional fields; store those as NULL."""
+    if isinstance(value, str) and not value.strip():
+        return None
+    return value
+
+
+def _optional_ip(value: str | None) -> str | None:
+    if value is None:
+        return None
+    try:
+        return str(ipaddress.ip_address(value.strip()))
+    except ValueError as exc:
+        raise ValueError("ip_address must be a valid IP address") from exc
+
+
 class DeviceIn(BaseModel):
     device_name: str = Field(min_length=1, max_length=120)
     ip_address: str | None = None
@@ -101,6 +120,9 @@ class DeviceIn(BaseModel):
     location: str | None = Field(default=None, max_length=120)
     status: str = Field(default="ACTIVE", pattern="^(ACTIVE|INACTIVE)$")
 
+    normalize_blanks = field_validator("ip_address", "mac_address", "operating_system", "location", mode="before")(_blank_to_none)
+    validate_ip = field_validator("ip_address")(_optional_ip)
+
 
 class SourceIn(BaseModel):
     source_name: str = Field(min_length=1, max_length=120)
@@ -109,10 +131,16 @@ class SourceIn(BaseModel):
     protocol: str | None = Field(default=None, max_length=30)
     device_id: int = Field(gt=0)
 
+    normalize_blanks = field_validator("ip_address", "protocol", mode="before")(_blank_to_none)
+    validate_ip = field_validator("ip_address")(_optional_ip)
+
 
 @app.get("/health")
 def health():
-    app.state.mongo.admin.command("ping")
+    try:
+        app.state.mongo.admin.command("ping")
+    except PyMongoError:
+        raise HTTPException(503, "MongoDB is unavailable")
     return {"status": "ok"}
 
 

@@ -124,9 +124,12 @@ def parse_upload(content: bytes, filename: str) -> Iterable[tuple[int, dict[str,
         for row_number, line in enumerate(decoded.splitlines(), start=1):
             if line.strip():
                 try:
-                    yield row_number, json.loads(line)
-                except json.JSONDecodeError as exc:
-                    raise ValueError(f"invalid JSON on line {row_number}") from exc
+                    row = json.loads(line)
+                except json.JSONDecodeError:
+                    # Earlier batches may already be stored, so aborting here would
+                    # report failure for a partial insert. Reject just this line.
+                    row = None
+                yield row_number, row
     else:
         raise ValueError("supported file types are CSV, JSON, and JSONL")
 

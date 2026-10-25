@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ipaddress
 import json
 import logging
 from datetime import datetime, timezone
@@ -199,7 +200,12 @@ def create_incident(
         raise HTTPException(status_code=422, detail=f"status must be one of {sorted(VALID_INCIDENT_STATUSES)}")
 
     now_utc = datetime.now(timezone.utc)
-    source_ip = payload.source_ip
+    source_ip = payload.source_ip.strip() if payload.source_ip else None
+    if source_ip:
+        try:
+            source_ip = str(ipaddress.ip_address(source_ip))
+        except ValueError:
+            raise HTTPException(status_code=422, detail="source_ip must be a valid IP address")
     evidence = list(payload.evidence)
 
     with db_transaction() as conn:
@@ -392,14 +398,25 @@ def update_incident(
             if st != existing["status"]:
                 updates.append("status = %s")
                 params.append(st)
-                if st in {"RESOLVED", "CLOSED"}:
+                was_closed = existing["status"] in {"RESOLVED", "CLOSED"}
+                if st in {"RESOLVED", "CLOSED"} and not was_closed:
                     updates.append("resolved_at = %s")
                     params.append(now_utc)
+                elif st not in {"RESOLVED", "CLOSED"} and was_closed:
+                    # Reopened: the case is no longer resolved
+                    updates.append("resolved_at = %s")
+                    params.append(None)
                 actions_to_log.append(
                     ("STATUS_CHANGE", f"Status updated from {existing['status']} to {st}", {"old": existing["status"], "new": st})
                 )
 
-        if payload.assigned_to is not None:
+        if "assigned_to" in payload.model_fields_set and payload.assigned_to is None:
+            # An explicit null clears the assignment
+            if existing["assigned_to"] is not None:
+                updates.append("assigned_to = %s")
+                params.append(None)
+                actions_to_log.append(("ASSIGNMENT", "Incident unassigned", {"assigned_to": None}))
+        elif payload.assigned_to is not None:
             if payload.assigned_to != existing["assigned_to"]:
                 assignee = conn.execute("SELECT user_id, username FROM users WHERE user_id = %s", (payload.assigned_to,)).fetchone()
                 if not assignee:

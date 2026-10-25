@@ -100,7 +100,7 @@ Optional `source_id` and `device_id` values are validated as positive integers b
 | `GET /api/auth/me` | Retrieve profile of currently authenticated user | Authenticated |
 | `GET /api/users` / `POST /api/users` / `PATCH /api/users/{id}` | User management | Administrator only |
 | `GET /api/users/assignable` | Minimal active user list (user_id, username) for assignee dropdowns | Analyst / Admin |
-| `GET /api/rules` / `POST /api/rules` / `PATCH /api/rules/{id}` | Detection rule management and threshold configuration | Analyst / Admin |
+| `GET /api/rules` / `POST /api/rules` / `PATCH /api/rules/{id}` | List rules (Analyst/Admin); create rules and change thresholds (Admin) | Role-based |
 | `GET /api/threats` / `GET /api/threats/{id}` | Threat records with correlated alerts and evidence | Analyst / Admin |
 | `GET /api/alerts` / `GET /api/alerts/{id}` | Security alerts with status, severity, and evidence | Analyst / Admin |
 | `POST /api/alerts/{id}/acknowledge` | Acknowledge active alert | Analyst / Admin |

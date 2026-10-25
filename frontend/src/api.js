@@ -34,6 +34,22 @@ export function setStoredUser(user) {
   }
 }
 
+/** FastAPI returns `detail` as a string, or as a list of field errors for 422s. */
+function describeDetail(detail) {
+  if (!detail) return null;
+  if (typeof detail === 'string') return detail;
+  if (Array.isArray(detail)) {
+    return detail
+      .map((item) => {
+        const field = Array.isArray(item?.loc) ? item.loc.filter((part) => part !== 'body').join('.') : '';
+        const msg = item?.msg || 'invalid value';
+        return field ? `${field}: ${msg}` : msg;
+      })
+      .join('; ');
+  }
+  return JSON.stringify(detail);
+}
+
 async function request(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`;
   const headers = { ...options.headers };
@@ -77,7 +93,7 @@ async function request(endpoint, options = {}) {
     const backendUnavailable = [502, 503, 504].includes(response.status) && !data;
     const errorMsg = backendUnavailable
       ? 'Backend unavailable. Start FastAPI, MongoDB, and PostgreSQL before signing in.'
-      : data?.detail || (typeof data === 'string' && data ? data : `Request failed with status ${response.status}`);
+      : describeDetail(data?.detail) || (typeof data === 'string' && data ? data : `Request failed with status ${response.status}`);
     const err = new Error(errorMsg);
     err.status = response.status;
     err.data = data;
@@ -172,7 +188,12 @@ export const api = {
 
   // Threats & Alerts (Member 2)
   listThreats: (params = {}) => {
-    const q = new URLSearchParams(params);
+    const q = new URLSearchParams();
+    Object.entries(params).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== '') {
+        q.append(k, v);
+      }
+    });
     return request(`/api/threats?${q.toString()}`);
   },
   getThreat: (id) => request(`/api/threats/${id}`),

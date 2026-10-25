@@ -31,7 +31,10 @@ export default function DetectionView() {
     setRunResult(null);
     setError(null);
     try {
-      const res = await api.runDetection({ limit: parseInt(scanLimit, 10) });
+      // An empty or out-of-range field would otherwise send NaN/null and fail validation
+      const limit = Math.min(Math.max(parseInt(scanLimit, 10) || 2000, 1), 10000);
+      setScanLimit(limit);
+      const res = await api.runDetection({ limit });
       setRunResult(res);
     } catch (err) {
       setError(err.message || 'Detection pass failed');

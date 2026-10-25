@@ -22,6 +22,7 @@ from .auth import (
     revoke_token,
     verify_password,
 )
+from .config import jwt_expire_minutes
 from .db import db_transaction, get_db_connection
 
 logger = logging.getLogger("app.routes_auth")
@@ -117,7 +118,7 @@ def login(payload: LoginRequest, request: Request):
     return {
         "access_token": token,
         "token_type": "bearer",
-        "expires_in": 3600,
+        "expires_in": jwt_expire_minutes() * 60,
         "user": _sanitize_user(user),
     }
 

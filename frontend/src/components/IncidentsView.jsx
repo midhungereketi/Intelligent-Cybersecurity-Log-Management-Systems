@@ -169,8 +169,9 @@ export default function IncidentsView({ prefillAlert, onClearPrefill }) {
   const handleStatusChange = async (newStatus) => {
     if (!incidentDetail) return;
     try {
-      const updated = await api.updateIncident(incidentDetail.incident_id, { status: newStatus });
-      setIncidentDetail(updated);
+      // PATCH returns the incident without its timeline and linked alerts, so reload the full detail
+      await api.updateIncident(incidentDetail.incident_id, { status: newStatus });
+      await fetchIncidentDetail(incidentDetail.incident_id);
       fetchIncidents();
     } catch (err) {
       alert(`Status update failed: ${err.message}`);
@@ -180,10 +181,10 @@ export default function IncidentsView({ prefillAlert, onClearPrefill }) {
   const handleAssigneeChange = async (userId) => {
     if (!incidentDetail) return;
     try {
-      const updated = await api.updateIncident(incidentDetail.incident_id, { 
-        assigned_to: userId ? parseInt(userId, 10) : null 
+      await api.updateIncident(incidentDetail.incident_id, {
+        assigned_to: userId ? parseInt(userId, 10) : null
       });
-      setIncidentDetail(updated);
+      await fetchIncidentDetail(incidentDetail.incident_id);
       fetchIncidents();
     } catch (err) {
       alert(`Assignment failed: ${err.message}`);

@@ -6,6 +6,7 @@ import hashlib
 import json
 import logging
 from collections import defaultdict
+from contextlib import nullcontext
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from typing import Any
@@ -543,18 +544,28 @@ def process_match(conn: Any, match: DetectionMatch) -> dict[str, Any]:
         }
 
 
+def _savepoint(conn: Any):
+    """Nested transaction so a failed statement does not abort the enclosing detection run.
+
+    In PostgreSQL any error inside a transaction aborts it until rollback, so a
+    swallowed checkpoint error would otherwise make the final commit fail.
+    """
+    transaction = getattr(conn, "transaction", None)
+    return transaction() if callable(transaction) else nullcontext()
+
+
 def get_checkpoint(conn: Any, checkpoint_name: str = "default") -> dict[str, Any] | None:
     """Retrieve the latest detection processing checkpoint for a given pipeline name."""
     try:
-        row = conn.execute(
-            """SELECT checkpoint_name, last_timestamp, last_event_id, updated_at
-               FROM detection_checkpoints
-               WHERE checkpoint_name = %s""",
-            (checkpoint_name,),
-        ).fetchone()
-        return row
+        with _savepoint(conn):
+            return conn.execute(
+                """SELECT checkpoint_name, last_timestamp, last_event_id, updated_at
+                   FROM detection_checkpoints
+                   WHERE checkpoint_name = %s""",
+                (checkpoint_name,),
+            ).fetchone()
     except Exception as exc:
-        logger.debug("Checkpoint retrieval failed: %s", exc)
+        logger.warning("Checkpoint retrieval failed: %s", exc)
         return None
 
 
@@ -562,15 +573,16 @@ def save_checkpoint(conn: Any, checkpoint_name: str, last_timestamp: datetime, l
     """Atomically record the progress watermark for a detection pipeline."""
     now_utc = datetime.now(timezone.utc)
     try:
-        conn.execute(
-            """INSERT INTO detection_checkpoints (checkpoint_name, last_timestamp, last_event_id, updated_at)
-               VALUES (%s, %s, %s, %s)
-               ON CONFLICT (checkpoint_name) DO UPDATE
-               SET last_timestamp = EXCLUDED.last_timestamp,
-                   last_event_id = EXCLUDED.last_event_id,
-                   updated_at = EXCLUDED.updated_at""",
-            (checkpoint_name, last_timestamp, str(last_event_id), now_utc),
-        )
+        with _savepoint(conn):
+            conn.execute(
+                """INSERT INTO detection_checkpoints (checkpoint_name, last_timestamp, last_event_id, updated_at)
+                   VALUES (%s, %s, %s, %s)
+                   ON CONFLICT (checkpoint_name) DO UPDATE
+                   SET last_timestamp = EXCLUDED.last_timestamp,
+                       last_event_id = EXCLUDED.last_event_id,
+                       updated_at = EXCLUDED.updated_at""",
+                (checkpoint_name, last_timestamp, str(last_event_id), now_utc),
+            )
     except Exception as exc:
         logger.warning("Failed to save detection checkpoint %s: %s", checkpoint_name, exc)
 

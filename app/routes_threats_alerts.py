@@ -12,7 +12,7 @@ from pydantic import BaseModel, Field
 from .auth import require_analyst_or_admin
 from .db import db_transaction, get_db_connection
 from .detection import execute_detection
-from .logs import SEVERITIES
+from .logs import SEVERITIES, _ip, _utc_timestamp
 
 router = APIRouter(tags=["Threats, Alerts & Detection"])
 
@@ -25,6 +25,21 @@ class DetectionRunRequest(BaseModel):
     batch_size: int = Field(default=500, ge=1, le=2000)
     checkpoint_name: str | None = "default"
     use_checkpoint: bool = True
+
+
+def _timestamp_filter(value: str, name: str) -> datetime:
+    """Parse an ISO 8601 filter value, rejecting input PostgreSQL would fail on."""
+    try:
+        return _utc_timestamp(value.strip())
+    except ValueError:
+        raise HTTPException(status_code=422, detail=f"{name} must be an ISO 8601 timestamp with a timezone")
+
+
+def _ip_filter(value: str) -> str:
+    try:
+        return _ip(value.strip(), "source_ip")
+    except ValueError:
+        raise HTTPException(status_code=422, detail="source_ip must be a valid IP address")
 
 
 def _format_threat(row: dict[str, Any]) -> dict[str, Any]:
@@ -111,15 +126,15 @@ def list_threats(
 
     if source_ip:
         clauses.append("source_ip = %s")
-        params.append(source_ip.strip())
+        params.append(_ip_filter(source_ip))
 
     if start:
         clauses.append("last_seen_at >= %s")
-        params.append(start)
+        params.append(_timestamp_filter(start, "start"))
 
     if end:
         clauses.append("first_seen_at <= %s")
-        params.append(end)
+        params.append(_timestamp_filter(end, "end"))
 
     where_sql = f"WHERE {' AND '.join(clauses)}" if clauses else ""
 
@@ -202,15 +217,15 @@ def list_alerts(
 
     if source_ip:
         clauses.append("a.source_ip = %s")
-        params.append(source_ip.strip())
+        params.append(_ip_filter(source_ip))
 
     if start:
         clauses.append("a.last_seen_at >= %s")
-        params.append(start)
+        params.append(_timestamp_filter(start, "start"))
 
     if end:
         clauses.append("a.first_seen_at <= %s")
-        params.append(end)
+        params.append(_timestamp_filter(end, "end"))
 
     where_sql = f"WHERE {' AND '.join(clauses)}" if clauses else ""
 
@@ -323,10 +338,16 @@ def run_detection(
     if logs_collection is None:
         raise HTTPException(status_code=503, detail="MongoDB logs collection is unavailable")
 
+    # Unparseable bounds used to become a None filter and silently scan nothing.
+    start = _timestamp_filter(payload.start, "start") if payload.start else None
+    end = _timestamp_filter(payload.end, "end") if payload.end else None
+    if start and end and start > end:
+        raise HTTPException(status_code=422, detail="start must not be after end")
+
     summary = execute_detection(
         mongo_collection=logs_collection,
-        start=payload.start,
-        end=payload.end,
+        start=start,
+        end=end,
         rule_ids=payload.rule_ids,
         limit=payload.limit,
         batch_size=payload.batch_size,
