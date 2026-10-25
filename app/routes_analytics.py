@@ -61,6 +61,7 @@ def get_dashboard_summary(
     incidents_total = 0
     incidents_open = 0
     incidents_investigating = 0
+    incidents_contained = 0
     incidents_resolved = 0
     incidents_by_severity = {"LOW": 0, "MEDIUM": 0, "HIGH": 0, "CRITICAL": 0}
     recent_alerts: list[dict[str, Any]] = []
@@ -107,7 +108,9 @@ def get_dashboard_summary(
                     incidents_open += cnt
                 elif st == "INVESTIGATING":
                     incidents_investigating += cnt
-                elif st in {"CONTAINED", "RESOLVED", "CLOSED"}:
+                elif st == "CONTAINED":
+                    incidents_contained += cnt
+                elif st in {"RESOLVED", "CLOSED"}:
                     incidents_resolved += cnt
                 if sev in incidents_by_severity:
                     incidents_by_severity[sev] += cnt
@@ -173,6 +176,9 @@ def get_dashboard_summary(
             "total": incidents_total,
             "open": incidents_open,
             "investigating": incidents_investigating,
+            "contained": incidents_contained,
+            # Every case still being worked: open, investigating or contained
+            "active": incidents_open + incidents_investigating + incidents_contained,
             "resolved": incidents_resolved,
             "by_severity": incidents_by_severity,
             "recent": recent_incidents,

@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  ShieldAlert, 
-  Check, 
-  CheckCircle, 
-  LifeBuoy, 
-  Eye, 
-  AlertTriangle, 
-  RefreshCw, 
-  X, 
-  Radio, 
-  Clock, 
+import {
+  ShieldAlert,
+  Check,
+  CheckCircle,
+  LifeBuoy,
+  Eye,
+  AlertTriangle,
+  RefreshCw,
+  X,
   Activity,
-  Layers
 } from 'lucide-react';
 import { api } from '../api';
 

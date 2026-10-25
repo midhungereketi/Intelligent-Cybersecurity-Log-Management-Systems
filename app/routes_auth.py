@@ -42,16 +42,22 @@ class TokenResponse(BaseModel):
     user: dict[str, Any]
 
 
+# Login accepts a username or an email, so usernames may not contain "@";
+# otherwise one account's username could equal another account's email.
+USERNAME_PATTERN = r"^[A-Za-z0-9_.-]+$"
+EMAIL_PATTERN = r"^[^@\s]+@[^@\s]+\.[^@\s]+$"
+
+
 class UserCreate(BaseModel):
-    username: str = Field(min_length=3, max_length=60)
-    email: str = Field(min_length=5, max_length=255)
+    username: str = Field(min_length=3, max_length=60, pattern=USERNAME_PATTERN)
+    email: str = Field(min_length=5, max_length=255, pattern=EMAIL_PATTERN)
     password: str = Field(min_length=8, max_length=200)
     role_id: int = Field(gt=0)
     is_active: bool = True
 
 
 class UserUpdate(BaseModel):
-    email: str | None = Field(default=None, min_length=5, max_length=255)
+    email: str | None = Field(default=None, min_length=5, max_length=255, pattern=EMAIL_PATTERN)
     role_id: int | None = Field(default=None, gt=0)
     is_active: bool | None = None
     password: str | None = Field(default=None, min_length=8, max_length=200)
@@ -85,8 +91,10 @@ def login(payload: LoginRequest, request: Request):
                       r.role_name, u.is_active, u.created_at, u.updated_at, u.last_login_at
                FROM users u
                JOIN roles r ON u.role_id = r.role_id
-               WHERE u.username = %s OR u.email = %s""",
-            (payload.username, payload.username),
+               WHERE u.username = %s OR u.email = %s
+               ORDER BY (u.username = %s) DESC
+               LIMIT 1""",
+            (payload.username, payload.username, payload.username),
         ).fetchone()
 
     if not user or not verify_password(payload.password, user["password_hash"]):

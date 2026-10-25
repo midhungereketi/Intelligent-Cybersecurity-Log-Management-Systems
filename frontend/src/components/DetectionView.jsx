@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Zap, Play, CheckCircle2, AlertTriangle, ShieldCheck, Clock, Settings, RefreshCw } from 'lucide-react';
+import {
+  Zap,
+  Play,
+  CheckCircle2,
+  AlertTriangle,
+  RefreshCw,
+} from 'lucide-react';
 import { api } from '../api';
 
 export default function DetectionView() {

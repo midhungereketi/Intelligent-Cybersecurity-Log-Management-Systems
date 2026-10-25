@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Users, 
-  Sliders, 
-  Server, 
-  HardDrive, 
-  Plus, 
-  Check, 
-  X, 
-  AlertTriangle, 
-  ShieldCheck, 
+import {
+  Users,
+  Sliders,
+  Server,
+  HardDrive,
+  Plus,
+  X,
+  AlertTriangle,
   Edit2,
-  RefreshCw
+  RefreshCw,
 } from 'lucide-react';
 import { api } from '../api';
 

@@ -1,29 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  LifeBuoy, 
-  Plus, 
-  Filter, 
-  User, 
-  Calendar, 
-  ShieldAlert, 
-  CheckCircle, 
-  Clock, 
-  ArrowRight, 
-  X, 
-  Tag, 
-  FileText, 
+import {
+  LifeBuoy,
+  Plus,
+  X,
   AlertTriangle,
-  Lock,
   ChevronRight,
-  ShieldCheck,
   Activity,
-  Send
+  Send,
 } from 'lucide-react';
 import { api } from '../api';
 
 export default function IncidentsView({ prefillAlert, onClearPrefill }) {
   const [incidents, setIncidents] = useState([]);
-  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -34,7 +22,6 @@ export default function IncidentsView({ prefillAlert, onClearPrefill }) {
   // Active Incident Selection for Detail/Investigation view
   const [activeIncidentId, setActiveIncidentId] = useState(null);
   const [incidentDetail, setIncidentDetail] = useState(null);
-  const [detailLoading, setDetailLoading] = useState(false);
 
   // Create Modal state
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -80,7 +67,6 @@ export default function IncidentsView({ prefillAlert, onClearPrefill }) {
       if (severityFilter) params.severity = severityFilter;
       const res = await api.listIncidents(params);
       setIncidents(res.items || []);
-      setTotal(res.total || 0);
 
       // If active incident is selected, refresh its details too
       if (activeIncidentId) {
@@ -94,15 +80,12 @@ export default function IncidentsView({ prefillAlert, onClearPrefill }) {
   };
 
   const fetchIncidentDetail = async (id) => {
-    setDetailLoading(true);
     try {
       const data = await api.getIncident(id);
       setIncidentDetail(data);
       setActiveIncidentId(id);
     } catch (err) {
       alert(`Failed to load incident detail: ${err.message}`);
-    } finally {
-      setDetailLoading(false);
     }
   };
 
@@ -169,10 +152,10 @@ export default function IncidentsView({ prefillAlert, onClearPrefill }) {
   const handleStatusChange = async (newStatus) => {
     if (!incidentDetail) return;
     try {
-      // PATCH returns the incident without its timeline and linked alerts, so reload the full detail
+      // PATCH returns the incident without its timeline and linked alerts;
+      // fetchIncidents reloads the list and the selected incident's full detail.
       await api.updateIncident(incidentDetail.incident_id, { status: newStatus });
-      await fetchIncidentDetail(incidentDetail.incident_id);
-      fetchIncidents();
+      await fetchIncidents();
     } catch (err) {
       alert(`Status update failed: ${err.message}`);
     }
@@ -184,8 +167,7 @@ export default function IncidentsView({ prefillAlert, onClearPrefill }) {
       await api.updateIncident(incidentDetail.incident_id, {
         assigned_to: userId ? parseInt(userId, 10) : null
       });
-      await fetchIncidentDetail(incidentDetail.incident_id);
-      fetchIncidents();
+      await fetchIncidents();
     } catch (err) {
       alert(`Assignment failed: ${err.message}`);
     }

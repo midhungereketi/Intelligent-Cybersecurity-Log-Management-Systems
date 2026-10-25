@@ -41,14 +41,14 @@ export default function LogsView() {
 
   // Manual event modal state
   const [showEventModal, setShowEventModal] = useState(false);
-  const [manualEvent, setManualEvent] = useState({
+  const [manualEvent, setManualEvent] = useState(() => ({
     timestamp: new Date().toISOString(),
     source_ip: '198.51.100.10',
     event_type: 'LOGIN_FAILED',
     severity: 'HIGH',
     message: 'Manual test failure event',
     username: 'sec_analyst',
-  });
+  }));
 
   // Selected log detail drawer
   const [selectedLog, setSelectedLog] = useState(null);
@@ -177,7 +177,11 @@ export default function LogsView() {
           </p>
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
-          <button className="btn btn-secondary" onClick={() => setShowEventModal(true)}>
+          <button className="btn btn-secondary" onClick={() => {
+            // Default to "now" each time the form opens instead of the page-load time
+            setManualEvent((prev) => ({ ...prev, timestamp: new Date().toISOString() }));
+            setShowEventModal(true);
+          }}>
             <Plus size={15} />
             <span>Insert Single Event</span>
           </button>

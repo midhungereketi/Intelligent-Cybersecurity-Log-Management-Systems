@@ -293,7 +293,7 @@ export default function DashboardView({ onNavigate }) {
     const logsTotal = summary.logs?.total || 0;
     const hot = (summary.logs?.by_severity?.CRITICAL || 0) + (summary.logs?.by_severity?.HIGH || 0);
     const hotShare = logsTotal ? hot / logsTotal : 0;
-    const raw = (summary.alerts?.open || 0) * 12 + (summary.incidents?.open || 0) * 8 + hotShare * 40;
+    const raw = (summary.alerts?.open || 0) * 12 + (summary.incidents?.active || 0) * 8 + hotShare * 40;
     return Math.min(100, Math.round(raw));
   }, [summary]);
 
@@ -355,7 +355,7 @@ export default function DashboardView({ onNavigate }) {
         <StatCard tone="danger" label="Security Alerts" value={summary?.alerts?.total} icon={ShieldAlert} spark={spark('critical')}
           foot={<><span style={{ color: 'var(--rose-danger)', fontWeight: 600 }}>{summary?.alerts?.open ?? 0} open</span> · {summary?.alerts?.resolved ?? 0} resolved</>} />
         <StatCard tone="warning" label="Incidents" value={summary?.incidents?.total} icon={LifeBuoy} spark={spark('high')}
-          foot={<><span style={{ color: 'var(--amber-warning)', fontWeight: 600 }}>{summary?.incidents?.open ?? 0} active</span> · {summary?.incidents?.resolved ?? 0} resolved</>} />
+          foot={<><span style={{ color: 'var(--amber-warning)', fontWeight: 600 }}>{summary?.incidents?.active ?? 0} active</span> · {summary?.incidents?.resolved ?? 0} resolved</>} />
         <StatCard tone="success" label="Correlated Threats" value={summary?.threats?.total} icon={Activity} spark={spark('low')}
           foot="Persistent attacker profiles" />
       </div>

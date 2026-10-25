@@ -34,7 +34,7 @@ function MetricsTicker() {
     { cls: 'danger', label: 'CRITICAL EVENTS', value: n(summary?.logs?.by_severity?.CRITICAL) },
     { cls: 'warn', label: 'HIGH EVENTS', value: n(summary?.logs?.by_severity?.HIGH) },
     { cls: 'danger', label: 'OPEN ALERTS', value: n(summary?.alerts?.open) },
-    { cls: 'warn', label: 'ACTIVE INCIDENTS', value: n(summary?.incidents?.open) },
+    { cls: 'warn', label: 'ACTIVE INCIDENTS', value: n(summary?.incidents?.active) },
     { cls: '', label: 'CORRELATED THREATS', value: n(summary?.threats?.total) },
     { cls: 'ok', label: 'RESOLVED ALERTS', value: n(summary?.alerts?.resolved) },
     { cls: 'ok', label: 'DETECTION ENGINE', value: 'ONLINE' },

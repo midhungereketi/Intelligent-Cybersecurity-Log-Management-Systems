@@ -66,7 +66,7 @@ cd frontend
 npm ci
 npm run dev
 ```
-Open `http://localhost:5173` to access the Security Operations Center dashboard.
+Open `http://localhost:5173` to access the Security Operations Center dashboard. The dev server proxies `/api` to `http://127.0.0.1:8000`; if the backend runs on another port, set `API_TARGET` first (for example `$env:API_TARGET = 'http://127.0.0.1:8001'`). The Playwright suite accepts `API_PORT` and `WEB_PORT` for the same reason.
 
 ## Log format
 

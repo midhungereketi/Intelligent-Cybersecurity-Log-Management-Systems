@@ -116,6 +116,28 @@ class ApiBugFixTests(unittest.TestCase):
             self.assertEqual(res.status_code, 200, res.text)
             self.assertEqual(res.json()["expires_in"], 15 * 60)
 
+    def test_dashboard_counts_investigating_and_contained_as_active(self):
+        for status in ("OPEN", "INVESTIGATING", "CONTAINED", "RESOLVED"):
+            self._incident(status=status)
+        res = self.client.get("/api/analytics/dashboard", headers=self.analyst_headers)
+        incidents = res.json()["incidents"]
+        self.assertEqual(incidents["active"], 3)
+        self.assertEqual(incidents["contained"], 1)
+        self.assertEqual(incidents["resolved"], 1)
+
+    def test_user_validation_rejects_ambiguous_usernames_and_bad_emails(self):
+        base = {"password": "LongEnough123!", "role_id": 2}
+        bad = [
+            {"username": "someone@example.com", "email": "a@example.com"},
+            {"username": "valid_name", "email": "not-an-email"},
+        ]
+        for payload in bad:
+            res = self.client.post("/api/users", json={**base, **payload}, headers=self.admin_headers)
+            self.assertEqual(res.status_code, 422, payload)
+        ok = self.client.post("/api/users", json={**base, "username": "new.analyst", "email": "new@example.local"},
+                              headers=self.admin_headers)
+        self.assertEqual(ok.status_code, 201, ok.text)
+
     def test_health_reports_503_when_mongo_is_down(self):
         from pymongo.errors import ServerSelectionTimeoutError
 
