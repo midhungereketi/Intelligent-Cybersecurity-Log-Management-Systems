@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import LoginView from './components/LoginView';
@@ -8,6 +8,11 @@ import AlertsView from './components/AlertsView';
 import IncidentsView from './components/IncidentsView';
 import DetectionView from './components/DetectionView';
 import AdminView from './components/AdminView';
+import Backdrop from './components/fx/Backdrop';
+import BootScreen from './components/fx/BootScreen';
+import CommandPalette from './components/fx/CommandPalette';
+import usePointerEffects from './components/fx/usePointerEffects';
+import { getNavItems } from './navigation';
 import { api, getStoredToken, getStoredUser, setStoredToken, setStoredUser } from './api';
 
 export default function App() {
@@ -15,6 +20,9 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [authChecking, setAuthChecking] = useState(true);
   const [prefillAlertForIncident, setPrefillAlertForIncident] = useState(null);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
+  usePointerEffects();
 
   // Check existing session
   useEffect(() => {
@@ -46,7 +54,19 @@ export default function App() {
     return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
   }, []);
 
-  const handleLogout = async () => {
+  // Ctrl/Cmd+K toggles the command palette while signed in
+  useEffect(() => {
+    const onKey = (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        if (currentUser) setPaletteOpen((open) => !open);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [currentUser]);
+
+  const handleLogout = useCallback(async () => {
     try {
       await api.logout();
     } catch {
@@ -57,69 +77,93 @@ export default function App() {
       setCurrentUser(null);
       setActiveTab('dashboard');
     }
-  };
+  }, []);
 
   const handlePromoteAlertToIncident = (alert) => {
     setPrefillAlertForIncident(alert);
     setActiveTab('incidents');
   };
 
+  const selectTab = useCallback((tab) => {
+    setActiveTab(tab);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   if (authChecking) {
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-main)', color: 'var(--cyan-glow)' }}>
-        Initializing CyberShield SOC...
-      </div>
-    );
+    return <BootScreen />;
   }
 
   if (!currentUser) {
-    return <LoginView onLoginSuccess={(user) => setCurrentUser(user)} />;
+    return (
+      <>
+        <Backdrop />
+        <div className="cursor-glow" />
+        <LoginView onLoginSuccess={(user) => setCurrentUser(user)} />
+      </>
+    );
   }
 
-  return (
-    <div className="app-container">
-      <Sidebar 
-        activeTab={activeTab} 
-        onSelectTab={setActiveTab} 
-        currentUser={currentUser} 
-      />
+  const navItems = getNavItems(currentUser);
 
-      <div className="main-content">
-        <Navbar 
-          currentUser={currentUser} 
-          onLogout={handleLogout} 
+  return (
+    <>
+      <Backdrop />
+      <div className="cursor-glow" />
+      <div className="app-container">
+        <Sidebar
           activeTab={activeTab}
+          onSelectTab={selectTab}
+          navItems={navItems}
         />
 
-        <main className="page-body">
-          {activeTab === 'dashboard' && (
-            <DashboardView onNavigate={(tab) => setActiveTab(tab)} />
-          )}
+        <div className="main-content">
+          <Navbar
+            currentUser={currentUser}
+            onLogout={handleLogout}
+            activeTab={activeTab}
+            navItems={navItems}
+            onOpenPalette={() => setPaletteOpen(true)}
+          />
 
-          {activeTab === 'logs' && (
-            <LogsView />
-          )}
+          <main className="page-body">
+            <div key={activeTab} className="page-transition">
+              {activeTab === 'dashboard' && (
+                <DashboardView onNavigate={selectTab} />
+              )}
 
-          {activeTab === 'alerts' && (
-            <AlertsView onPromoteToIncident={handlePromoteAlertToIncident} />
-          )}
+              {activeTab === 'logs' && (
+                <LogsView />
+              )}
 
-          {activeTab === 'incidents' && (
-            <IncidentsView 
-              prefillAlert={prefillAlertForIncident} 
-              onClearPrefill={() => setPrefillAlertForIncident(null)} 
-            />
-          )}
+              {activeTab === 'alerts' && (
+                <AlertsView onPromoteToIncident={handlePromoteAlertToIncident} />
+              )}
 
-          {activeTab === 'detection' && (
-            <DetectionView />
-          )}
+              {activeTab === 'incidents' && (
+                <IncidentsView
+                  prefillAlert={prefillAlertForIncident}
+                  onClearPrefill={() => setPrefillAlertForIncident(null)}
+                />
+              )}
 
-          {activeTab === 'admin' && currentUser.role_name === 'ADMIN' && (
-            <AdminView />
-          )}
-        </main>
+              {activeTab === 'detection' && (
+                <DetectionView />
+              )}
+
+              {activeTab === 'admin' && currentUser.role_name === 'ADMIN' && (
+                <AdminView />
+              )}
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+      <CommandPalette
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        items={navItems}
+        onSelect={selectTab}
+        onLogout={handleLogout}
+      />
+    </>
   );
 }

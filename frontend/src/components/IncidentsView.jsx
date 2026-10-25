@@ -427,7 +427,7 @@ export default function IncidentsView({ prefillAlert, onClearPrefill }) {
               {incidentDetail.tags?.length > 0 && (
                 <div style={{ display: 'flex', gap: '6px', marginTop: '10px', flexWrap: 'wrap' }}>
                   {incidentDetail.tags.map((t, idx) => (
-                    <span key={idx} style={{ background: '#1e293b', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem', color: '#94a3b8' }}>
+                    <span key={idx} className="tag-chip">
                       #{t}
                     </span>
                   ))}

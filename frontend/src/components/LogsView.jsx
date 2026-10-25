@@ -403,12 +403,12 @@ export default function LogsView() {
               </button>
             </div>
             <pre style={{
-              background: '#f4f7f0',
+              background: 'var(--bg-code)',
               padding: '16px',
               borderRadius: 'var(--radius-sm)',
               overflowX: 'auto',
               fontSize: '0.85rem',
-              color: '#38bdf8',
+              color: 'var(--cyan-glow)',
             }}>
               {JSON.stringify(selectedLog, null, 2)}
             </pre>
@@ -457,7 +457,7 @@ export default function LogsView() {
               {uploadResult?.errors?.length > 0 && (
                 <div style={{ marginTop: '16px' }}>
                   <label className="form-label" style={{ color: 'var(--rose-danger)' }}>Row Validation Errors</label>
-                  <div style={{ maxHeight: '120px', overflowY: 'auto', background: '#0b1120', padding: '10px', borderRadius: '4px', fontSize: '0.75rem', color: '#fda4af' }}>
+                  <div style={{ maxHeight: '120px', overflowY: 'auto', background: 'var(--bg-code)', padding: '10px', borderRadius: '4px', fontSize: '0.75rem', color: '#fda4af' }}>
                     {uploadResult.errors.map((err, idx) => (
                       <div key={idx}>Row {err.row}: {err.error}</div>
                     ))}

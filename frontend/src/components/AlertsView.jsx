@@ -383,7 +383,7 @@ export default function AlertsView({ onPromoteToIncident }) {
                 <div style={{
                   maxHeight: '160px',
                   overflowY: 'auto',
-                  background: '#f4f7f0',
+                  background: 'var(--bg-code)',
                   padding: '12px',
                   borderRadius: 'var(--radius-sm)',
                   fontSize: '0.8rem',
