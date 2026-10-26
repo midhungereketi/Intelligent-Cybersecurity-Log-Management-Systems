@@ -1,0 +1,501 @@
+event_id,timestamp,source_ip,destination_ip,source_port,destination_port,protocol,event_type,severity,action,username,status,hostname,message,bytes_sent,bytes_received,country,source_system
+EVT-00001,2026-10-25T08:00:00Z,198.51.100.77,192.168.1.72,49289,53,HTTPS,web_request,LOW,LOG,user01,INFO,firewall-01,Normal HTTPS request,4953410,3539336,IN,firewall
+EVT-00002,2026-10-25T08:00:27Z,198.51.100.20,192.168.1.139,2763,443,TCP,port_scan,MEDIUM,ALERT,,SUSPICIOUS,firewall-01,Repeated probes against exposed service ports,1849189,3768238,SG,authentication
+EVT-00003,2026-10-25T08:00:36Z,192.168.1.50,198.51.100.140,11213,443,TCP,config_change,LOW,ALLOW,guest,SUCCESS,web-server-01,Configuration changed outside maintenance window,811315,3011337,GB,web_gateway
+EVT-00004,2026-10-25T08:00:33Z,203.0.113.200,192.168.1.147,64798,8080,TCP,malware_signature,HIGH,DENY,,REVIEW,auth-server-01,Malicious payload pattern detected in inbound traffic,3033614,4843180,US,firewall
+EVT-00005,2026-10-25T08:02:20Z,198.51.100.77,192.168.1.30,57809,53,TCP,login,HIGH,ALERT,user02,BLOCKED,workstation-07,Repeated failed login attempts,1364441,3105303,GB,endpoint
+EVT-00006,2026-10-25T08:02:15Z,192.168.1.184,203.0.113.77,36029,443,HTTPS,web_request,MEDIUM,ALLOW,user01,DENIED,workstation-07,Unusual request path observed,4672033,1842265,NL,authentication
+EVT-00007,2026-10-25T08:01:48Z,203.0.113.45,192.168.1.216,27314,445,TCP,ransomware_indicator,CRITICAL,BLOCK,,BLOCKED,firewall-01,Possible ransomware encryption behavior observed,1783640,4187855,DE,dns
+EVT-00008,2026-10-25T08:03:02Z,198.51.100.77,192.168.1.201,59863,8080,UDP,dns_query,MEDIUM,DENY,root,REVIEW,db-server-01,High-volume DNS requests in short interval,4139910,762603,IN,firewall
+EVT-00009,2026-10-25T08:01:20Z,198.51.100.140,192.168.1.162,26033,3389,UDP,dns_query,HIGH,BLOCK,root,BLOCKED,firewall-01,DNS lookup for approved domain,960929,4504433,GB,authentication
+EVT-00010,2026-10-25T08:03:18Z,198.51.100.140,192.168.1.50,1236,445,TCP,port_scan,HIGH,BLOCK,,DETECTED,firewall-01,Sequential connection attempts across multiple ports,2503536,4258584,SG,endpoint
+EVT-00011,2026-10-25T08:04:30Z,192.168.1.148,203.0.113.45,33045,22,UDP,dns_query,MEDIUM,ALLOW,service_account,DENIED,auth-server-01,DNS lookup for approved domain,485911,2020577,SG,firewall
+EVT-00012,2026-10-25T08:04:35Z,203.0.113.77,192.168.1.204,51213,80,TCP,port_scan,HIGH,DENY,,REVIEW,workstation-07,Sequential connection attempts across multiple ports,2223456,4426448,SG,dns
+EVT-00013,2026-10-25T08:06:00Z,192.168.1.186,198.51.100.20,27172,5432,TCP,file_access,HIGH,ALERT,guest,REVIEW,workstation-07,User accessed approved document,2079583,1884897,IN,authentication
+EVT-00014,2026-10-25T08:01:44Z,192.168.1.160,198.51.100.20,47413,22,TCP,login,HIGH,DENY,analyst01,DETECTED,web-server-01,Repeated failed login attempts,594394,4313054,US,authentication
+EVT-00015,2026-10-25T08:08:38Z,203.0.113.120,192.168.1.195,16949,3389,HTTPS,web_request,MEDIUM,DENY,operator,REVIEW,web-server-01,Normal HTTPS request,3615919,2972063,DE,dns
+EVT-00016,2026-10-25T08:05:00Z,203.0.113.77,192.168.1.25,53491,53,HTTPS,data_transfer,HIGH,DENY,service_account,DETECTED,db-server-01,Transfer volume exceeded baseline threshold,3763243,1175934,DE,endpoint
+EVT-00017,2026-10-25T08:09:52Z,198.51.100.20,192.168.1.233,5964,3389,TCP,malware_signature,CRITICAL,QUARANTINE,,BLOCKED,web-server-01,Malicious payload pattern detected in inbound traffic,4534780,123797,IN,endpoint
+EVT-00018,2026-10-25T08:10:12Z,192.168.1.64,198.51.100.140,11813,8080,UDP,dns_query,MEDIUM,ALLOW,admin,DENIED,auth-server-01,Unusual DNS request to newly observed domain,2392843,3548443,NL,web_gateway
+EVT-00019,2026-10-25T08:02:42Z,198.51.100.77,192.168.1.65,50043,5432,HTTPS,web_request,MEDIUM,ALLOW,admin,REVIEW,firewall-01,Unusual request path observed,4218214,4455408,US,firewall
+EVT-00020,2026-10-25T08:09:11Z,192.168.1.27,203.0.113.77,27485,53,TCP,firewall_event,LOW,LOG,user02,SUCCESS,firewall-01,Unexpected firewall rule match,333377,687726,DE,web_gateway
+EVT-00021,2026-10-25T08:09:40Z,198.51.100.77,192.168.1.62,16666,445,TCP,outbound_connection,HIGH,ALERT,service_account,DETECTED,auth-server-01,Connection to uncommon external destination,2652286,608535,IN,dns
+EVT-00022,2026-10-25T08:08:24Z,192.168.1.28,198.51.100.20,9704,5432,TCP,outbound_connection,HIGH,DENY,guest,DETECTED,auth-server-01,Connection to uncommon external destination,1323276,3675758,SG,authentication
+EVT-00023,2026-10-25T08:13:34Z,192.168.1.180,198.51.100.77,62557,80,TCP,outbound_connection,HIGH,ALERT,analyst01,DETECTED,web-server-01,Repeated outbound connection attempts,4640776,1303991,GB,authentication
+EVT-00024,2026-10-25T08:09:12Z,192.168.1.62,198.51.100.77,17481,22,TCP,outbound_connection,LOW,ALLOW,operator,INFO,workstation-07,Connection to uncommon external destination,369826,29743,GB,endpoint
+EVT-00025,2026-10-25T08:12:00Z,203.0.113.200,192.168.1.151,37783,22,HTTPS,web_request,MEDIUM,ALLOW,root,REVIEW,db-server-01,High request rate from one source,302225,3097208,SG,web_gateway
+EVT-00026,2026-10-25T08:15:00Z,198.51.100.77,192.168.1.103,59935,5432,UDP,dns_query,MEDIUM,ALLOW,admin,SUSPICIOUS,db-server-01,High-volume DNS requests in short interval,862295,2966871,SG,dns
+EVT-00027,2026-10-25T08:05:38Z,198.51.100.20,192.168.1.231,58788,8080,TCP,outbound_connection,HIGH,DENY,user01,DETECTED,auth-server-01,Connection to uncommon external destination,2081777,2238128,US,firewall
+EVT-00028,2026-10-25T08:15:18Z,192.168.1.66,198.51.100.20,61215,3389,ARP,arp_change,MEDIUM,DENY,,DENIED,db-server-01,IP-to-MAC mapping changed unexpectedly,198511,1620090,DE,authentication
+EVT-00029,2026-10-25T08:13:04Z,198.51.100.77,192.168.1.99,34408,8080,TCP,malware_signature,HIGH,BLOCK,,REVIEW,auth-server-01,Known malware signature detected,967556,2191231,US,web_gateway
+EVT-00030,2026-10-25T08:10:09Z,203.0.113.77,192.168.1.162,23678,5432,TCP,malware_signature,HIGH,ALERT,,REVIEW,firewall-01,Known malware signature detected,3231253,4836771,US,authentication
+EVT-00031,2026-10-25T08:09:30Z,192.168.1.143,198.51.100.20,5609,5432,TCP,login,HIGH,BLOCK,root,BLOCKED,web-server-01,Repeated failed login attempts,4254051,2594467,NL,dns
+EVT-00032,2026-10-25T08:06:12Z,198.51.100.77,192.168.1.151,28578,8080,HTTPS,sql_injection_attempt,CRITICAL,QUARANTINE,user02,ESCALATED,db-server-01,Potential SQL injection payload blocked,4774000,2524550,DE,web_gateway
+EVT-00033,2026-10-25T08:17:36Z,198.51.100.20,192.168.1.120,39033,5432,TCP,ransomware_indicator,CRITICAL,ALERT,,QUARANTINED,workstation-07,Rapid file modification pattern detected,4288038,3969373,NL,endpoint
+EVT-00034,2026-10-25T08:18:42Z,198.51.100.88,192.168.1.33,45116,445,HTTPS,web_request,LOW,ALLOW,user02,SUCCESS,db-server-01,Normal HTTPS request,387668,2053888,DE,web_gateway
+EVT-00035,2026-10-25T08:17:00Z,192.168.1.236,198.51.100.20,46660,8080,TCP,ransomware_indicator,CRITICAL,ALERT,,QUARANTINED,db-server-01,Rapid file modification pattern detected,46513,894119,DE,endpoint
+EVT-00036,2026-10-25T08:21:35Z,192.168.1.22,198.51.100.20,30938,80,UDP,dns_query,HIGH,ALERT,analyst01,REVIEW,firewall-01,High-volume DNS requests in short interval,4995016,2661688,DE,web_gateway
+EVT-00037,2026-10-25T08:21:36Z,192.168.1.150,203.0.113.200,11454,3389,TCP,ransomware_indicator,CRITICAL,ALERT,,QUARANTINED,db-server-01,Possible ransomware encryption behavior observed,4372979,4065094,NL,endpoint
+EVT-00038,2026-10-25T08:10:29Z,203.0.113.77,192.168.1.192,16391,445,TCP,malware_signature,CRITICAL,ALERT,,QUARANTINED,firewall-01,Known malware signature detected,1160765,1265259,US,dns
+EVT-00039,2026-10-25T08:13:18Z,192.168.1.26,198.51.100.140,36584,3389,TCP,privilege_escalation,HIGH,ALERT,service_account,DETECTED,db-server-01,Process attempted elevated access,3267168,4899613,NL,firewall
+EVT-00040,2026-10-25T08:20:48Z,192.168.1.100,198.51.100.77,26582,8080,TCP,ransomware_indicator,CRITICAL,QUARANTINE,,ESCALATED,firewall-01,Rapid file modification pattern detected,4095565,1840642,GB,dns
+EVT-00041,2026-10-25T08:20:40Z,192.168.1.181,198.51.100.140,56107,3389,HTTPS,data_transfer,LOW,ALLOW,user01,INFO,firewall-01,Normal outbound data transfer,3305281,4965156,SG,firewall
+EVT-00042,2026-10-25T08:15:02Z,203.0.113.120,192.168.1.231,12933,22,TCP,port_scan,HIGH,ALERT,,BLOCKED,auth-server-01,Sequential connection attempts across multiple ports,3814294,2741781,GB,dns
+EVT-00043,2026-10-25T08:07:00Z,198.51.100.77,192.168.1.223,31846,22,TCP,malware_signature,CRITICAL,QUARANTINE,,ESCALATED,web-server-01,Suspicious executable quarantined,1880911,575612,NL,firewall
+EVT-00044,2026-10-25T08:19:21Z,192.168.1.61,203.0.113.45,16657,80,TCP,config_change,LOW,ALLOW,user01,INFO,web-server-01,Approved configuration update,3900987,2149527,GB,endpoint
+EVT-00045,2026-10-25T08:23:28Z,192.168.1.193,203.0.113.77,64247,445,TCP,outbound_connection,HIGH,DENY,user01,REVIEW,web-server-01,Connection to uncommon external destination,4830133,3148302,DE,endpoint
+EVT-00046,2026-10-25T08:24:00Z,203.0.113.77,192.168.1.188,20788,53,TCP,port_scan,MEDIUM,ALERT,,REVIEW,auth-server-01,Repeated probes against exposed service ports,3108573,578451,SG,authentication
+EVT-00047,2026-10-25T08:14:34Z,192.168.1.37,198.51.100.140,47378,80,TCP,login,MEDIUM,DENY,operator,REVIEW,firewall-01,Repeated failed login attempts,4514521,4055871,DE,dns
+EVT-00048,2026-10-25T08:12:32Z,192.168.1.72,203.0.113.77,58802,3389,TCP,ransomware_indicator,CRITICAL,BLOCK,,QUARANTINED,firewall-01,Possible ransomware encryption behavior observed,2821899,240753,DE,authentication
+EVT-00049,2026-10-25T08:12:48Z,198.51.100.77,192.168.1.97,37448,22,UDP,dns_query,MEDIUM,ALERT,guest,REVIEW,web-server-01,DNS lookup for approved domain,3409366,4098488,SG,endpoint
+EVT-00050,2026-10-25T08:26:57Z,192.168.1.135,203.0.113.200,7122,445,TCP,privilege_escalation,CRITICAL,BLOCK,admin,QUARANTINED,db-server-01,Process attempted elevated access,4878441,3095567,DE,web_gateway
+EVT-00051,2026-10-25T08:15:50Z,192.168.1.200,198.51.100.88,18778,445,TCP,firewall_event,MEDIUM,DENY,operator,REVIEW,web-server-01,Unexpected firewall rule match,1615514,2647008,IN,web_gateway
+EVT-00052,2026-10-25T08:26:21Z,203.0.113.200,192.168.1.80,65282,53,TCP,config_change,LOW,ALLOW,guest,ALLOWED,db-server-01,Configuration changed outside maintenance window,1505264,2535604,IN,web_gateway
+EVT-00053,2026-10-25T08:14:44Z,203.0.113.45,192.168.1.151,42827,3389,UDP,dns_query,MEDIUM,ALLOW,user01,REVIEW,firewall-01,Unusual DNS request to newly observed domain,3937586,4015745,DE,authentication
+EVT-00054,2026-10-25T08:30:02Z,203.0.113.200,192.168.1.39,27284,3389,UDP,dns_query,LOW,ALLOW,analyst01,INFO,web-server-01,DNS lookup for approved domain,1251560,4721440,GB,firewall
+EVT-00055,2026-10-25T08:28:48Z,192.168.1.116,198.51.100.20,30548,3389,TCP,file_access,LOW,ALLOW,root,INFO,workstation-07,Unauthorized access to restricted file,4770009,505248,SG,firewall
+EVT-00056,2026-10-25T08:11:55Z,192.168.1.77,203.0.113.77,12415,53,TCP,config_change,LOW,ALLOW,user02,SUCCESS,workstation-07,Configuration changed outside maintenance window,4981249,3941911,GB,firewall
+EVT-00057,2026-10-25T08:09:20Z,192.168.1.189,203.0.113.200,61573,445,TCP,file_access,MEDIUM,ALERT,user02,SUSPICIOUS,db-server-01,Unauthorized access to restricted file,962813,4568120,US,endpoint
+EVT-00058,2026-10-25T08:08:33Z,203.0.113.120,192.168.1.28,52969,445,TCP,ssh_bruteforce,CRITICAL,QUARANTINE,user01,ESCALATED,firewall-01,Multiple usernames attempted from same source,3683886,1043154,DE,authentication
+EVT-00059,2026-10-25T08:21:16Z,192.168.1.138,203.0.113.200,40216,22,TCP,privilege_escalation,CRITICAL,ALERT,analyst01,ESCALATED,auth-server-01,Unauthorized role modification detected,2100238,216970,IN,endpoint
+EVT-00060,2026-10-25T08:25:34Z,192.168.1.182,198.51.100.77,51035,80,HTTPS,web_request,LOW,ALLOW,admin,INFO,workstation-07,Unusual request path observed,1522441,4910100,DE,dns
+EVT-00061,2026-10-25T08:18:00Z,198.51.100.88,192.168.1.114,22064,53,TCP,port_scan,HIGH,DENY,,BLOCKED,workstation-07,Repeated probes against exposed service ports,2417746,3359236,SG,firewall
+EVT-00062,2026-10-25T08:32:32Z,198.51.100.88,192.168.1.39,57706,22,HTTPS,data_transfer,LOW,LOG,root,INFO,workstation-07,Unusually large outbound transfer,454696,1573556,SG,authentication
+EVT-00063,2026-10-25T08:14:28Z,192.168.1.204,203.0.113.45,37017,80,TCP,outbound_connection,MEDIUM,DENY,guest,DENIED,workstation-07,Connection to approved external service,242174,2007372,NL,endpoint
+EVT-00064,2026-10-25T08:15:45Z,198.51.100.140,192.168.1.33,56166,53,TCP,malware_signature,HIGH,ALERT,,DETECTED,db-server-01,Suspicious executable quarantined,2448312,4268727,NL,authentication
+EVT-00065,2026-10-25T08:26:40Z,192.168.1.72,203.0.113.200,10503,8080,ARP,arp_change,HIGH,DENY,,REVIEW,firewall-01,IP-to-MAC mapping changed unexpectedly,585609,2317331,DE,authentication
+EVT-00066,2026-10-25T08:33:35Z,203.0.113.45,192.168.1.82,55908,3389,TCP,ssh_bruteforce,CRITICAL,BLOCK,guest,QUARANTINED,firewall-01,Multiple usernames attempted from same source,2895109,2788708,SG,web_gateway
+EVT-00067,2026-10-25T08:33:00Z,192.168.1.232,198.51.100.20,16674,8080,ARP,arp_change,HIGH,DENY,,BLOCKED,web-server-01,Duplicate ARP response observed on local network,3967612,3197998,DE,endpoint
+EVT-00068,2026-10-25T08:12:17Z,198.51.100.88,192.168.1.232,7558,3389,HTTPS,data_transfer,LOW,ALLOW,operator,INFO,db-server-01,Unusually large outbound transfer,1294875,627704,DE,authentication
+EVT-00069,2026-10-25T08:20:24Z,203.0.113.77,192.168.1.228,63554,5432,HTTPS,sql_injection_attempt,CRITICAL,QUARANTINE,root,ESCALATED,workstation-07,Potential SQL injection payload blocked,301143,573954,US,authentication
+EVT-00070,2026-10-25T08:32:12Z,203.0.113.77,192.168.1.204,30100,80,TCP,file_access,HIGH,BLOCK,analyst01,BLOCKED,web-server-01,User accessed approved document,2721051,470762,GB,authentication
+EVT-00071,2026-10-25T08:28:00Z,203.0.113.120,192.168.1.72,38112,80,HTTPS,sql_injection_attempt,CRITICAL,BLOCK,root,BLOCKED,web-server-01,Potential SQL injection payload blocked,3209014,2020226,DE,web_gateway
+EVT-00072,2026-10-25T08:18:56Z,192.168.1.75,203.0.113.200,59934,3389,UDP,dns_query,LOW,ALLOW,admin,INFO,firewall-01,DNS lookup for approved domain,619598,3705497,GB,web_gateway
+EVT-00073,2026-10-25T08:42:00Z,198.51.100.77,192.168.1.126,20823,443,TCP,malware_signature,CRITICAL,ALERT,,QUARANTINED,web-server-01,Known malware signature detected,3199115,4797635,GB,web_gateway
+EVT-00074,2026-10-25T08:35:17Z,203.0.113.45,192.168.1.222,26963,445,TCP,malware_signature,CRITICAL,BLOCK,,ESCALATED,web-server-01,Malicious payload pattern detected in inbound traffic,4166850,2400770,US,web_gateway
+EVT-00075,2026-10-25T08:19:44Z,198.51.100.20,192.168.1.168,42196,53,TCP,config_change,MEDIUM,ALERT,user01,SUSPICIOUS,web-server-01,Configuration changed outside maintenance window,3697892,279881,SG,authentication
+EVT-00076,2026-10-25T08:38:45Z,198.51.100.77,192.168.1.93,12534,443,TCP,privilege_escalation,HIGH,DENY,root,REVIEW,auth-server-01,Unauthorized role modification detected,4209359,2286125,US,authentication
+EVT-00077,2026-10-25T08:44:20Z,198.51.100.77,192.168.1.201,53730,53,TCP,ssh_bruteforce,CRITICAL,ALERT,service_account,BLOCKED,db-server-01,Repeated SSH authentication failures,3333729,4675077,GB,firewall
+EVT-00078,2026-10-25T08:24:23Z,203.0.113.77,192.168.1.126,39333,8080,TCP,config_change,MEDIUM,ALERT,guest,DENIED,web-server-01,Approved configuration update,3955034,209921,SG,web_gateway
+EVT-00079,2026-10-25T08:44:12Z,203.0.113.77,192.168.1.172,60621,445,HTTPS,sql_injection_attempt,HIGH,BLOCK,operator,BLOCKED,web-server-01,Request contains suspicious UNION SELECT pattern,380396,312157,GB,dns
+EVT-00080,2026-10-25T08:32:55Z,198.51.100.20,192.168.1.237,9914,8080,TCP,port_scan,MEDIUM,DENY,,DENIED,firewall-01,Repeated probes against exposed service ports,4926967,1296232,DE,firewall
+EVT-00081,2026-10-25T08:12:00Z,192.168.1.250,198.51.100.77,46262,5432,TCP,ransomware_indicator,CRITICAL,BLOCK,,QUARANTINED,workstation-07,Rapid file modification pattern detected,3042431,833446,NL,authentication
+EVT-00082,2026-10-25T08:14:51Z,198.51.100.77,192.168.1.58,7031,443,TCP,firewall_event,MEDIUM,ALERT,operator,SUSPICIOUS,firewall-01,Routine firewall policy match,424283,2797677,US,endpoint
+EVT-00083,2026-10-25T08:19:08Z,198.51.100.20,192.168.1.160,22556,80,TCP,config_change,LOW,LOG,user02,SUCCESS,auth-server-01,Approved configuration update,1090453,4531655,GB,endpoint
+EVT-00084,2026-10-25T08:26:17Z,203.0.113.120,192.168.1.13,52796,443,TCP,port_scan,MEDIUM,ALERT,,DENIED,web-server-01,Sequential connection attempts across multiple ports,2226064,439554,US,dns
+EVT-00085,2026-10-25T08:44:48Z,192.168.1.131,203.0.113.200,34659,53,TCP,firewall_event,LOW,ALLOW,service_account,INFO,db-server-01,Unexpected firewall rule match,363772,4374249,GB,dns
+EVT-00086,2026-10-25T08:28:20Z,203.0.113.200,192.168.1.226,45988,53,HTTPS,web_request,LOW,ALLOW,root,INFO,workstation-07,Normal HTTPS request,677719,2702069,SG,endpoint
+EVT-00087,2026-10-25T08:40:08Z,198.51.100.77,192.168.1.169,39386,5432,TCP,port_scan,MEDIUM,DENY,,SUSPICIOUS,firewall-01,Repeated probes against exposed service ports,3806040,4240869,SG,dns
+EVT-00088,2026-10-25T08:31:54Z,198.51.100.20,192.168.1.120,59225,443,TCP,port_scan,MEDIUM,DENY,,DENIED,workstation-07,Repeated probes against exposed service ports,3489574,797637,GB,dns
+EVT-00089,2026-10-25T08:42:32Z,198.51.100.88,192.168.1.49,5423,53,HTTPS,sql_injection_attempt,CRITICAL,BLOCK,operator,BLOCKED,workstation-07,Request contains suspicious UNION SELECT pattern,3125988,1091487,SG,firewall
+EVT-00090,2026-10-25T08:31:09Z,192.168.1.181,203.0.113.77,58276,8080,TCP,outbound_connection,HIGH,BLOCK,service_account,DETECTED,auth-server-01,Repeated outbound connection attempts,2621011,2949822,IN,web_gateway
+EVT-00091,2026-10-25T08:52:30Z,203.0.113.200,192.168.1.67,23969,5432,TCP,firewall_event,LOW,ALLOW,analyst01,ALLOWED,firewall-01,Routine firewall policy match,3599655,4705721,SG,web_gateway
+EVT-00092,2026-10-25T08:12:08Z,192.168.1.178,198.51.100.77,18933,445,HTTPS,web_request,LOW,ALLOW,user01,ALLOWED,web-server-01,Normal HTTPS request,1201680,4750645,NL,dns
+EVT-00093,2026-10-25T08:47:32Z,203.0.113.45,192.168.1.33,35789,443,TCP,port_scan,MEDIUM,DENY,,DENIED,workstation-07,Repeated probes against exposed service ports,1320444,3104230,GB,authentication
+EVT-00094,2026-10-25T08:49:36Z,192.168.1.49,203.0.113.120,45193,53,TCP,config_change,LOW,ALLOW,admin,ALLOWED,workstation-07,Configuration changed outside maintenance window,3708135,3474425,GB,endpoint
+EVT-00095,2026-10-25T08:45:26Z,192.168.1.38,198.51.100.77,35557,445,TCP,config_change,LOW,ALLOW,operator,SUCCESS,workstation-07,Approved configuration update,64483,1714825,GB,endpoint
+EVT-00096,2026-10-25T08:17:25Z,192.168.1.84,198.51.100.88,33620,8080,TCP,config_change,LOW,ALLOW,admin,SUCCESS,workstation-07,Approved configuration update,4196504,4686912,NL,authentication
+EVT-00097,2026-10-25T08:12:48Z,203.0.113.45,192.168.1.121,31154,53,TCP,port_scan,HIGH,ALERT,,REVIEW,workstation-07,Repeated probes against exposed service ports,3503870,2428629,IN,dns
+EVT-00098,2026-10-25T08:48:30Z,203.0.113.200,192.168.1.222,6799,8080,TCP,login,MEDIUM,ALLOW,service_account,REVIEW,workstation-07,Administrator login from unfamiliar host,4395316,659739,DE,authentication
+EVT-00099,2026-10-25T08:39:12Z,203.0.113.120,192.168.1.29,35797,443,TCP,privilege_escalation,CRITICAL,ALERT,analyst01,QUARANTINED,db-server-01,Unexpected privilege assignment attempt,862386,1228463,GB,endpoint
+EVT-00100,2026-10-25T08:52:48Z,203.0.113.77,192.168.1.55,31429,3389,UDP,dns_query,HIGH,BLOCK,operator,REVIEW,firewall-01,Unusual DNS request to newly observed domain,2651965,1266322,DE,firewall
+EVT-00101,2026-10-25T08:43:20Z,192.168.1.213,198.51.100.77,24088,53,HTTPS,data_transfer,MEDIUM,DENY,admin,DENIED,workstation-07,Normal outbound data transfer,477228,3093195,GB,firewall
+EVT-00102,2026-10-25T08:37:02Z,192.168.1.139,198.51.100.140,30497,443,HTTPS,web_request,LOW,ALLOW,admin,INFO,workstation-07,High request rate from one source,1265514,519034,DE,firewall
+EVT-00103,2026-10-25T08:15:18Z,192.168.1.31,203.0.113.120,47398,3389,TCP,config_change,MEDIUM,DENY,user02,SUSPICIOUS,firewall-01,Approved configuration update,3052597,3127709,GB,dns
+EVT-00104,2026-10-25T08:17:10Z,192.168.1.23,198.51.100.88,22630,53,ARP,arp_change,HIGH,BLOCK,,REVIEW,workstation-07,Duplicate ARP response observed on local network,2113893,1261422,GB,firewall
+EVT-00105,2026-10-25T08:48:32Z,198.51.100.88,192.168.1.89,9474,53,TCP,outbound_connection,HIGH,ALERT,root,REVIEW,workstation-07,Repeated outbound connection attempts,2755461,1072011,NL,web_gateway
+EVT-00106,2026-10-25T08:33:15Z,198.51.100.88,192.168.1.14,21265,80,TCP,port_scan,HIGH,DENY,,BLOCKED,workstation-07,Sequential connection attempts across multiple ports,1900380,1153981,US,firewall
+EVT-00107,2026-10-25T08:31:48Z,203.0.113.45,192.168.1.179,58459,80,TCP,malware_signature,HIGH,BLOCK,,BLOCKED,db-server-01,Known malware signature detected,1517045,1388643,NL,dns
+EVT-00108,2026-10-25T08:39:14Z,192.168.1.194,198.51.100.20,50332,3389,TCP,login,MEDIUM,ALLOW,guest,SUSPICIOUS,db-server-01,Repeated failed login attempts,3934388,1627525,GB,web_gateway
+EVT-00109,2026-10-25T08:43:12Z,192.168.1.209,198.51.100.140,64349,80,HTTPS,data_transfer,MEDIUM,ALLOW,root,SUSPICIOUS,db-server-01,Unusually large outbound transfer,437715,4031486,GB,web_gateway
+EVT-00110,2026-10-25T08:18:10Z,203.0.113.77,192.168.1.82,18901,3389,TCP,ssh_bruteforce,HIGH,BLOCK,user01,DETECTED,workstation-07,Repeated SSH authentication failures,1862589,3784335,GB,firewall
+EVT-00111,2026-10-25T08:36:40Z,192.168.1.105,198.51.100.20,6372,5432,ARP,arp_change,MEDIUM,ALLOW,,REVIEW,auth-server-01,IP-to-MAC mapping changed unexpectedly,2812619,1225150,US,firewall
+EVT-00112,2026-10-25T08:55:30Z,203.0.113.120,192.168.1.204,31767,3389,TCP,malware_signature,CRITICAL,QUARANTINE,,BLOCKED,web-server-01,Known malware signature detected,2146845,1809043,US,web_gateway
+EVT-00113,2026-10-25T08:31:44Z,198.51.100.77,192.168.1.70,4153,443,TCP,privilege_escalation,CRITICAL,ALERT,analyst01,ESCALATED,firewall-01,Process attempted elevated access,526864,929943,DE,web_gateway
+EVT-00114,2026-10-25T08:56:30Z,192.168.1.157,198.51.100.20,20112,8080,TCP,firewall_event,LOW,ALLOW,user01,INFO,auth-server-01,Routine firewall policy match,4787074,3494422,US,firewall
+EVT-00115,2026-10-25T09:06:30Z,203.0.113.45,192.168.1.109,3877,8080,TCP,firewall_event,MEDIUM,DENY,operator,DENIED,web-server-01,Inbound connection denied by firewall,566730,2892412,US,firewall
+EVT-00116,2026-10-25T08:34:30Z,198.51.100.88,192.168.1.149,55444,3389,TCP,config_change,MEDIUM,ALERT,user01,DENIED,db-server-01,Approved configuration update,529325,3839294,IN,authentication
+EVT-00117,2026-10-25T08:34:48Z,192.168.1.236,203.0.113.45,34800,8080,TCP,file_access,LOW,LOG,guest,ALLOWED,auth-server-01,User accessed approved document,1603091,2400072,GB,firewall
+EVT-00118,2026-10-25T09:10:12Z,198.51.100.88,192.168.1.121,27239,3389,TCP,ransomware_indicator,CRITICAL,ALERT,,QUARANTINED,db-server-01,Possible ransomware encryption behavior observed,4173528,3081529,SG,authentication
+EVT-00119,2026-10-25T08:53:06Z,192.168.1.30,198.51.100.140,36772,445,TCP,config_change,LOW,ALLOW,user01,SUCCESS,web-server-01,Configuration changed outside maintenance window,2480007,2571073,DE,web_gateway
+EVT-00120,2026-10-25T08:43:38Z,203.0.113.200,192.168.1.99,48656,5432,TCP,privilege_escalation,CRITICAL,QUARANTINE,admin,QUARANTINED,auth-server-01,Unauthorized role modification detected,481154,629490,NL,dns
+EVT-00121,2026-10-25T09:10:00Z,203.0.113.45,192.168.1.46,3304,80,HTTPS,sql_injection_attempt,HIGH,DENY,operator,DETECTED,auth-server-01,SQL metacharacters detected in request parameters,3211615,4758392,IN,web_gateway
+EVT-00122,2026-10-25T08:44:22Z,192.168.1.104,198.51.100.88,38636,80,UDP,dns_query,HIGH,BLOCK,analyst01,BLOCKED,workstation-07,Unusual DNS request to newly observed domain,2337819,2093894,IN,firewall
+EVT-00123,2026-10-25T08:32:32Z,192.168.1.109,203.0.113.77,47163,3389,TCP,privilege_escalation,HIGH,DENY,guest,REVIEW,auth-server-01,Unauthorized role modification detected,4120485,1679217,IN,endpoint
+EVT-00124,2026-10-25T08:20:30Z,192.168.1.240,203.0.113.200,54141,5432,TCP,ransomware_indicator,CRITICAL,QUARANTINE,,QUARANTINED,web-server-01,Possible ransomware encryption behavior observed,2516218,1321249,NL,endpoint
+EVT-00125,2026-10-25T09:08:12Z,192.168.1.41,198.51.100.20,16538,3389,TCP,config_change,MEDIUM,ALLOW,user01,DENIED,firewall-01,Configuration changed outside maintenance window,3920884,4627549,US,web_gateway
+EVT-00126,2026-10-25T08:41:40Z,203.0.113.77,192.168.1.89,35475,8080,TCP,ssh_bruteforce,HIGH,ALERT,operator,REVIEW,web-server-01,Repeated SSH authentication failures,2659420,622141,DE,dns
+EVT-00127,2026-10-25T08:25:12Z,203.0.113.120,192.168.1.206,33979,22,HTTPS,web_request,MEDIUM,ALLOW,root,SUSPICIOUS,db-server-01,Unusual request path observed,1381243,1358677,GB,endpoint
+EVT-00128,2026-10-25T08:29:38Z,203.0.113.77,192.168.1.74,9227,445,HTTPS,sql_injection_attempt,CRITICAL,QUARANTINE,guest,ESCALATED,web-server-01,Potential SQL injection payload blocked,1414620,4964449,SG,endpoint
+EVT-00129,2026-10-25T09:12:32Z,192.168.1.240,198.51.100.88,55106,22,UDP,dns_query,HIGH,DENY,admin,DETECTED,firewall-01,Unusual DNS request to newly observed domain,1768388,4799434,DE,web_gateway
+EVT-00130,2026-10-25T09:00:12Z,192.168.1.170,198.51.100.77,32674,443,HTTPS,web_request,LOW,LOG,guest,ALLOWED,auth-server-01,Unusual request path observed,612142,502586,US,dns
+EVT-00131,2026-10-25T08:39:00Z,192.168.1.97,203.0.113.120,57482,5432,ARP,arp_change,HIGH,BLOCK,,BLOCKED,workstation-07,IP-to-MAC mapping changed unexpectedly,3108316,4319966,SG,firewall
+EVT-00132,2026-10-25T08:34:56Z,203.0.113.200,192.168.1.41,17271,80,HTTPS,sql_injection_attempt,HIGH,DENY,operator,DETECTED,auth-server-01,SQL metacharacters detected in request parameters,3507568,2082642,US,authentication
+EVT-00133,2026-10-25T08:28:36Z,198.51.100.20,192.168.1.205,34757,3389,TCP,ssh_bruteforce,CRITICAL,ALERT,operator,QUARANTINED,workstation-07,Repeated SSH authentication failures,755386,3298754,SG,dns
+EVT-00134,2026-10-25T08:37:41Z,192.168.1.22,203.0.113.45,40182,3389,TCP,file_access,LOW,ALLOW,operator,INFO,web-server-01,User accessed approved document,3614884,1123527,GB,authentication
+EVT-00135,2026-10-25T08:58:04Z,192.168.1.112,203.0.113.45,24782,445,TCP,config_change,MEDIUM,ALLOW,user02,DENIED,firewall-01,Configuration changed outside maintenance window,4612535,2346467,SG,web_gateway
+EVT-00136,2026-10-25T08:42:45Z,203.0.113.77,192.168.1.110,53118,5432,TCP,port_scan,MEDIUM,ALERT,,DENIED,db-server-01,Sequential connection attempts across multiple ports,4270829,3367078,SG,firewall
+EVT-00137,2026-10-25T08:52:08Z,198.51.100.88,192.168.1.215,10784,80,TCP,login,LOW,ALLOW,operator,INFO,auth-server-01,Failed password authentication,3296341,2510159,SG,authentication
+EVT-00138,2026-10-25T09:17:38Z,192.168.1.86,203.0.113.200,25164,5432,TCP,firewall_event,MEDIUM,ALERT,admin,REVIEW,workstation-07,Unexpected firewall rule match,2580988,223532,SG,dns
+EVT-00139,2026-10-25T08:52:54Z,203.0.113.45,192.168.1.159,12198,8080,TCP,malware_signature,HIGH,DENY,,REVIEW,db-server-01,Known malware signature detected,4803067,921870,US,firewall
+EVT-00140,2026-10-25T08:48:39Z,192.168.1.115,198.51.100.20,58224,22,HTTPS,data_transfer,MEDIUM,ALERT,operator,REVIEW,firewall-01,Normal outbound data transfer,4705059,2726713,NL,dns
+EVT-00141,2026-10-25T09:26:20Z,203.0.113.120,192.168.1.127,36824,5432,TCP,firewall_event,MEDIUM,ALERT,service_account,SUSPICIOUS,auth-server-01,Unexpected firewall rule match,4061597,1612828,US,authentication
+EVT-00142,2026-10-25T08:39:57Z,198.51.100.77,192.168.1.207,46259,3389,TCP,firewall_event,MEDIUM,DENY,user02,DENIED,auth-server-01,Unexpected firewall rule match,2293928,2414152,IN,web_gateway
+EVT-00143,2026-10-25T09:15:44Z,192.168.1.111,198.51.100.88,20059,22,HTTPS,web_request,MEDIUM,DENY,user01,SUSPICIOUS,web-server-01,Unusual request path observed,3710919,2151207,NL,dns
+EVT-00144,2026-10-25T08:28:36Z,192.168.1.79,198.51.100.77,41373,443,TCP,file_access,LOW,ALLOW,analyst01,SUCCESS,firewall-01,User accessed approved document,1953174,440327,IN,dns
+EVT-00145,2026-10-25T09:16:48Z,203.0.113.77,192.168.1.184,1363,80,HTTPS,sql_injection_attempt,CRITICAL,ALERT,user01,ESCALATED,workstation-07,SQL metacharacters detected in request parameters,1673157,2409586,GB,authentication
+EVT-00146,2026-10-25T09:00:25Z,192.168.1.32,198.51.100.20,60873,80,HTTPS,web_request,LOW,ALLOW,admin,SUCCESS,web-server-01,Unusual request path observed,4155581,1562895,NL,authentication
+EVT-00147,2026-10-25T09:03:16Z,203.0.113.45,192.168.1.86,61871,5432,TCP,ssh_bruteforce,HIGH,ALERT,analyst01,BLOCKED,firewall-01,Multiple usernames attempted from same source,1125750,4229642,DE,authentication
+EVT-00148,2026-10-25T09:08:36Z,192.168.1.197,203.0.113.200,48118,80,TCP,file_access,LOW,ALLOW,guest,INFO,auth-server-01,Unauthorized access to restricted file,4762894,1620354,US,web_gateway
+EVT-00149,2026-10-25T08:24:40Z,192.168.1.141,198.51.100.88,27293,53,TCP,ransomware_indicator,CRITICAL,BLOCK,,BLOCKED,workstation-07,Possible ransomware encryption behavior observed,2080769,57295,GB,dns
+EVT-00150,2026-10-25T09:04:34Z,192.168.1.94,198.51.100.77,18165,5432,TCP,file_access,MEDIUM,ALERT,admin,REVIEW,web-server-01,Sensitive configuration file access attempt,991741,3904016,GB,endpoint
+EVT-00151,2026-10-25T08:47:30Z,192.168.1.173,198.51.100.77,41304,443,ARP,arp_change,HIGH,DENY,,DETECTED,workstation-07,IP-to-MAC mapping changed unexpectedly,3816637,3134192,DE,web_gateway
+EVT-00152,2026-10-25T08:37:45Z,198.51.100.20,192.168.1.205,35463,3389,TCP,ssh_bruteforce,CRITICAL,QUARANTINE,analyst01,ESCALATED,auth-server-01,Repeated SSH authentication failures,4732590,941275,IN,web_gateway
+EVT-00153,2026-10-25T08:45:36Z,203.0.113.120,192.168.1.52,8641,443,TCP,ssh_bruteforce,HIGH,BLOCK,operator,REVIEW,workstation-07,Repeated SSH authentication failures,4281338,3736979,IN,dns
+EVT-00154,2026-10-25T09:03:45Z,192.168.1.154,203.0.113.45,45114,445,UDP,dns_query,HIGH,BLOCK,operator,DETECTED,workstation-07,Unusual DNS request to newly observed domain,25295,1827888,SG,firewall
+EVT-00155,2026-10-25T09:34:58Z,192.168.1.26,203.0.113.45,62219,3389,TCP,login,MEDIUM,ALLOW,analyst01,DENIED,workstation-07,Failed password authentication,1136059,3526251,GB,dns
+EVT-00156,2026-10-25T09:12:20Z,192.168.1.184,203.0.113.120,8798,80,HTTPS,data_transfer,MEDIUM,ALERT,service_account,DENIED,firewall-01,Normal outbound data transfer,1868060,29136,IN,authentication
+EVT-00157,2026-10-25T09:28:24Z,192.168.1.118,198.51.100.140,17244,3389,HTTPS,data_transfer,HIGH,ALERT,user02,DETECTED,auth-server-01,Normal outbound data transfer,946609,270258,NL,dns
+EVT-00158,2026-10-25T09:10:39Z,203.0.113.77,192.168.1.35,30281,22,TCP,outbound_connection,LOW,ALLOW,admin,INFO,web-server-01,Connection to uncommon external destination,3682286,1965780,SG,endpoint
+EVT-00159,2026-10-25T09:29:32Z,198.51.100.77,192.168.1.69,38869,5432,TCP,config_change,LOW,ALLOW,service_account,ALLOWED,db-server-01,Approved configuration update,3469194,2520784,GB,firewall
+EVT-00160,2026-10-25T08:23:51Z,192.168.1.119,203.0.113.200,62731,8080,TCP,firewall_event,LOW,LOG,service_account,ALLOWED,workstation-07,Inbound connection denied by firewall,1251728,2515647,DE,endpoint
+EVT-00161,2026-10-25T09:33:20Z,198.51.100.20,192.168.1.86,53831,3389,TCP,config_change,MEDIUM,ALLOW,user01,SUSPICIOUS,workstation-07,Configuration changed outside maintenance window,4674860,4445893,US,dns
+EVT-00162,2026-10-25T08:59:02Z,203.0.113.77,192.168.1.246,7083,443,TCP,file_access,MEDIUM,ALLOW,service_account,DENIED,workstation-07,Sensitive configuration file access attempt,331748,610559,US,web_gateway
+EVT-00163,2026-10-25T08:45:54Z,192.168.1.232,198.51.100.88,14905,443,TCP,privilege_escalation,HIGH,BLOCK,admin,DETECTED,workstation-07,Unexpected privilege assignment attempt,1715580,3327190,US,web_gateway
+EVT-00164,2026-10-25T09:07:55Z,198.51.100.140,192.168.1.129,21236,445,HTTPS,sql_injection_attempt,CRITICAL,ALERT,service_account,ESCALATED,workstation-07,SQL metacharacters detected in request parameters,827185,3938371,GB,endpoint
+EVT-00165,2026-10-25T09:11:04Z,198.51.100.140,192.168.1.21,49602,80,HTTPS,sql_injection_attempt,CRITICAL,BLOCK,user02,QUARANTINED,firewall-01,Potential SQL injection payload blocked,4858202,3502898,GB,endpoint
+EVT-00166,2026-10-25T09:08:45Z,198.51.100.20,192.168.1.137,17888,3389,TCP,file_access,MEDIUM,ALERT,service_account,SUSPICIOUS,workstation-07,Unauthorized access to restricted file,1411246,2954267,US,endpoint
+EVT-00167,2026-10-25T08:24:54Z,203.0.113.45,192.168.1.144,62967,22,TCP,privilege_escalation,CRITICAL,BLOCK,analyst01,QUARANTINED,db-server-01,Unauthorized role modification detected,1941404,570156,NL,endpoint
+EVT-00168,2026-10-25T09:15:09Z,192.168.1.105,203.0.113.45,44230,3389,TCP,login,LOW,ALLOW,operator,SUCCESS,firewall-01,Administrator login from unfamiliar host,99413,140309,SG,authentication
+EVT-00169,2026-10-25T09:43:36Z,198.51.100.140,192.168.1.216,8037,53,TCP,firewall_event,MEDIUM,ALERT,user01,REVIEW,db-server-01,Routine firewall policy match,4416232,2117437,GB,authentication
+EVT-00170,2026-10-25T09:13:14Z,198.51.100.140,192.168.1.127,46718,443,TCP,config_change,MEDIUM,DENY,user02,SUSPICIOUS,web-server-01,Approved configuration update,784339,3399720,DE,dns
+EVT-00171,2026-10-25T08:36:50Z,203.0.113.45,192.168.1.189,33782,8080,TCP,firewall_event,MEDIUM,ALERT,analyst01,DENIED,firewall-01,Routine firewall policy match,4430520,356950,US,endpoint
+EVT-00172,2026-10-25T09:45:27Z,198.51.100.77,192.168.1.21,45878,445,TCP,ssh_bruteforce,CRITICAL,QUARANTINE,analyst01,ESCALATED,web-server-01,Repeated SSH authentication failures,2638088,131349,US,web_gateway
+EVT-00173,2026-10-25T08:48:44Z,192.168.1.247,203.0.113.77,37983,443,UDP,dns_query,HIGH,BLOCK,user01,BLOCKED,firewall-01,Unusual DNS request to newly observed domain,3219935,1173990,NL,firewall
+EVT-00174,2026-10-25T09:38:02Z,198.51.100.140,192.168.1.69,23345,8080,TCP,firewall_event,MEDIUM,DENY,analyst01,REVIEW,auth-server-01,Inbound connection denied by firewall,4115480,1913763,GB,web_gateway
+EVT-00175,2026-10-25T09:32:48Z,198.51.100.140,192.168.1.31,41565,445,ARP,arp_change,HIGH,DENY,,REVIEW,web-server-01,IP-to-MAC mapping changed unexpectedly,2247912,1293699,DE,endpoint
+EVT-00176,2026-10-25T08:23:20Z,203.0.113.77,192.168.1.33,30170,5432,TCP,privilege_escalation,CRITICAL,ALERT,guest,BLOCKED,db-server-01,Unexpected privilege assignment attempt,1571956,3615318,DE,web_gateway
+EVT-00177,2026-10-25T09:13:20Z,203.0.113.77,192.168.1.100,40144,5432,TCP,firewall_event,MEDIUM,DENY,analyst01,REVIEW,auth-server-01,Inbound connection denied by firewall,3253098,710511,NL,web_gateway
+EVT-00178,2026-10-25T08:59:00Z,203.0.113.120,192.168.1.185,10123,445,TCP,ssh_bruteforce,HIGH,ALERT,user01,BLOCKED,workstation-07,Repeated SSH authentication failures,530723,1402637,DE,authentication
+EVT-00179,2026-10-25T08:47:28Z,192.168.1.29,198.51.100.88,62904,443,ARP,arp_change,HIGH,BLOCK,,REVIEW,workstation-07,IP-to-MAC mapping changed unexpectedly,3840821,897349,US,authentication
+EVT-00180,2026-10-25T09:38:27Z,192.168.1.168,198.51.100.140,29874,5432,TCP,login,MEDIUM,DENY,service_account,SUSPICIOUS,firewall-01,Failed password authentication,2520233,2689934,SG,endpoint
+EVT-00181,2026-10-25T08:51:00Z,198.51.100.140,192.168.1.91,64447,443,HTTPS,data_transfer,MEDIUM,DENY,operator,DENIED,auth-server-01,Unusually large outbound transfer,3061972,955360,SG,endpoint
+EVT-00182,2026-10-25T09:06:22Z,203.0.113.45,192.168.1.196,29758,445,TCP,outbound_connection,HIGH,BLOCK,user02,DETECTED,workstation-07,Repeated outbound connection attempts,4188458,1167519,NL,authentication
+EVT-00183,2026-10-25T09:40:06Z,192.168.1.193,198.51.100.140,5871,3389,TCP,file_access,MEDIUM,ALERT,root,DENIED,firewall-01,Unauthorized access to restricted file,4482598,4249774,NL,dns
+EVT-00184,2026-10-25T08:33:33Z,192.168.1.102,203.0.113.77,44120,5432,TCP,firewall_event,LOW,ALLOW,user02,INFO,firewall-01,Routine firewall policy match,4724634,3352236,GB,dns
+EVT-00185,2026-10-25T08:46:00Z,203.0.113.77,192.168.1.76,34491,443,TCP,port_scan,MEDIUM,DENY,,DENIED,workstation-07,Repeated probes against exposed service ports,4937450,4198211,US,authentication
+EVT-00186,2026-10-25T08:30:50Z,198.51.100.140,192.168.1.245,55505,80,TCP,login,MEDIUM,DENY,analyst01,DENIED,auth-server-01,Administrator login from unfamiliar host,1735328,4371428,DE,authentication
+EVT-00187,2026-10-25T08:55:48Z,192.168.1.188,203.0.113.200,20702,22,HTTPS,data_transfer,LOW,LOG,analyst01,SUCCESS,web-server-01,Unusually large outbound transfer,917400,1378702,NL,endpoint
+EVT-00188,2026-10-25T09:08:34Z,192.168.1.94,198.51.100.140,53305,8080,TCP,firewall_event,LOW,LOG,user02,SUCCESS,db-server-01,Unexpected firewall rule match,3625006,3318385,IN,web_gateway
+EVT-00189,2026-10-25T09:05:48Z,203.0.113.200,192.168.1.161,1315,443,TCP,ssh_bruteforce,HIGH,DENY,root,BLOCKED,web-server-01,Repeated SSH authentication failures,4503751,1568332,GB,authentication
+EVT-00190,2026-10-25T09:28:12Z,203.0.113.200,192.168.1.145,40147,8080,TCP,file_access,MEDIUM,ALERT,service_account,DENIED,firewall-01,User accessed approved document,2918603,2952663,DE,web_gateway
+EVT-00191,2026-10-25T09:31:50Z,192.168.1.86,203.0.113.77,21548,53,UDP,dns_query,HIGH,DENY,user01,BLOCKED,web-server-01,DNS lookup for approved domain,3131518,1185801,SG,dns
+EVT-00192,2026-10-25T09:13:13Z,192.168.1.118,203.0.113.120,42672,80,ARP,arp_change,MEDIUM,ALERT,,REVIEW,workstation-07,Duplicate ARP response observed on local network,1176892,1569496,GB,dns
+EVT-00193,2026-10-25T08:38:24Z,192.168.1.12,203.0.113.200,54449,8080,TCP,outbound_connection,LOW,LOG,user02,INFO,workstation-07,Connection to uncommon external destination,4124895,3486560,NL,dns
+EVT-00194,2026-10-25T09:42:56Z,203.0.113.45,192.168.1.213,20166,22,HTTPS,data_transfer,LOW,ALLOW,user02,SUCCESS,firewall-01,Unusually large outbound transfer,1411039,3836289,SG,dns
+EVT-00195,2026-10-25T09:20:50Z,192.168.1.78,198.51.100.88,50831,3389,TCP,firewall_event,LOW,LOG,admin,SUCCESS,workstation-07,Routine firewall policy match,2076445,2497363,IN,dns
+EVT-00196,2026-10-25T09:53:45Z,203.0.113.77,192.168.1.122,8717,443,TCP,malware_signature,CRITICAL,BLOCK,,ESCALATED,firewall-01,Malicious payload pattern detected in inbound traffic,2941304,3591725,US,web_gateway
+EVT-00197,2026-10-25T09:24:56Z,192.168.1.216,203.0.113.45,35907,445,UDP,dns_query,LOW,LOG,service_account,INFO,db-server-01,Unusual DNS request to newly observed domain,2454797,2427103,SG,authentication
+EVT-00198,2026-10-25T08:29:33Z,198.51.100.140,192.168.1.245,19198,80,TCP,ransomware_indicator,CRITICAL,QUARANTINE,,BLOCKED,db-server-01,Rapid file modification pattern detected,2701943,2076639,NL,dns
+EVT-00199,2026-10-25T09:06:00Z,192.168.1.78,198.51.100.140,5973,53,HTTPS,data_transfer,LOW,ALLOW,operator,INFO,auth-server-01,Transfer volume exceeded baseline threshold,3095993,3814263,DE,authentication
+EVT-00200,2026-10-25T09:42:49Z,192.168.1.226,203.0.113.77,42628,5432,TCP,outbound_connection,LOW,ALLOW,operator,INFO,workstation-07,Connection to approved external service,3604107,1777138,DE,authentication
+EVT-00201,2026-10-25T09:26:40Z,198.51.100.88,192.168.1.150,38126,3389,HTTPS,sql_injection_attempt,CRITICAL,ALERT,user01,ESCALATED,web-server-01,Request contains suspicious UNION SELECT pattern,835293,3855251,IN,firewall
+EVT-00202,2026-10-25T08:26:48Z,203.0.113.200,192.168.1.126,14283,80,TCP,ssh_bruteforce,HIGH,BLOCK,root,BLOCKED,db-server-01,Multiple usernames attempted from same source,782992,3023551,GB,firewall
+EVT-00203,2026-10-25T09:34:16Z,203.0.113.45,192.168.1.111,48602,443,HTTPS,sql_injection_attempt,HIGH,ALERT,guest,REVIEW,web-server-01,Potential SQL injection payload blocked,798458,9112,US,dns
+EVT-00204,2026-10-25T09:38:07Z,198.51.100.20,192.168.1.142,30191,22,TCP,port_scan,MEDIUM,ALLOW,,SUSPICIOUS,auth-server-01,Sequential connection attempts across multiple ports,3542626,1108765,DE,firewall
+EVT-00205,2026-10-25T09:01:12Z,203.0.113.77,192.168.1.36,58760,445,TCP,file_access,MEDIUM,ALLOW,service_account,DENIED,db-server-01,Sensitive configuration file access attempt,1198338,573878,SG,web_gateway
+EVT-00206,2026-10-25T09:45:55Z,192.168.1.122,198.51.100.88,42185,80,TCP,login,HIGH,ALERT,user02,REVIEW,workstation-07,Failed password authentication,727191,842762,US,firewall
+EVT-00207,2026-10-25T09:53:18Z,192.168.1.119,198.51.100.88,17262,445,TCP,outbound_connection,HIGH,BLOCK,user01,DETECTED,db-server-01,Repeated outbound connection attempts,2390088,225019,NL,authentication
+EVT-00208,2026-10-25T08:58:39Z,192.168.1.58,198.51.100.140,52391,443,TCP,file_access,HIGH,ALERT,admin,BLOCKED,web-server-01,User accessed approved document,4190802,4982244,IN,web_gateway
+EVT-00209,2026-10-25T09:02:24Z,198.51.100.88,192.168.1.249,26375,8080,TCP,ssh_bruteforce,HIGH,ALERT,user01,REVIEW,db-server-01,Multiple usernames attempted from same source,612299,140000,SG,firewall
+EVT-00210,2026-10-25T09:09:40Z,203.0.113.45,192.168.1.212,42218,8080,TCP,login,MEDIUM,DENY,guest,SUSPICIOUS,workstation-07,Successful user login,4501031,4510180,SG,endpoint
+EVT-00211,2026-10-25T09:24:00Z,198.51.100.77,192.168.1.30,61377,443,TCP,malware_signature,HIGH,DENY,,REVIEW,auth-server-01,Suspicious executable quarantined,4919391,554613,GB,dns
+EVT-00212,2026-10-25T09:13:51Z,203.0.113.77,192.168.1.246,30736,22,TCP,privilege_escalation,HIGH,ALERT,analyst01,REVIEW,db-server-01,Unexpected privilege assignment attempt,106241,1151015,NL,firewall
+EVT-00213,2026-10-25T08:45:56Z,192.168.1.143,198.51.100.77,9342,445,UDP,dns_query,MEDIUM,ALERT,service_account,REVIEW,web-server-01,Unusual DNS request to newly observed domain,3601435,2281538,SG,firewall
+EVT-00214,2026-10-25T09:25:12Z,203.0.113.200,192.168.1.126,24625,22,TCP,malware_signature,HIGH,ALERT,,REVIEW,db-server-01,Suspicious executable quarantined,1319611,2140068,IN,web_gateway
+EVT-00215,2026-10-25T10:04:50Z,203.0.113.45,192.168.1.21,17050,22,HTTPS,web_request,LOW,ALLOW,admin,ALLOWED,workstation-07,Normal HTTPS request,1501233,296651,SG,dns
+EVT-00216,2026-10-25T10:01:50Z,198.51.100.88,192.168.1.79,38480,5432,TCP,file_access,MEDIUM,ALLOW,analyst01,SUSPICIOUS,web-server-01,User accessed approved document,1872211,4326626,IN,dns
+EVT-00217,2026-10-25T10:06:00Z,198.51.100.77,192.168.1.208,21385,5432,TCP,port_scan,HIGH,DENY,,REVIEW,workstation-07,Sequential connection attempts across multiple ports,3094719,1683351,GB,web_gateway
+EVT-00218,2026-10-25T09:08:43Z,192.168.1.72,203.0.113.200,51657,443,TCP,config_change,MEDIUM,ALERT,operator,SUSPICIOUS,db-server-01,Approved configuration update,53501,3439632,IN,endpoint
+EVT-00219,2026-10-25T09:05:24Z,192.168.1.187,203.0.113.45,50761,8080,TCP,firewall_event,MEDIUM,ALERT,admin,SUSPICIOUS,auth-server-01,Routine firewall policy match,1721295,4444406,US,dns
+EVT-00220,2026-10-25T08:36:30Z,192.168.1.46,198.51.100.77,61400,443,HTTPS,data_transfer,LOW,LOG,admin,ALLOWED,auth-server-01,Unusually large outbound transfer,712213,4871857,IN,web_gateway
+EVT-00221,2026-10-25T09:17:00Z,192.168.1.29,203.0.113.45,16541,445,UDP,dns_query,HIGH,ALERT,user01,BLOCKED,workstation-07,High-volume DNS requests in short interval,2736796,2668061,DE,authentication
+EVT-00222,2026-10-25T08:44:12Z,192.168.1.44,203.0.113.77,11796,3389,TCP,file_access,LOW,ALLOW,analyst01,ALLOWED,workstation-07,User accessed approved document,4495660,3005532,US,dns
+EVT-00223,2026-10-25T08:40:42Z,198.51.100.77,192.168.1.228,6949,80,TCP,malware_signature,CRITICAL,QUARANTINE,,QUARANTINED,firewall-01,Known malware signature detected,1803725,2749732,US,firewall
+EVT-00224,2026-10-25T09:47:47Z,192.168.1.111,203.0.113.45,18074,80,TCP,privilege_escalation,HIGH,DENY,guest,BLOCKED,workstation-07,Unauthorized role modification detected,4614748,2095915,IN,dns
+EVT-00225,2026-10-25T08:33:36Z,203.0.113.77,192.168.1.13,55443,443,TCP,port_scan,MEDIUM,ALLOW,,REVIEW,workstation-07,Repeated probes against exposed service ports,704973,4884886,SG,authentication
+EVT-00226,2026-10-25T08:52:30Z,203.0.113.45,192.168.1.26,54062,80,TCP,ssh_bruteforce,HIGH,DENY,operator,BLOCKED,web-server-01,Repeated SSH authentication failures,3867105,424779,US,web_gateway
+EVT-00227,2026-10-25T08:48:58Z,192.168.1.107,198.51.100.140,24220,443,ARP,arp_change,HIGH,DENY,,BLOCKED,auth-server-01,Duplicate ARP response observed on local network,1246810,290660,SG,web_gateway
+EVT-00228,2026-10-25T10:16:12Z,192.168.1.137,198.51.100.140,5020,53,TCP,outbound_connection,LOW,ALLOW,operator,ALLOWED,db-server-01,Connection to uncommon external destination,1673173,4410848,US,web_gateway
+EVT-00229,2026-10-25T09:27:24Z,192.168.1.210,198.51.100.88,23570,5432,TCP,config_change,LOW,ALLOW,operator,ALLOWED,db-server-01,Approved configuration update,2674938,1837274,IN,authentication
+EVT-00230,2026-10-25T08:49:37Z,192.168.1.206,198.51.100.20,17267,443,TCP,login,MEDIUM,DENY,analyst01,SUSPICIOUS,web-server-01,Failed password authentication,4829255,3258324,GB,endpoint
+EVT-00231,2026-10-25T10:21:50Z,192.168.1.216,198.51.100.88,47125,5432,UDP,dns_query,LOW,LOG,admin,INFO,db-server-01,High-volume DNS requests in short interval,1579018,4129097,SG,authentication
+EVT-00232,2026-10-25T09:43:57Z,203.0.113.45,192.168.1.69,2330,3389,UDP,dns_query,MEDIUM,ALLOW,user02,DENIED,firewall-01,DNS lookup for approved domain,1094625,2858494,NL,endpoint
+EVT-00233,2026-10-25T08:46:24Z,203.0.113.45,192.168.1.15,51772,53,TCP,ssh_bruteforce,CRITICAL,QUARANTINE,user01,QUARANTINED,web-server-01,Multiple usernames attempted from same source,3318496,4915864,IN,authentication
+EVT-00234,2026-10-25T10:00:23Z,203.0.113.120,192.168.1.50,63197,8080,TCP,malware_signature,CRITICAL,QUARANTINE,,QUARANTINED,auth-server-01,Known malware signature detected,4714207,2993269,US,web_gateway
+EVT-00235,2026-10-25T08:46:48Z,192.168.1.197,198.51.100.77,12670,22,TCP,ransomware_indicator,CRITICAL,QUARANTINE,,ESCALATED,workstation-07,Rapid file modification pattern detected,1527412,2669396,SG,endpoint
+EVT-00236,2026-10-25T10:01:25Z,192.168.1.46,198.51.100.88,16621,5432,HTTPS,web_request,LOW,ALLOW,analyst01,SUCCESS,web-server-01,High request rate from one source,2816470,3746603,IN,authentication
+EVT-00237,2026-10-25T10:09:48Z,192.168.1.99,198.51.100.77,48237,22,TCP,file_access,LOW,ALLOW,analyst01,ALLOWED,workstation-07,Sensitive configuration file access attempt,3520306,1395347,DE,dns
+EVT-00238,2026-10-25T09:19:00Z,198.51.100.88,192.168.1.149,55340,3389,TCP,ssh_bruteforce,CRITICAL,QUARANTINE,analyst01,ESCALATED,db-server-01,Repeated SSH authentication failures,3785673,618319,IN,authentication
+EVT-00239,2026-10-25T09:11:24Z,203.0.113.77,192.168.1.28,59215,8080,TCP,login,MEDIUM,ALLOW,user01,SUSPICIOUS,web-server-01,Successful user login,2834934,4983089,SG,dns
+EVT-00240,2026-10-25T09:47:33Z,192.168.1.177,203.0.113.120,11319,22,TCP,privilege_escalation,HIGH,DENY,root,BLOCKED,db-server-01,Unexpected privilege assignment attempt,3433288,4648231,NL,web_gateway
+EVT-00241,2026-10-25T08:44:00Z,198.51.100.77,192.168.1.70,4276,8080,TCP,malware_signature,CRITICAL,QUARANTINE,,ESCALATED,workstation-07,Known malware signature detected,457219,3026852,IN,dns
+EVT-00242,2026-10-25T08:44:11Z,203.0.113.200,192.168.1.61,2710,443,TCP,port_scan,HIGH,DENY,,REVIEW,auth-server-01,Sequential connection attempts across multiple ports,3972598,968959,GB,dns
+EVT-00243,2026-10-25T09:52:56Z,192.168.1.77,203.0.113.77,13140,5432,HTTPS,data_transfer,MEDIUM,DENY,root,DENIED,db-server-01,Unusually large outbound transfer,374273,2208686,DE,dns
+EVT-00244,2026-10-25T08:36:27Z,198.51.100.77,192.168.1.154,10928,53,TCP,malware_signature,HIGH,DENY,,REVIEW,auth-server-01,Malicious payload pattern detected in inbound traffic,3472771,4946983,US,web_gateway
+EVT-00245,2026-10-25T09:45:44Z,192.168.1.117,203.0.113.200,32236,445,TCP,login,MEDIUM,ALLOW,user02,DENIED,web-server-01,Failed password authentication,1008997,3766818,US,endpoint
+EVT-00246,2026-10-25T09:58:25Z,198.51.100.140,192.168.1.30,14256,80,TCP,file_access,LOW,LOG,root,ALLOWED,auth-server-01,Sensitive configuration file access attempt,562137,730039,DE,web_gateway
+EVT-00247,2026-10-25T10:31:42Z,192.168.1.143,203.0.113.200,58267,22,ARP,arp_change,HIGH,BLOCK,,REVIEW,firewall-01,Duplicate ARP response observed on local network,943876,3476594,US,endpoint
+EVT-00248,2026-10-25T10:32:19Z,192.168.1.250,203.0.113.77,37900,53,TCP,outbound_connection,HIGH,ALERT,analyst01,REVIEW,auth-server-01,Connection to uncommon external destination,2215738,3213201,NL,dns
+EVT-00249,2026-10-25T09:22:40Z,192.168.1.54,198.51.100.77,41541,8080,TCP,outbound_connection,HIGH,DENY,user01,BLOCKED,auth-server-01,Repeated outbound connection attempts,1992959,413482,NL,dns
+EVT-00250,2026-10-25T09:14:42Z,198.51.100.88,192.168.1.15,21402,445,TCP,ssh_bruteforce,CRITICAL,ALERT,guest,ESCALATED,web-server-01,Repeated SSH authentication failures,1127307,2520612,NL,dns
+EVT-00251,2026-10-25T09:56:40Z,198.51.100.140,192.168.1.164,13340,3389,TCP,config_change,MEDIUM,ALLOW,analyst01,DENIED,workstation-07,Configuration changed outside maintenance window,471488,4322395,US,firewall
+EVT-00252,2026-10-25T10:26:25Z,203.0.113.120,192.168.1.209,35383,22,TCP,malware_signature,CRITICAL,BLOCK,,BLOCKED,db-server-01,Known malware signature detected,2092876,277420,DE,firewall
+EVT-00253,2026-10-25T09:19:48Z,198.51.100.20,192.168.1.80,34127,8080,TCP,ssh_bruteforce,CRITICAL,QUARANTINE,operator,BLOCKED,web-server-01,Repeated SSH authentication failures,3124477,4100240,SG,dns
+EVT-00254,2026-10-25T08:54:49Z,192.168.1.99,198.51.100.88,50107,53,UDP,dns_query,MEDIUM,DENY,guest,REVIEW,workstation-07,DNS lookup for approved domain,1366566,4800448,US,endpoint
+EVT-00255,2026-10-25T09:41:36Z,192.168.1.78,198.51.100.140,57688,22,HTTPS,web_request,LOW,ALLOW,admin,SUCCESS,db-server-01,High request rate from one source,70998,1877119,GB,web_gateway
+EVT-00256,2026-10-25T09:29:15Z,192.168.1.191,198.51.100.77,56833,5432,TCP,config_change,MEDIUM,DENY,root,DENIED,db-server-01,Configuration changed outside maintenance window,2534576,4367427,SG,dns
+EVT-00257,2026-10-25T09:59:28Z,198.51.100.88,192.168.1.153,20584,53,TCP,outbound_connection,LOW,ALLOW,guest,SUCCESS,auth-server-01,Connection to uncommon external destination,2727447,2322679,GB,authentication
+EVT-00258,2026-10-25T10:21:21Z,192.168.1.71,203.0.113.45,44312,5432,TCP,file_access,LOW,LOG,root,SUCCESS,web-server-01,Sensitive configuration file access attempt,4172265,2479711,GB,dns
+EVT-00259,2026-10-25T09:17:24Z,192.168.1.159,198.51.100.20,48639,443,ARP,arp_change,HIGH,BLOCK,,REVIEW,workstation-07,Duplicate ARP response observed on local network,4255665,2518216,US,web_gateway
+EVT-00260,2026-10-25T09:09:04Z,203.0.113.120,192.168.1.199,63081,5432,UDP,dns_query,MEDIUM,ALERT,user01,REVIEW,db-server-01,Unusual DNS request to newly observed domain,1873410,2576017,DE,authentication
+EVT-00261,2026-10-25T10:31:40Z,198.51.100.77,192.168.1.128,31861,22,HTTPS,sql_injection_attempt,CRITICAL,QUARANTINE,analyst01,ESCALATED,firewall-01,Potential SQL injection payload blocked,597400,3961265,US,web_gateway
+EVT-00262,2026-10-25T08:39:09Z,198.51.100.77,192.168.1.115,58095,80,TCP,port_scan,HIGH,DENY,,DETECTED,auth-server-01,Repeated probes against exposed service ports,4776503,3838387,US,authentication
+EVT-00263,2026-10-25T10:02:16Z,192.168.1.134,198.51.100.88,12612,5432,TCP,ransomware_indicator,CRITICAL,QUARANTINE,,BLOCKED,web-server-01,Possible ransomware encryption behavior observed,2294518,1756426,US,web_gateway
+EVT-00264,2026-10-25T08:52:36Z,192.168.1.205,203.0.113.77,42540,8080,TCP,config_change,LOW,ALLOW,root,ALLOWED,workstation-07,Configuration changed outside maintenance window,39167,316462,SG,endpoint
+EVT-00265,2026-10-25T10:20:48Z,192.168.1.238,198.51.100.88,2198,22,TCP,privilege_escalation,CRITICAL,QUARANTINE,user02,ESCALATED,db-server-01,Unexpected privilege assignment attempt,2888615,2618019,US,firewall
+EVT-00266,2026-10-25T09:15:05Z,203.0.113.45,192.168.1.86,30903,5432,ARP,arp_change,HIGH,ALERT,,REVIEW,db-server-01,Duplicate ARP response observed on local network,4111916,3013614,US,endpoint
+EVT-00267,2026-10-25T09:06:30Z,203.0.113.45,192.168.1.68,14864,22,TCP,ssh_bruteforce,CRITICAL,QUARANTINE,user01,ESCALATED,db-server-01,Repeated SSH authentication failures,3075191,313427,DE,authentication
+EVT-00268,2026-10-25T10:04:36Z,192.168.1.22,203.0.113.77,4185,53,TCP,config_change,LOW,ALLOW,admin,ALLOWED,workstation-07,Approved configuration update,4590937,2120122,DE,endpoint
+EVT-00269,2026-10-25T09:33:48Z,192.168.1.12,198.51.100.77,44440,445,TCP,file_access,HIGH,BLOCK,analyst01,REVIEW,db-server-01,Unauthorized access to restricted file,880084,4291484,NL,web_gateway
+EVT-00270,2026-10-25T08:49:19Z,203.0.113.77,192.168.1.210,33643,443,TCP,port_scan,HIGH,BLOCK,,DETECTED,auth-server-01,Sequential connection attempts across multiple ports,3002465,3437284,GB,endpoint
+EVT-00271,2026-10-25T09:21:00Z,192.168.1.63,203.0.113.200,1203,22,TCP,login,HIGH,BLOCK,user02,DETECTED,web-server-01,Administrator login from unfamiliar host,1251114,755668,SG,firewall
+EVT-00272,2026-10-25T09:39:22Z,192.168.1.174,198.51.100.20,18333,3389,TCP,privilege_escalation,HIGH,DENY,guest,DETECTED,db-server-01,Unexpected privilege assignment attempt,2437454,3021699,NL,authentication
+EVT-00273,2026-10-25T10:38:40Z,203.0.113.45,192.168.1.12,10093,80,ARP,arp_change,MEDIUM,DENY,,DENIED,workstation-07,Duplicate ARP response observed on local network,779732,3125781,GB,endpoint
+EVT-00274,2026-10-25T09:12:48Z,198.51.100.140,192.168.1.126,55792,8080,TCP,port_scan,HIGH,BLOCK,,BLOCKED,workstation-07,Sequential connection attempts across multiple ports,948387,1111587,NL,firewall
+EVT-00275,2026-10-25T09:58:44Z,203.0.113.200,192.168.1.215,45483,3389,TCP,ransomware_indicator,CRITICAL,BLOCK,,ESCALATED,workstation-07,Possible ransomware encryption behavior observed,241728,1096016,DE,dns
+EVT-00276,2026-10-25T08:45:50Z,203.0.113.200,192.168.1.21,18169,5432,TCP,port_scan,HIGH,DENY,,REVIEW,firewall-01,Sequential connection attempts across multiple ports,2837871,4354523,SG,web_gateway
+EVT-00277,2026-10-25T09:27:24Z,198.51.100.20,192.168.1.133,44520,8080,TCP,port_scan,HIGH,DENY,,REVIEW,firewall-01,Sequential connection attempts across multiple ports,97684,1316402,SG,dns
+EVT-00278,2026-10-25T09:23:06Z,192.168.1.29,203.0.113.200,16811,5432,TCP,ransomware_indicator,CRITICAL,ALERT,,BLOCKED,firewall-01,Rapid file modification pattern detected,4617891,3176242,DE,endpoint
+EVT-00279,2026-10-25T10:00:28Z,203.0.113.200,192.168.1.215,30390,53,TCP,port_scan,HIGH,ALERT,,BLOCKED,auth-server-01,Sequential connection attempts across multiple ports,4172270,149058,IN,dns
+EVT-00280,2026-10-25T10:33:27Z,192.168.1.10,203.0.113.77,40621,445,ARP,arp_change,MEDIUM,ALERT,,SUSPICIOUS,db-server-01,Duplicate ARP response observed on local network,2859292,3047937,IN,endpoint
+EVT-00281,2026-10-25T10:20:00Z,192.168.1.206,203.0.113.200,44092,5432,TCP,ransomware_indicator,CRITICAL,QUARANTINE,,QUARANTINED,web-server-01,Rapid file modification pattern detected,1860149,18429,GB,authentication
+EVT-00282,2026-10-25T08:42:09Z,192.168.1.105,203.0.113.77,59801,80,TCP,ransomware_indicator,CRITICAL,ALERT,,BLOCKED,workstation-07,Rapid file modification pattern detected,2133133,1643508,US,firewall
+EVT-00283,2026-10-25T10:39:48Z,198.51.100.20,192.168.1.127,47999,5432,TCP,ssh_bruteforce,CRITICAL,BLOCK,user02,QUARANTINED,web-server-01,Repeated SSH authentication failures,3779106,3836847,NL,web_gateway
+EVT-00284,2026-10-25T09:57:55Z,192.168.1.11,203.0.113.45,55996,3389,TCP,firewall_event,LOW,LOG,root,SUCCESS,firewall-01,Routine firewall policy match,1076944,868673,DE,web_gateway
+EVT-00285,2026-10-25T10:07:48Z,192.168.1.108,198.51.100.140,18954,8080,TCP,outbound_connection,MEDIUM,DENY,user02,DENIED,workstation-07,Connection to approved external service,1159137,3462359,SG,web_gateway
+EVT-00286,2026-10-25T09:06:30Z,198.51.100.20,192.168.1.61,41929,445,TCP,malware_signature,CRITICAL,QUARANTINE,,QUARANTINED,db-server-01,Malicious payload pattern detected in inbound traffic,1491601,4226964,SG,authentication
+EVT-00287,2026-10-25T10:03:56Z,192.168.1.153,203.0.113.200,45211,445,TCP,privilege_escalation,HIGH,ALERT,root,DETECTED,firewall-01,Unexpected privilege assignment attempt,211998,3194971,US,firewall
+EVT-00288,2026-10-25T10:18:43Z,203.0.113.120,192.168.1.83,10620,22,HTTPS,web_request,LOW,LOG,guest,ALLOWED,db-server-01,High request rate from one source,271005,3008846,DE,firewall
+EVT-00289,2026-10-25T10:28:48Z,192.168.1.231,198.51.100.20,16595,445,TCP,outbound_connection,HIGH,BLOCK,root,REVIEW,web-server-01,Connection to uncommon external destination,3251044,3494410,NL,authentication
+EVT-00290,2026-10-25T10:10:03Z,198.51.100.77,192.168.1.61,55417,443,TCP,firewall_event,LOW,LOG,operator,INFO,auth-server-01,Unexpected firewall rule match,4585340,1648102,NL,endpoint
+EVT-00291,2026-10-25T08:48:20Z,203.0.113.120,192.168.1.184,13277,80,TCP,malware_signature,CRITICAL,QUARANTINE,,ESCALATED,web-server-01,Suspicious executable quarantined,340864,3594584,GB,web_gateway
+EVT-00292,2026-10-25T10:49:45Z,203.0.113.120,192.168.1.159,17736,22,TCP,malware_signature,HIGH,ALERT,,BLOCKED,db-server-01,Known malware signature detected,1289357,2706416,SG,firewall
+EVT-00293,2026-10-25T08:48:40Z,192.168.1.156,198.51.100.88,35456,443,TCP,config_change,MEDIUM,ALLOW,service_account,SUSPICIOUS,web-server-01,Approved configuration update,3489084,4555686,SG,dns
+EVT-00294,2026-10-25T09:08:22Z,198.51.100.20,192.168.1.236,44496,5432,TCP,port_scan,HIGH,ALERT,,BLOCKED,auth-server-01,Sequential connection attempts across multiple ports,4450147,3983390,SG,firewall
+EVT-00295,2026-10-25T10:56:24Z,203.0.113.200,192.168.1.71,43115,443,TCP,port_scan,HIGH,DENY,,REVIEW,auth-server-01,Repeated probes against exposed service ports,951050,3236961,GB,web_gateway
+EVT-00296,2026-10-25T10:42:15Z,198.51.100.88,192.168.1.141,32927,22,TCP,privilege_escalation,CRITICAL,ALERT,operator,ESCALATED,db-server-01,Process attempted elevated access,4310861,690763,IN,endpoint
+EVT-00297,2026-10-25T10:52:40Z,192.168.1.63,198.51.100.20,55790,53,TCP,config_change,LOW,ALLOW,root,INFO,workstation-07,Approved configuration update,1289786,199254,DE,authentication
+EVT-00298,2026-10-25T09:19:12Z,203.0.113.120,192.168.1.213,38704,443,TCP,login,LOW,ALLOW,analyst01,ALLOWED,workstation-07,Administrator login from unfamiliar host,3392755,3632477,GB,firewall
+EVT-00299,2026-10-25T10:38:56Z,192.168.1.174,203.0.113.77,49910,22,ARP,arp_change,MEDIUM,ALERT,,REVIEW,auth-server-01,IP-to-MAC mapping changed unexpectedly,2431325,2527912,SG,firewall
+EVT-00300,2026-10-25T10:49:26Z,198.51.100.140,192.168.1.111,44325,22,TCP,malware_signature,CRITICAL,ALERT,,BLOCKED,firewall-01,Known malware signature detected,1144050,3279883,SG,authentication
+EVT-00301,2026-10-25T10:05:00Z,198.51.100.88,192.168.1.12,9100,22,HTTPS,web_request,LOW,ALLOW,user01,INFO,firewall-01,Unusual request path observed,4505957,4592976,IN,authentication
+EVT-00302,2026-10-25T09:10:14Z,192.168.1.195,198.51.100.88,60375,80,TCP,file_access,HIGH,DENY,root,DETECTED,db-server-01,Sensitive configuration file access attempt,2120151,1630126,IN,endpoint
+EVT-00303,2026-10-25T10:20:56Z,192.168.1.248,203.0.113.200,20072,53,HTTPS,web_request,LOW,ALLOW,analyst01,SUCCESS,db-server-01,High request rate from one source,4870389,4086849,GB,authentication
+EVT-00304,2026-10-25T10:16:21Z,192.168.1.35,198.51.100.77,60014,443,UDP,dns_query,HIGH,ALERT,analyst01,BLOCKED,workstation-07,Unusual DNS request to newly observed domain,2564191,4900372,US,web_gateway
+EVT-00305,2026-10-25T08:40:32Z,192.168.1.119,203.0.113.120,17157,443,TCP,outbound_connection,MEDIUM,ALERT,service_account,SUSPICIOUS,workstation-07,Connection to uncommon external destination,3015587,1126638,NL,authentication
+EVT-00306,2026-10-25T09:36:35Z,203.0.113.200,192.168.1.124,32938,53,TCP,ssh_bruteforce,CRITICAL,BLOCK,guest,ESCALATED,firewall-01,Repeated SSH authentication failures,2353977,1174419,SG,endpoint
+EVT-00307,2026-10-25T08:40:48Z,203.0.113.77,192.168.1.238,56702,22,TCP,malware_signature,HIGH,BLOCK,,REVIEW,workstation-07,Malicious payload pattern detected in inbound traffic,1784765,307495,SG,authentication
+EVT-00308,2026-10-25T09:42:20Z,192.168.1.48,198.51.100.88,59445,445,TCP,firewall_event,MEDIUM,ALLOW,user02,DENIED,firewall-01,Unexpected firewall rule match,759622,3328475,GB,web_gateway
+EVT-00309,2026-10-25T10:03:12Z,203.0.113.120,192.168.1.203,30267,80,TCP,login,HIGH,DENY,user01,REVIEW,firewall-01,Failed password authentication,4055920,3009795,IN,endpoint
+EVT-00310,2026-10-25T09:17:15Z,198.51.100.77,192.168.1.104,44840,443,TCP,config_change,MEDIUM,ALERT,admin,DENIED,workstation-07,Configuration changed outside maintenance window,3813825,389545,IN,authentication
+EVT-00311,2026-10-25T10:09:10Z,198.51.100.77,192.168.1.158,38390,80,TCP,port_scan,HIGH,ALERT,,REVIEW,workstation-07,Repeated probes against exposed service ports,4929807,652948,SG,authentication
+EVT-00312,2026-10-25T09:59:13Z,192.168.1.100,198.51.100.88,52971,3389,ARP,arp_change,MEDIUM,ALERT,,REVIEW,firewall-01,IP-to-MAC mapping changed unexpectedly,3690137,1389202,US,firewall
+EVT-00313,2026-10-25T09:38:48Z,203.0.113.120,192.168.1.50,44350,443,TCP,firewall_event,MEDIUM,DENY,analyst01,DENIED,web-server-01,Inbound connection denied by firewall,4016588,4018320,US,web_gateway
+EVT-00314,2026-10-25T08:46:57Z,192.168.1.15,198.51.100.20,38608,80,UDP,dns_query,HIGH,DENY,user01,REVIEW,firewall-01,DNS lookup for approved domain,4800542,1231993,IN,endpoint
+EVT-00315,2026-10-25T10:16:04Z,198.51.100.140,192.168.1.163,42811,22,TCP,malware_signature,HIGH,BLOCK,,REVIEW,auth-server-01,Known malware signature detected,1816917,3768190,SG,dns
+EVT-00316,2026-10-25T09:03:00Z,198.51.100.140,192.168.1.163,53099,80,TCP,ransomware_indicator,CRITICAL,QUARANTINE,,ESCALATED,firewall-01,Possible ransomware encryption behavior observed,1406951,2874534,DE,web_gateway
+EVT-00317,2026-10-25T08:57:56Z,198.51.100.140,192.168.1.43,14285,8080,TCP,outbound_connection,LOW,ALLOW,admin,INFO,web-server-01,Connection to approved external service,3991880,327462,SG,web_gateway
+EVT-00318,2026-10-25T10:22:39Z,203.0.113.120,192.168.1.240,59807,8080,TCP,config_change,LOW,LOG,admin,ALLOWED,auth-server-01,Approved configuration update,4444423,3598345,US,dns
+EVT-00319,2026-10-25T09:51:18Z,192.168.1.215,203.0.113.77,17704,3389,TCP,config_change,MEDIUM,ALLOW,user01,REVIEW,auth-server-01,Configuration changed outside maintenance window,2162624,1585623,IN,firewall
+EVT-00320,2026-10-25T10:28:52Z,203.0.113.45,192.168.1.106,46097,5432,TCP,outbound_connection,HIGH,ALERT,user02,BLOCKED,web-server-01,Connection to approved external service,3574147,4910441,GB,authentication
+EVT-00321,2026-10-25T10:34:40Z,192.168.1.166,198.51.100.77,27071,443,TCP,ransomware_indicator,CRITICAL,ALERT,,ESCALATED,firewall-01,Possible ransomware encryption behavior observed,1499208,3105571,SG,web_gateway
+EVT-00322,2026-10-25T10:51:12Z,192.168.1.157,198.51.100.88,49244,80,HTTPS,data_transfer,MEDIUM,ALERT,root,REVIEW,db-server-01,Unusually large outbound transfer,1357235,841198,US,web_gateway
+EVT-00323,2026-10-25T09:09:46Z,192.168.1.167,203.0.113.45,26524,22,ARP,arp_change,HIGH,DENY,,DETECTED,workstation-07,Duplicate ARP response observed on local network,739377,537545,GB,endpoint
+EVT-00324,2026-10-25T09:47:40Z,203.0.113.45,192.168.1.195,41260,445,HTTPS,sql_injection_attempt,HIGH,BLOCK,root,REVIEW,web-server-01,Request contains suspicious UNION SELECT pattern,4147062,3682364,IN,endpoint
+EVT-00325,2026-10-25T09:10:12Z,198.51.100.20,192.168.1.167,45196,22,TCP,ransomware_indicator,CRITICAL,ALERT,,BLOCKED,web-server-01,Rapid file modification pattern detected,728490,2314726,DE,authentication
+EVT-00326,2026-10-25T10:47:55Z,192.168.1.61,203.0.113.45,61263,53,HTTPS,web_request,MEDIUM,ALERT,analyst01,DENIED,firewall-01,High request rate from one source,2920034,2914832,GB,endpoint
+EVT-00327,2026-10-25T09:26:56Z,192.168.1.113,203.0.113.45,27705,53,TCP,outbound_connection,LOW,LOG,user01,SUCCESS,firewall-01,Connection to uncommon external destination,2851840,981542,SG,authentication
+EVT-00328,2026-10-25T10:21:42Z,203.0.113.200,192.168.1.106,51484,443,TCP,ssh_bruteforce,CRITICAL,ALERT,operator,QUARANTINED,workstation-07,Repeated SSH authentication failures,4043058,975329,GB,firewall
+EVT-00329,2026-10-25T09:54:48Z,192.168.1.68,198.51.100.88,63640,5432,ARP,arp_change,MEDIUM,ALERT,,SUSPICIOUS,web-server-01,Duplicate ARP response observed on local network,2082535,2409959,IN,dns
+EVT-00330,2026-10-25T09:38:42Z,203.0.113.120,192.168.1.131,15347,445,HTTPS,web_request,MEDIUM,ALLOW,service_account,SUSPICIOUS,db-server-01,Unusual request path observed,1674924,1970159,NL,endpoint
+EVT-00331,2026-10-25T09:22:30Z,198.51.100.20,192.168.1.223,55834,5432,TCP,ransomware_indicator,CRITICAL,BLOCK,,BLOCKED,web-server-01,Rapid file modification pattern detected,4132772,55563,SG,firewall
+EVT-00332,2026-10-25T11:18:36Z,192.168.1.90,203.0.113.200,58760,445,TCP,ransomware_indicator,CRITICAL,ALERT,,BLOCKED,firewall-01,Possible ransomware encryption behavior observed,3337655,1863049,SG,endpoint
+EVT-00333,2026-10-25T10:12:48Z,192.168.1.132,203.0.113.45,26826,80,TCP,login,HIGH,ALERT,service_account,DETECTED,firewall-01,Administrator login from unfamiliar host,2647874,70620,IN,endpoint
+EVT-00334,2026-10-25T09:12:09Z,192.168.1.166,198.51.100.77,36974,445,ARP,arp_change,MEDIUM,ALLOW,,DENIED,workstation-07,Duplicate ARP response observed on local network,3069594,1542779,DE,dns
+EVT-00335,2026-10-25T11:14:50Z,192.168.1.105,198.51.100.88,19349,3389,TCP,file_access,MEDIUM,ALLOW,root,SUSPICIOUS,db-server-01,Sensitive configuration file access attempt,1917356,837768,NL,authentication
+EVT-00336,2026-10-25T09:18:10Z,192.168.1.229,198.51.100.140,53455,80,TCP,config_change,LOW,ALLOW,user01,SUCCESS,db-server-01,Configuration changed outside maintenance window,4190930,1128030,NL,web_gateway
+EVT-00337,2026-10-25T10:20:00Z,192.168.1.86,198.51.100.77,27133,53,TCP,firewall_event,MEDIUM,ALERT,admin,REVIEW,web-server-01,Routine firewall policy match,2133136,3997502,NL,firewall
+EVT-00338,2026-10-25T10:20:25Z,192.168.1.102,198.51.100.88,23577,22,HTTPS,data_transfer,HIGH,ALERT,guest,DETECTED,auth-server-01,Transfer volume exceeded baseline threshold,1668981,4839000,SG,web_gateway
+EVT-00339,2026-10-25T11:00:16Z,192.168.1.182,203.0.113.200,59326,53,UDP,dns_query,MEDIUM,DENY,operator,SUSPICIOUS,auth-server-01,Unusual DNS request to newly observed domain,1215075,1405725,NL,authentication
+EVT-00340,2026-10-25T09:13:27Z,192.168.1.28,203.0.113.77,23543,443,ARP,arp_change,HIGH,ALERT,,BLOCKED,auth-server-01,Duplicate ARP response observed on local network,3317319,2275393,DE,authentication
+EVT-00341,2026-10-25T09:08:00Z,192.168.1.57,203.0.113.45,44410,445,TCP,privilege_escalation,CRITICAL,QUARANTINE,user02,ESCALATED,web-server-01,Unexpected privilege assignment attempt,1400146,3330659,IN,firewall
+EVT-00342,2026-10-25T11:01:52Z,203.0.113.45,192.168.1.16,27042,53,TCP,port_scan,HIGH,DENY,,BLOCKED,firewall-01,Sequential connection attempts across multiple ports,707254,3270267,GB,endpoint
+EVT-00343,2026-10-25T10:16:48Z,203.0.113.120,192.168.1.43,2896,22,TCP,file_access,HIGH,BLOCK,user01,BLOCKED,auth-server-01,Unauthorized access to restricted file,3919102,4534748,GB,web_gateway
+EVT-00344,2026-10-25T10:28:38Z,192.168.1.188,203.0.113.120,42380,8080,HTTPS,data_transfer,LOW,LOG,operator,INFO,firewall-01,Unusually large outbound transfer,2912258,4040387,SG,endpoint
+EVT-00345,2026-10-25T09:31:44Z,192.168.1.103,198.51.100.140,20918,22,TCP,config_change,LOW,ALLOW,user01,INFO,db-server-01,Configuration changed outside maintenance window,2405536,3935917,SG,firewall
+EVT-00346,2026-10-25T08:46:00Z,192.168.1.132,198.51.100.77,53319,445,TCP,privilege_escalation,CRITICAL,QUARANTINE,root,BLOCKED,web-server-01,Unauthorized role modification detected,3134352,1581848,DE,web_gateway
+EVT-00347,2026-10-25T09:55:20Z,198.51.100.140,192.168.1.222,15480,445,ARP,arp_change,HIGH,DENY,,BLOCKED,db-server-01,Duplicate ARP response observed on local network,2388042,4462271,GB,dns
+EVT-00348,2026-10-25T10:41:56Z,198.51.100.77,192.168.1.38,41507,3389,TCP,file_access,LOW,ALLOW,operator,INFO,firewall-01,Unauthorized access to restricted file,1575292,2689754,IN,endpoint
+EVT-00349,2026-10-25T09:32:48Z,203.0.113.77,192.168.1.82,47895,3389,TCP,login,HIGH,BLOCK,user01,DETECTED,db-server-01,Successful user login,1264026,123520,DE,endpoint
+EVT-00350,2026-10-25T11:11:57Z,198.51.100.77,192.168.1.211,25363,3389,HTTPS,sql_injection_attempt,CRITICAL,QUARANTINE,operator,BLOCKED,auth-server-01,Request contains suspicious UNION SELECT pattern,1225473,470083,GB,dns
+EVT-00351,2026-10-25T11:30:00Z,203.0.113.120,192.168.1.59,56175,445,TCP,port_scan,HIGH,ALERT,,DETECTED,web-server-01,Sequential connection attempts across multiple ports,3227918,3715825,US,firewall
+EVT-00352,2026-10-25T10:14:33Z,192.168.1.34,198.51.100.20,45683,445,TCP,file_access,MEDIUM,DENY,root,REVIEW,web-server-01,Sensitive configuration file access attempt,4610210,4369846,IN,authentication
+EVT-00353,2026-10-25T08:52:48Z,198.51.100.88,192.168.1.237,64808,53,HTTPS,data_transfer,HIGH,DENY,user02,REVIEW,workstation-07,Unusually large outbound transfer,126397,1403920,GB,web_gateway
+EVT-00354,2026-10-25T08:52:57Z,198.51.100.20,192.168.1.12,39105,3389,TCP,port_scan,HIGH,BLOCK,,REVIEW,db-server-01,Repeated probes against exposed service ports,750611,2086433,US,dns
+EVT-00355,2026-10-25T09:52:06Z,203.0.113.45,192.168.1.25,43266,80,TCP,port_scan,HIGH,BLOCK,,REVIEW,web-server-01,Sequential connection attempts across multiple ports,4092322,1951816,GB,web_gateway
+EVT-00356,2026-10-25T08:47:20Z,192.168.1.122,198.51.100.20,24496,80,TCP,config_change,MEDIUM,DENY,root,REVIEW,workstation-07,Configuration changed outside maintenance window,4689439,2472245,SG,dns
+EVT-00357,2026-10-25T11:03:56Z,198.51.100.88,192.168.1.92,19067,80,TCP,file_access,HIGH,DENY,operator,REVIEW,db-server-01,Unauthorized access to restricted file,2480282,2209133,SG,authentication
+EVT-00358,2026-10-25T11:04:27Z,192.168.1.139,198.51.100.140,58887,22,HTTPS,data_transfer,LOW,LOG,user01,ALLOWED,firewall-01,Normal outbound data transfer,2690177,531349,NL,web_gateway
+EVT-00359,2026-10-25T10:29:10Z,203.0.113.200,192.168.1.206,11125,445,TCP,ransomware_indicator,CRITICAL,ALERT,,QUARANTINED,auth-server-01,Rapid file modification pattern detected,807456,4388924,NL,firewall
+EVT-00360,2026-10-25T09:05:49Z,203.0.113.45,192.168.1.61,13581,53,TCP,login,LOW,ALLOW,operator,INFO,workstation-07,Administrator login from unfamiliar host,4410909,4951802,GB,firewall
+EVT-00361,2026-10-25T11:42:00Z,203.0.113.77,192.168.1.13,43999,3389,HTTPS,sql_injection_attempt,HIGH,DENY,user02,BLOCKED,web-server-01,SQL metacharacters detected in request parameters,4681010,3489268,GB,firewall
+EVT-00362,2026-10-25T11:24:34Z,192.168.1.197,203.0.113.77,20940,53,TCP,ransomware_indicator,CRITICAL,BLOCK,,ESCALATED,web-server-01,Rapid file modification pattern detected,1937919,4459896,DE,endpoint
+EVT-00363,2026-10-25T10:30:50Z,192.168.1.155,203.0.113.120,49920,53,TCP,file_access,HIGH,BLOCK,root,REVIEW,auth-server-01,Sensitive configuration file access attempt,3848027,3582564,IN,endpoint
+EVT-00364,2026-10-25T10:55:27Z,192.168.1.139,198.51.100.88,36013,3389,TCP,config_change,LOW,ALLOW,user01,ALLOWED,firewall-01,Configuration changed outside maintenance window,3118209,3458986,NL,dns
+EVT-00365,2026-10-25T10:01:20Z,192.168.1.154,198.51.100.20,51205,445,TCP,ransomware_indicator,CRITICAL,ALERT,,QUARANTINED,workstation-07,Possible ransomware encryption behavior observed,1641,290773,GB,web_gateway
+EVT-00366,2026-10-25T09:43:25Z,198.51.100.77,192.168.1.11,15102,5432,TCP,login,HIGH,DENY,user02,REVIEW,auth-server-01,Failed password authentication,790937,316555,DE,authentication
+EVT-00367,2026-10-25T09:37:36Z,198.51.100.20,192.168.1.69,7047,8080,UDP,dns_query,LOW,LOG,guest,SUCCESS,web-server-01,High-volume DNS requests in short interval,2723714,4047781,US,dns
+EVT-00368,2026-10-25T11:09:37Z,192.168.1.86,203.0.113.45,53999,8080,TCP,ransomware_indicator,CRITICAL,BLOCK,,BLOCKED,auth-server-01,Possible ransomware encryption behavior observed,3643209,3494037,IN,endpoint
+EVT-00369,2026-10-25T08:55:12Z,192.168.1.171,198.51.100.140,35389,22,TCP,privilege_escalation,HIGH,ALERT,guest,REVIEW,firewall-01,Unexpected privilege assignment attempt,2741662,4214450,NL,endpoint
+EVT-00370,2026-10-25T11:16:48Z,192.168.1.110,203.0.113.200,15578,8080,UDP,dns_query,LOW,ALLOW,analyst01,ALLOWED,db-server-01,DNS lookup for approved domain,2819983,692438,DE,web_gateway
+EVT-00371,2026-10-25T10:03:20Z,192.168.1.77,203.0.113.77,51737,80,TCP,privilege_escalation,HIGH,DENY,root,BLOCKED,firewall-01,Unexpected privilege assignment attempt,4092475,3316174,NL,web_gateway
+EVT-00372,2026-10-25T09:32:45Z,192.168.1.198,198.51.100.20,18473,8080,TCP,file_access,HIGH,ALERT,analyst01,REVIEW,firewall-01,User accessed approved document,943968,3469377,DE,authentication
+EVT-00373,2026-10-25T10:47:24Z,198.51.100.88,192.168.1.98,51465,445,HTTPS,sql_injection_attempt,HIGH,DENY,admin,BLOCKED,firewall-01,SQL metacharacters detected in request parameters,1223214,3694875,IN,endpoint
+EVT-00374,2026-10-25T09:08:23Z,192.168.1.203,203.0.113.77,16952,80,TCP,file_access,HIGH,ALERT,admin,DETECTED,auth-server-01,Sensitive configuration file access attempt,933467,2559515,DE,dns
+EVT-00375,2026-10-25T10:35:50Z,198.51.100.20,192.168.1.62,36990,3389,TCP,login,MEDIUM,ALERT,guest,SUSPICIOUS,db-server-01,Successful user login,3159205,4890599,NL,web_gateway
+EVT-00376,2026-10-25T11:26:15Z,198.51.100.77,192.168.1.61,4502,3389,TCP,login,MEDIUM,ALERT,guest,REVIEW,web-server-01,Administrator login from unfamiliar host,2275916,3021737,IN,firewall
+EVT-00377,2026-10-25T10:30:24Z,198.51.100.20,192.168.1.107,65027,53,TCP,malware_signature,CRITICAL,ALERT,,QUARANTINED,firewall-01,Malicious payload pattern detected in inbound traffic,738370,1563782,US,web_gateway
+EVT-00378,2026-10-25T09:34:15Z,192.168.1.15,203.0.113.45,22884,3389,HTTPS,data_transfer,HIGH,ALERT,guest,REVIEW,db-server-01,Normal outbound data transfer,2909000,2952060,GB,authentication
+EVT-00379,2026-10-25T09:40:48Z,203.0.113.45,192.168.1.170,59377,22,TCP,file_access,HIGH,BLOCK,root,BLOCKED,db-server-01,User accessed approved document,2867110,3295436,NL,endpoint
+EVT-00380,2026-10-25T09:34:45Z,198.51.100.20,192.168.1.116,38569,80,TCP,port_scan,HIGH,ALERT,,BLOCKED,firewall-01,Repeated probes against exposed service ports,3767904,4548586,US,endpoint
+EVT-00381,2026-10-25T11:41:40Z,192.168.1.185,198.51.100.20,21274,80,HTTPS,web_request,LOW,ALLOW,user01,SUCCESS,firewall-01,Normal HTTPS request,2663351,568865,SG,web_gateway
+EVT-00382,2026-10-25T08:50:48Z,203.0.113.120,192.168.1.196,58704,8080,TCP,privilege_escalation,HIGH,ALERT,service_account,BLOCKED,workstation-07,Unauthorized role modification detected,2296768,1274708,US,firewall
+EVT-00383,2026-10-25T10:45:32Z,198.51.100.77,192.168.1.165,40107,443,UDP,dns_query,LOW,ALLOW,user02,INFO,web-server-01,Unusual DNS request to newly observed domain,666688,3998029,US,web_gateway
+EVT-00384,2026-10-25T11:43:25Z,192.168.1.105,203.0.113.120,26416,3389,TCP,ransomware_indicator,CRITICAL,ALERT,,BLOCKED,db-server-01,Rapid file modification pattern detected,1898116,270361,DE,firewall
+EVT-00385,2026-10-25T11:18:24Z,198.51.100.140,192.168.1.66,50685,443,TCP,ssh_bruteforce,CRITICAL,BLOCK,user02,BLOCKED,workstation-07,Multiple usernames attempted from same source,2725422,3838165,US,dns
+EVT-00386,2026-10-25T11:18:55Z,192.168.1.221,198.51.100.140,21530,8080,ARP,arp_change,MEDIUM,ALERT,,SUSPICIOUS,firewall-01,IP-to-MAC mapping changed unexpectedly,4367521,917011,DE,dns
+EVT-00387,2026-10-25T11:19:26Z,192.168.1.72,198.51.100.140,3596,8080,TCP,ransomware_indicator,CRITICAL,QUARANTINE,,ESCALATED,web-server-01,Rapid file modification pattern detected,2442589,3687245,DE,authentication
+EVT-00388,2026-10-25T10:54:09Z,192.168.1.118,198.51.100.77,46240,80,TCP,config_change,MEDIUM,DENY,admin,SUSPICIOUS,workstation-07,Approved configuration update,4199821,949352,US,web_gateway
+EVT-00389,2026-10-25T09:56:24Z,198.51.100.140,192.168.1.115,2656,80,TCP,ssh_bruteforce,HIGH,ALERT,operator,REVIEW,db-server-01,Multiple usernames attempted from same source,756481,2097842,GB,endpoint
+EVT-00390,2026-10-25T10:03:11Z,203.0.113.200,192.168.1.172,35352,8080,TCP,privilege_escalation,HIGH,BLOCK,analyst01,REVIEW,firewall-01,Unexpected privilege assignment attempt,3176586,4616635,DE,firewall
+EVT-00391,2026-10-25T09:24:30Z,192.168.1.154,203.0.113.120,12746,22,TCP,config_change,LOW,ALLOW,user01,ALLOWED,auth-server-01,Configuration changed outside maintenance window,2422466,1515788,IN,endpoint
+EVT-00392,2026-10-25T10:23:22Z,192.168.1.74,203.0.113.45,57084,3389,TCP,file_access,LOW,LOG,operator,SUCCESS,firewall-01,Unauthorized access to restricted file,1995468,1819269,SG,dns
+EVT-00393,2026-10-25T09:38:00Z,192.168.1.163,203.0.113.45,41640,443,HTTPS,data_transfer,MEDIUM,ALLOW,guest,REVIEW,db-server-01,Normal outbound data transfer,2927790,308038,US,firewall
+EVT-00394,2026-10-25T09:12:03Z,192.168.1.32,203.0.113.45,12705,80,HTTPS,web_request,MEDIUM,ALERT,root,DENIED,firewall-01,High request rate from one source,4990961,4800654,SG,endpoint
+EVT-00395,2026-10-25T09:05:40Z,192.168.1.248,203.0.113.45,22180,5432,HTTPS,data_transfer,HIGH,ALERT,guest,DETECTED,workstation-07,Transfer volume exceeded baseline threshold,544637,2456458,DE,endpoint
+EVT-00396,2026-10-25T10:18:15Z,198.51.100.88,192.168.1.144,35407,443,TCP,port_scan,HIGH,BLOCK,,DETECTED,firewall-01,Sequential connection attempts across multiple ports,916893,4792974,NL,web_gateway
+EVT-00397,2026-10-25T10:58:12Z,198.51.100.77,192.168.1.119,56585,5432,TCP,port_scan,HIGH,ALERT,,REVIEW,firewall-01,Repeated probes against exposed service ports,1088112,4719718,DE,web_gateway
+EVT-00398,2026-10-25T11:18:30Z,192.168.1.56,198.51.100.20,65200,443,TCP,privilege_escalation,CRITICAL,BLOCK,guest,BLOCKED,web-server-01,Process attempted elevated access,989232,1739217,SG,dns
+EVT-00399,2026-10-25T08:53:04Z,192.168.1.153,198.51.100.20,43007,443,ARP,arp_change,MEDIUM,ALERT,,DENIED,auth-server-01,IP-to-MAC mapping changed unexpectedly,2581783,2518964,SG,web_gateway
+EVT-00400,2026-10-25T09:59:42Z,203.0.113.77,192.168.1.185,26979,22,HTTPS,sql_injection_attempt,HIGH,DENY,service_account,DETECTED,auth-server-01,SQL metacharacters detected in request parameters,4019051,3980398,IN,endpoint
+EVT-00401,2026-10-25T10:26:40Z,192.168.1.238,198.51.100.88,61827,22,HTTPS,data_transfer,LOW,LOG,root,ALLOWED,firewall-01,Transfer volume exceeded baseline threshold,2646629,4657163,SG,firewall
+EVT-00402,2026-10-25T09:06:50Z,192.168.1.214,198.51.100.88,19404,22,TCP,file_access,HIGH,ALERT,user01,BLOCKED,firewall-01,User accessed approved document,4789741,3267918,US,web_gateway
+EVT-00403,2026-10-25T09:00:18Z,198.51.100.88,192.168.1.191,18816,8080,TCP,port_scan,HIGH,DENY,,BLOCKED,db-server-01,Repeated probes against exposed service ports,3790865,2538633,US,web_gateway
+EVT-00404,2026-10-25T11:41:39Z,203.0.113.77,192.168.1.105,3474,443,TCP,malware_signature,HIGH,DENY,,BLOCKED,firewall-01,Known malware signature detected,4048872,4194759,US,endpoint
+EVT-00405,2026-10-25T10:01:12Z,198.51.100.77,192.168.1.208,51452,53,HTTPS,sql_injection_attempt,CRITICAL,QUARANTINE,user01,ESCALATED,db-server-01,Request contains suspicious UNION SELECT pattern,306624,3853461,DE,web_gateway
+EVT-00406,2026-10-25T09:00:45Z,198.51.100.77,192.168.1.248,46050,53,TCP,port_scan,MEDIUM,DENY,,DENIED,web-server-01,Sequential connection attempts across multiple ports,4366922,2621278,IN,web_gateway
+EVT-00407,2026-10-25T09:34:44Z,192.168.1.63,198.51.100.88,19804,445,TCP,config_change,MEDIUM,ALERT,user02,DENIED,workstation-07,Approved configuration update,2287189,1252593,US,authentication
+EVT-00408,2026-10-25T10:49:35Z,203.0.113.77,192.168.1.62,23982,5432,TCP,port_scan,MEDIUM,DENY,,REVIEW,auth-server-01,Sequential connection attempts across multiple ports,1436758,597628,GB,web_gateway
+EVT-00409,2026-10-25T09:21:36Z,203.0.113.200,192.168.1.22,31874,22,TCP,ssh_bruteforce,CRITICAL,BLOCK,admin,QUARANTINED,web-server-01,Repeated SSH authentication failures,3577453,3287636,US,web_gateway
+EVT-00410,2026-10-25T10:02:42Z,198.51.100.88,192.168.1.89,47744,53,TCP,ssh_bruteforce,CRITICAL,ALERT,user02,ESCALATED,db-server-01,Repeated SSH authentication failures,3928183,815901,DE,authentication
+EVT-00411,2026-10-25T11:59:10Z,192.168.1.67,203.0.113.120,60849,5432,HTTPS,web_request,MEDIUM,DENY,guest,REVIEW,auth-server-01,Unusual request path observed,3802413,4089502,IN,firewall
+EVT-00412,2026-10-25T09:56:27Z,192.168.1.128,203.0.113.120,40636,80,HTTPS,data_transfer,LOW,LOG,service_account,SUCCESS,workstation-07,Transfer volume exceeded baseline threshold,897424,2733593,SG,firewall
+EVT-00413,2026-10-25T09:43:00Z,192.168.1.112,198.51.100.140,36934,80,TCP,config_change,MEDIUM,DENY,user02,DENIED,web-server-01,Configuration changed outside maintenance window,1746828,4957417,DE,dns
+EVT-00414,2026-10-25T11:19:37Z,192.168.1.70,203.0.113.120,49479,3389,TCP,outbound_connection,MEDIUM,ALLOW,analyst01,SUSPICIOUS,firewall-01,Connection to uncommon external destination,2729469,4656413,IN,dns
+EVT-00415,2026-10-25T11:20:06Z,192.168.1.27,203.0.113.77,22481,3389,UDP,dns_query,MEDIUM,ALERT,root,SUSPICIOUS,web-server-01,DNS lookup for approved domain,1825459,1165318,SG,firewall
+EVT-00416,2026-10-25T10:18:20Z,192.168.1.125,198.51.100.77,13847,443,TCP,config_change,LOW,LOG,operator,ALLOWED,auth-server-01,Configuration changed outside maintenance window,3646754,2887900,IN,web_gateway
+EVT-00417,2026-10-25T12:02:40Z,192.168.1.113,203.0.113.120,5114,5432,TCP,login,HIGH,BLOCK,guest,DETECTED,web-server-01,Repeated failed login attempts,920216,2367342,IN,endpoint
+EVT-00418,2026-10-25T10:19:00Z,192.168.1.192,198.51.100.140,26030,8080,ARP,arp_change,HIGH,BLOCK,,DETECTED,db-server-01,Duplicate ARP response observed on local network,1166594,1578961,SG,dns
+EVT-00419,2026-10-25T12:03:50Z,192.168.1.49,198.51.100.77,44937,80,TCP,ransomware_indicator,CRITICAL,BLOCK,,BLOCKED,web-server-01,Rapid file modification pattern detected,1207925,4082746,NL,dns
+EVT-00420,2026-10-25T10:33:38Z,198.51.100.140,192.168.1.230,41869,80,UDP,dns_query,LOW,ALLOW,root,INFO,workstation-07,High-volume DNS requests in short interval,3775257,3227220,GB,endpoint
+EVT-00421,2026-10-25T12:05:00Z,192.168.1.157,203.0.113.200,47694,445,UDP,dns_query,MEDIUM,DENY,user02,SUSPICIOUS,firewall-01,Unusual DNS request to newly observed domain,280698,317634,SG,dns
+EVT-00422,2026-10-25T09:10:10Z,203.0.113.200,192.168.1.186,48877,445,TCP,privilege_escalation,CRITICAL,ALERT,user01,ESCALATED,web-server-01,Unauthorized role modification detected,741941,2057149,DE,firewall
+EVT-00423,2026-10-25T10:55:50Z,192.168.1.241,198.51.100.88,31751,3389,HTTPS,web_request,MEDIUM,ALERT,admin,DENIED,firewall-01,High request rate from one source,2780940,3531739,GB,authentication
+EVT-00424,2026-10-25T12:20:51Z,203.0.113.45,192.168.1.187,40190,445,TCP,malware_signature,HIGH,BLOCK,,REVIEW,auth-server-01,Known malware signature detected,3969158,4849798,US,web_gateway
+EVT-00425,2026-10-25T10:00:08Z,192.168.1.217,203.0.113.45,6431,80,TCP,login,HIGH,BLOCK,operator,DETECTED,auth-server-01,Repeated failed login attempts,1111815,2356963,GB,authentication
+EVT-00426,2026-10-25T11:04:10Z,203.0.113.120,192.168.1.242,44222,3389,TCP,login,HIGH,ALERT,user01,DETECTED,auth-server-01,Failed password authentication,4067791,1516737,SG,firewall
+EVT-00427,2026-10-25T12:22:42Z,203.0.113.120,192.168.1.162,55917,3389,HTTPS,sql_injection_attempt,HIGH,ALERT,user01,BLOCKED,db-server-01,Potential SQL injection payload blocked,3692539,1403273,US,web_gateway
+EVT-00428,2026-10-25T12:01:58Z,198.51.100.77,192.168.1.203,4466,80,TCP,privilege_escalation,CRITICAL,ALERT,analyst01,QUARANTINED,workstation-07,Process attempted elevated access,3995210,4467108,US,dns
+EVT-00429,2026-10-25T08:57:04Z,192.168.1.47,198.51.100.140,61790,3389,HTTPS,web_request,MEDIUM,DENY,guest,SUSPICIOUS,auth-server-01,High request rate from one source,344080,816751,SG,authentication
+EVT-00430,2026-10-25T10:08:42Z,192.168.1.176,198.51.100.77,18740,445,TCP,ransomware_indicator,CRITICAL,BLOCK,,QUARANTINED,firewall-01,Possible ransomware encryption behavior observed,3868059,2028339,NL,web_gateway
+EVT-00431,2026-10-25T10:09:00Z,192.168.1.183,203.0.113.120,45116,22,TCP,config_change,LOW,ALLOW,admin,SUCCESS,workstation-07,Approved configuration update,4406236,871637,NL,dns
+EVT-00432,2026-10-25T09:40:34Z,198.51.100.77,192.168.1.74,2577,53,HTTPS,sql_injection_attempt,HIGH,DENY,admin,REVIEW,db-server-01,Potential SQL injection payload blocked,1021649,1006440,IN,web_gateway
+EVT-00433,2026-10-25T12:19:12Z,192.168.1.240,203.0.113.120,46614,80,UDP,dns_query,MEDIUM,DENY,analyst01,DENIED,workstation-07,High-volume DNS requests in short interval,635136,3803761,GB,dns
+EVT-00434,2026-10-25T11:50:56Z,203.0.113.77,192.168.1.80,26111,8080,TCP,privilege_escalation,CRITICAL,ALERT,admin,BLOCKED,auth-server-01,Process attempted elevated access,1492580,3695809,IN,dns
+EVT-00435,2026-10-25T11:22:32Z,198.51.100.140,192.168.1.55,8130,80,TCP,ssh_bruteforce,HIGH,BLOCK,operator,BLOCKED,db-server-01,Repeated SSH authentication failures,3704255,2172618,IN,firewall
+EVT-00436,2026-10-25T10:39:30Z,198.51.100.77,192.168.1.208,2253,3389,TCP,port_scan,MEDIUM,ALLOW,,SUSPICIOUS,web-server-01,Sequential connection attempts across multiple ports,3275615,2235031,US,authentication
+EVT-00437,2026-10-25T11:38:00Z,203.0.113.45,192.168.1.141,32359,8080,TCP,ssh_bruteforce,CRITICAL,ALERT,operator,ESCALATED,web-server-01,Repeated SSH authentication failures,27744,3224781,NL,dns
+EVT-00438,2026-10-25T10:03:49Z,198.51.100.88,192.168.1.184,27278,22,TCP,port_scan,HIGH,BLOCK,,REVIEW,web-server-01,Repeated probes against exposed service ports,4484770,2852653,IN,dns
+EVT-00439,2026-10-25T10:26:00Z,192.168.1.55,203.0.113.45,20610,8080,TCP,config_change,MEDIUM,ALLOW,user02,SUSPICIOUS,auth-server-01,Configuration changed outside maintenance window,711878,3674073,NL,endpoint
+EVT-00440,2026-10-25T10:26:20Z,198.51.100.20,192.168.1.135,52976,445,UDP,dns_query,LOW,ALLOW,analyst01,INFO,workstation-07,DNS lookup for approved domain,310736,2846129,IN,authentication
+EVT-00441,2026-10-25T11:32:40Z,192.168.1.64,203.0.113.200,49589,443,TCP,config_change,LOW,ALLOW,user01,SUCCESS,db-server-01,Configuration changed outside maintenance window,159912,3952876,SG,firewall
+EVT-00442,2026-10-25T11:25:48Z,192.168.1.13,203.0.113.120,60311,445,TCP,file_access,HIGH,DENY,admin,BLOCKED,firewall-01,User accessed approved document,4958023,536515,IN,firewall
+EVT-00443,2026-10-25T12:03:06Z,192.168.1.66,203.0.113.77,28956,5432,HTTPS,data_transfer,HIGH,BLOCK,user02,REVIEW,workstation-07,Unusually large outbound transfer,1013364,4831561,SG,endpoint
+EVT-00444,2026-10-25T09:35:59Z,203.0.113.45,192.168.1.161,5167,53,HTTPS,sql_injection_attempt,HIGH,ALERT,service_account,DETECTED,workstation-07,Request contains suspicious UNION SELECT pattern,3103175,4642320,US,dns
+EVT-00445,2026-10-25T12:19:00Z,203.0.113.77,192.168.1.212,51988,80,TCP,file_access,HIGH,DENY,root,BLOCKED,web-server-01,User accessed approved document,60599,1505024,IN,web_gateway
+EVT-00446,2026-10-25T12:04:45Z,198.51.100.140,192.168.1.187,46398,80,TCP,ssh_bruteforce,CRITICAL,BLOCK,operator,BLOCKED,auth-server-01,Multiple usernames attempted from same source,3456369,2007005,US,web_gateway
+EVT-00447,2026-10-25T11:20:42Z,192.168.1.193,203.0.113.200,42127,445,TCP,privilege_escalation,HIGH,ALERT,analyst01,BLOCKED,web-server-01,Unauthorized role modification detected,1976683,1609797,IN,web_gateway
+EVT-00448,2026-10-25T11:58:24Z,198.51.100.20,192.168.1.128,42079,443,TCP,port_scan,HIGH,ALERT,,DETECTED,db-server-01,Sequential connection attempts across multiple ports,1251726,3979663,DE,endpoint
+EVT-00449,2026-10-25T10:06:56Z,192.168.1.23,198.51.100.88,29510,445,UDP,dns_query,HIGH,ALERT,user02,REVIEW,workstation-07,DNS lookup for approved domain,875947,440037,SG,endpoint
+EVT-00450,2026-10-25T12:29:24Z,192.168.1.39,203.0.113.77,48301,3389,UDP,dns_query,LOW,LOG,user02,INFO,auth-server-01,Unusual DNS request to newly observed domain,1667247,2732043,US,firewall
+EVT-00451,2026-10-25T11:52:30Z,203.0.113.77,192.168.1.70,58032,443,HTTPS,sql_injection_attempt,HIGH,ALERT,root,DETECTED,web-server-01,SQL metacharacters detected in request parameters,4908109,4063506,IN,dns
+EVT-00452,2026-10-25T10:30:20Z,192.168.1.126,203.0.113.120,9963,3389,UDP,dns_query,LOW,LOG,service_account,SUCCESS,auth-server-01,Unusual DNS request to newly observed domain,1696267,2817660,US,firewall
+EVT-00453,2026-10-25T10:45:44Z,203.0.113.77,192.168.1.228,28432,80,TCP,privilege_escalation,HIGH,ALERT,operator,DETECTED,auth-server-01,Unauthorized role modification detected,1315234,1425522,SG,web_gateway
+EVT-00454,2026-10-25T09:45:42Z,203.0.113.200,192.168.1.230,39793,3389,TCP,ransomware_indicator,CRITICAL,ALERT,,QUARANTINED,web-server-01,Possible ransomware encryption behavior observed,2069085,2078960,GB,dns
+EVT-00455,2026-10-25T12:39:58Z,192.168.1.161,203.0.113.120,28403,22,TCP,outbound_connection,LOW,ALLOW,admin,ALLOWED,firewall-01,Connection to approved external service,3571010,4455371,DE,dns
+EVT-00456,2026-10-25T11:09:35Z,192.168.1.71,203.0.113.77,46450,8080,TCP,config_change,LOW,ALLOW,admin,SUCCESS,auth-server-01,Configuration changed outside maintenance window,2005400,761094,IN,dns
+EVT-00457,2026-10-25T11:17:36Z,203.0.113.200,192.168.1.229,65014,3389,HTTPS,web_request,MEDIUM,DENY,admin,REVIEW,workstation-07,Normal HTTPS request,3107312,3894795,NL,firewall
+EVT-00458,2026-10-25T11:02:48Z,192.168.1.186,198.51.100.88,3167,445,TCP,ransomware_indicator,CRITICAL,ALERT,,QUARANTINED,firewall-01,Rapid file modification pattern detected,679133,2816011,NL,firewall
+EVT-00459,2026-10-25T10:25:02Z,192.168.1.38,198.51.100.140,41599,22,TCP,firewall_event,MEDIUM,DENY,operator,DENIED,db-server-01,Unexpected firewall rule match,4687474,562086,SG,endpoint
+EVT-00460,2026-10-25T10:55:57Z,203.0.113.77,192.168.1.176,50383,443,UDP,dns_query,MEDIUM,DENY,user02,DENIED,auth-server-01,High-volume DNS requests in short interval,3547786,2324863,IN,firewall
+EVT-00461,2026-10-25T11:04:00Z,203.0.113.200,192.168.1.134,31836,445,HTTPS,sql_injection_attempt,CRITICAL,ALERT,analyst01,ESCALATED,auth-server-01,Potential SQL injection payload blocked,550524,1580024,DE,firewall
+EVT-00462,2026-10-25T09:16:50Z,203.0.113.120,192.168.1.83,8191,80,TCP,port_scan,HIGH,ALERT,,DETECTED,db-server-01,Repeated probes against exposed service ports,1262469,1713424,SG,firewall
+EVT-00463,2026-10-25T10:26:18Z,203.0.113.120,192.168.1.131,28557,3389,TCP,malware_signature,CRITICAL,QUARANTINE,,ESCALATED,web-server-01,Suspicious executable quarantined,1585955,528058,IN,endpoint
+EVT-00464,2026-10-25T10:57:29Z,192.168.1.97,198.51.100.88,39910,3389,TCP,ransomware_indicator,CRITICAL,ALERT,,QUARANTINED,firewall-01,Rapid file modification pattern detected,2571066,1440635,GB,endpoint
+EVT-00465,2026-10-25T09:32:48Z,192.168.1.207,203.0.113.45,19661,3389,HTTPS,data_transfer,MEDIUM,ALLOW,service_account,SUSPICIOUS,db-server-01,Transfer volume exceeded baseline threshold,4490561,2392821,US,endpoint
+EVT-00466,2026-10-25T10:19:30Z,203.0.113.77,192.168.1.20,38676,80,TCP,ransomware_indicator,CRITICAL,ALERT,,QUARANTINED,auth-server-01,Rapid file modification pattern detected,1720967,4718484,NL,firewall
+EVT-00467,2026-10-25T10:50:52Z,192.168.1.47,198.51.100.88,35996,445,HTTPS,web_request,MEDIUM,ALLOW,user01,REVIEW,workstation-07,Unusual request path observed,1219568,3842324,GB,endpoint
+EVT-00468,2026-10-25T11:37:56Z,192.168.1.139,198.51.100.88,32082,445,TCP,login,HIGH,BLOCK,guest,REVIEW,db-server-01,Administrator login from unfamiliar host,2841090,942171,NL,dns
+EVT-00469,2026-10-25T11:15:00Z,203.0.113.120,192.168.1.183,21214,22,TCP,ssh_bruteforce,HIGH,ALERT,analyst01,REVIEW,db-server-01,Multiple usernames attempted from same source,2998034,775787,GB,firewall
+EVT-00470,2026-10-25T12:49:13Z,198.51.100.20,192.168.1.210,13850,22,TCP,outbound_connection,HIGH,DENY,guest,REVIEW,workstation-07,Repeated outbound connection attempts,732970,4293184,DE,endpoint
+EVT-00471,2026-10-25T12:49:50Z,192.168.1.140,203.0.113.45,27078,80,HTTPS,data_transfer,MEDIUM,ALERT,service_account,DENIED,auth-server-01,Unusually large outbound transfer,3127534,102263,GB,authentication
+EVT-00472,2026-10-25T11:16:15Z,203.0.113.200,192.168.1.233,15159,3389,HTTPS,sql_injection_attempt,CRITICAL,QUARANTINE,analyst01,QUARANTINED,workstation-07,SQL metacharacters detected in request parameters,1373972,3555362,NL,dns
+EVT-00473,2026-10-25T10:13:44Z,192.168.1.46,198.51.100.20,57878,5432,UDP,dns_query,HIGH,DENY,operator,REVIEW,workstation-07,DNS lookup for approved domain,55523,3434804,NL,authentication
+EVT-00474,2026-10-25T09:50:22Z,192.168.1.191,203.0.113.120,13214,8080,ARP,arp_change,MEDIUM,DENY,,SUSPICIOUS,workstation-07,IP-to-MAC mapping changed unexpectedly,2533300,4909082,GB,dns
+EVT-00475,2026-10-25T10:06:24Z,203.0.113.45,192.168.1.49,63678,3389,TCP,firewall_event,MEDIUM,ALLOW,guest,SUSPICIOUS,auth-server-01,Inbound connection denied by firewall,1504683,4126243,NL,endpoint
+EVT-00476,2026-10-25T11:33:45Z,192.168.1.136,203.0.113.77,39104,3389,TCP,login,LOW,LOG,service_account,ALLOWED,auth-server-01,Administrator login from unfamiliar host,1003140,3130647,SG,web_gateway
+EVT-00477,2026-10-25T10:22:48Z,203.0.113.45,192.168.1.47,58585,80,TCP,login,MEDIUM,DENY,operator,REVIEW,web-server-01,Repeated failed login attempts,3029658,3519138,NL,authentication
+EVT-00478,2026-10-25T09:51:18Z,203.0.113.77,192.168.1.141,51138,53,TCP,login,MEDIUM,ALERT,user01,REVIEW,firewall-01,Repeated failed login attempts,2652565,2525577,GB,authentication
+EVT-00479,2026-10-25T09:35:36Z,203.0.113.120,192.168.1.13,34982,445,TCP,port_scan,HIGH,ALERT,,BLOCKED,workstation-07,Repeated probes against exposed service ports,1367587,859143,US,endpoint
+EVT-00480,2026-10-25T10:47:39Z,192.168.1.213,203.0.113.77,61057,53,TCP,firewall_event,LOW,ALLOW,operator,SUCCESS,web-server-01,Inbound connection denied by firewall,2920996,2613667,NL,authentication
+EVT-00481,2026-10-25T09:44:00Z,192.168.1.162,198.51.100.88,2908,53,UDP,dns_query,MEDIUM,ALLOW,guest,REVIEW,db-server-01,High-volume DNS requests in short interval,1900644,2578895,US,endpoint
+EVT-00482,2026-10-25T09:20:10Z,192.168.1.205,203.0.113.77,51794,3389,UDP,dns_query,LOW,ALLOW,admin,SUCCESS,db-server-01,DNS lookup for approved domain,275085,4307375,SG,firewall
+EVT-00483,2026-10-25T10:16:34Z,192.168.1.21,203.0.113.77,50474,53,HTTPS,data_transfer,LOW,ALLOW,admin,INFO,db-server-01,Transfer volume exceeded baseline threshold,1677926,1550062,NL,authentication
+EVT-00484,2026-10-25T10:32:57Z,198.51.100.77,192.168.1.158,11546,443,TCP,login,LOW,LOG,service_account,INFO,web-server-01,Successful user login,4849736,117308,SG,endpoint
+EVT-00485,2026-10-25T12:10:04Z,192.168.1.53,203.0.113.45,61594,443,TCP,privilege_escalation,HIGH,BLOCK,analyst01,REVIEW,workstation-07,Process attempted elevated access,4944082,1552947,DE,firewall
+EVT-00486,2026-10-25T11:14:00Z,192.168.1.118,198.51.100.20,27735,53,UDP,dns_query,MEDIUM,DENY,user02,REVIEW,workstation-07,DNS lookup for approved domain,4359790,1140115,DE,authentication
+EVT-00487,2026-10-25T10:25:48Z,192.168.1.20,203.0.113.77,8607,8080,TCP,privilege_escalation,CRITICAL,ALERT,operator,QUARANTINED,firewall-01,Unauthorized role modification detected,2617303,3724171,US,web_gateway
+EVT-00488,2026-10-25T12:44:05Z,192.168.1.119,198.51.100.20,5585,3389,ARP,arp_change,HIGH,BLOCK,,BLOCKED,db-server-01,IP-to-MAC mapping changed unexpectedly,4124245,882245,DE,dns
+EVT-00489,2026-10-25T12:04:00Z,198.51.100.140,192.168.1.112,49614,80,TCP,firewall_event,LOW,ALLOW,analyst01,ALLOWED,db-server-01,Inbound connection denied by firewall,1679931,4990893,DE,firewall
+EVT-00490,2026-10-25T12:20:48Z,192.168.1.81,198.51.100.77,24361,3389,TCP,file_access,MEDIUM,ALERT,root,SUSPICIOUS,workstation-07,Unauthorized access to restricted file,4290055,2339504,US,dns
+EVT-00491,2026-10-25T11:07:50Z,198.51.100.77,192.168.1.135,16151,80,TCP,port_scan,MEDIUM,ALLOW,,REVIEW,web-server-01,Sequential connection attempts across multiple ports,4178658,224385,US,dns
+EVT-00492,2026-10-25T12:21:52Z,192.168.1.87,203.0.113.77,44348,3389,TCP,outbound_connection,HIGH,ALERT,analyst01,DETECTED,auth-server-01,Repeated outbound connection attempts,4176679,4112518,SG,authentication
+EVT-00493,2026-10-25T12:22:24Z,192.168.1.148,203.0.113.45,29231,53,TCP,firewall_event,MEDIUM,DENY,admin,DENIED,auth-server-01,Inbound connection denied by firewall,3712430,3855876,IN,firewall
+EVT-00494,2026-10-25T12:55:48Z,192.168.1.209,198.51.100.77,33233,8080,UDP,dns_query,HIGH,DENY,user01,BLOCKED,workstation-07,Unusual DNS request to newly observed domain,917562,4771903,NL,dns
+EVT-00495,2026-10-25T11:17:36Z,192.168.1.228,203.0.113.120,26673,445,HTTPS,web_request,MEDIUM,DENY,admin,SUSPICIOUS,workstation-07,High request rate from one source,2959196,2386035,GB,firewall
+EVT-00496,2026-10-25T12:32:15Z,198.51.100.88,192.168.1.99,51171,5432,TCP,login,HIGH,ALERT,admin,DETECTED,workstation-07,Repeated failed login attempts,2997803,3455515,GB,firewall
+EVT-00497,2026-10-25T09:22:40Z,198.51.100.77,192.168.1.161,57970,445,HTTPS,web_request,LOW,ALLOW,analyst01,ALLOWED,db-server-01,Normal HTTPS request,4516567,2735666,IN,dns
+EVT-00498,2026-10-25T10:12:32Z,192.168.1.240,198.51.100.140,46634,3389,HTTPS,web_request,MEDIUM,ALERT,admin,REVIEW,auth-server-01,Unusual request path observed,4784472,3274080,GB,web_gateway
+EVT-00499,2026-10-25T12:00:42Z,203.0.113.77,192.168.1.186,14518,5432,TCP,port_scan,HIGH,ALERT,,REVIEW,auth-server-01,Sequential connection attempts across multiple ports,2512563,3047869,DE,endpoint
+EVT-00500,2026-10-25T12:42:46Z,192.168.1.211,203.0.113.77,19856,445,HTTPS,data_transfer,HIGH,DENY,user02,BLOCKED,firewall-01,Unusually large outbound transfer,1894868,771398,NL,web_gateway
