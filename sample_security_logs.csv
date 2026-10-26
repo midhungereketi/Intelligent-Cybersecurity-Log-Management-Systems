@@ -1,0 +1,21 @@
+timestamp,source_ip,destination_ip,event_type,protocol,action,severity,username,status,message
+2026-10-25T09:00:12Z,192.168.1.10,192.168.1.1,login,TCP,ALLOW,LOW,admin,SUCCESS,Successful administrator login from internal network
+2026-10-25T09:02:41Z,203.0.113.45,192.168.1.20,login,TCP,DENY,MEDIUM,jsmith,FAILED,Failed login attempt
+2026-10-25T09:02:49Z,203.0.113.45,192.168.1.20,login,TCP,DENY,MEDIUM,jsmith,FAILED,Repeated failed login attempt
+2026-10-25T09:03:02Z,203.0.113.45,192.168.1.20,login,TCP,DENY,HIGH,admin,FAILED,Multiple authentication failures; possible brute-force activity
+2026-10-25T09:05:17Z,198.51.100.77,192.168.1.30,port_scan,TCP,ALERT,HIGH,,DETECTED,Sequential connection attempts to multiple destination ports
+2026-10-25T09:07:33Z,192.168.1.55,198.51.100.20,dns_query,UDP,ALLOW,LOW,user01,SUCCESS,DNS query for example.com
+2026-10-25T09:08:01Z,192.168.1.55,198.51.100.20,dns_query,UDP,ALERT,HIGH,user01,SUSPICIOUS,DNS query for suspicious-domain.test
+2026-10-25T09:10:44Z,192.168.1.60,192.168.1.10,file_access,TCP,DENY,MEDIUM,guest,BLOCKED,Unauthorized access to restricted configuration file
+2026-10-25T09:12:09Z,10.0.0.25,192.168.1.5,network_connection,TCP,ALLOW,LOW,service_account,SUCCESS,Approved internal service connection
+2026-10-25T09:14:56Z,198.51.100.88,192.168.1.40,malware_signature,TCP,BLOCK,CRITICAL,,QUARANTINED,Known malware signature detected in inbound payload
+2026-10-25T09:17:20Z,192.168.1.70,203.0.113.90,data_transfer,HTTPS,ALERT,HIGH,user02,REVIEW,Unusually large outbound data transfer
+2026-10-25T09:19:03Z,192.168.1.10,192.168.1.1,config_change,TCP,ALLOW,LOW,admin,SUCCESS,Firewall configuration updated by administrator
+2026-10-25T09:21:38Z,203.0.113.120,192.168.1.25,login,TCP,DENY,HIGH,root,FAILED,Remote root login attempt rejected
+2026-10-25T09:24:11Z,192.168.1.90,192.168.1.1,arp_change,ARP,ALERT,HIGH,,SUSPICIOUS,IP-to-MAC mapping changed unexpectedly; investigate possible ARP spoofing
+2026-10-25T09:26:52Z,192.168.1.35,203.0.113.10,web_request,HTTPS,ALLOW,LOW,user03,SUCCESS,Normal HTTPS request to approved service
+2026-10-25T09:29:14Z,198.51.100.140,192.168.1.15,sql_injection_attempt,HTTPS,BLOCK,CRITICAL,,BLOCKED,Request contained suspicious SQL injection pattern: UNION SELECT
+2026-10-25T09:31:47Z,192.168.1.80,203.0.113.200,outbound_connection,TCP,ALERT,MEDIUM,user04,REVIEW,Connection to an uncommon external destination
+2026-10-25T09:34:29Z,203.0.113.45,192.168.1.20,login,TCP,DENY,HIGH,admin,FAILED,Additional failed login following repeated authentication failures
+2026-10-25T09:37:05Z,192.168.1.44,192.168.1.1,firewall_event,TCP,ALLOW,LOW,,SUCCESS,Routine firewall policy match
+2026-10-25T09:40:18Z,198.51.100.77,192.168.1.30,port_scan,TCP,BLOCK,HIGH,,BLOCKED,Further scan traffic blocked by firewall rule

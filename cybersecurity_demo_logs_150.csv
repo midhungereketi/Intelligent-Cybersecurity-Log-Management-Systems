@@ -1,0 +1,151 @@
+timestamp,source_ip,event_type,severity,message,username,log_source,destination_ip,destination_port,protocol,status,hostname,country,bytes_sent,bytes_received,rule_hint
+2026-10-25T16:00:00+00:00,192.0.2.11,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,diana,auth-service,198.51.100.8,443,DNS,FAILED,host-18,GB,65536,32768,outbound_connection
+2026-10-25T16:00:26+00:00,192.0.2.66,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,eve,vpn-gateway,203.0.113.25,53,TCP,OBSERVED,host-17,GB,65536,256,dns_query
+2026-10-25T16:00:34+00:00,192.0.2.44,LOGIN_FAILURE,HIGH,Repeated failed login attempt,diana,web-gateway,198.51.100.8,443,TCP,OBSERVED,host-18,IN,1024,32768,login_failure
+2026-10-25T16:00:39+00:00,192.0.2.162,LOGIN_FAILURE,HIGH,Repeated failed login attempt,eve,endpoint-agent,203.0.113.25,443,DNS,FAILED,host-16,DE,1024,131072,login_failure
+2026-10-25T16:00:24+00:00,192.0.2.218,ACCESS,LOW,User accessed an internal application,grace,endpoint-agent,203.0.113.10,443,TCP,FAILED,host-14,SG,1048576,32768,access
+2026-10-25T16:01:50+00:00,192.0.2.180,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,charlie,firewall,198.51.100.8,53,DNS,BLOCKED,host-19,IN,65536,2048,dns_query
+2026-10-25T16:02:54+00:00,192.0.2.161,ACCESS,LOW,User accessed an internal application,eve,endpoint-agent,198.51.100.8,443,HTTP,SUCCESS,host-13,IN,4096,256,access
+2026-10-25T16:02:41+00:00,192.0.2.126,LOGIN_FAILURE,HIGH,Repeated failed login attempt,frank,endpoint-agent,203.0.113.25,443,TCP,SUCCESS,host-03,SG,1024,2048,login_failure
+2026-10-25T16:03:20+00:00,192.0.2.54,ACCESS,LOW,User accessed an internal application,diana,firewall,198.51.100.8,443,HTTP,SUCCESS,host-14,GB,1024,2048,access
+2026-10-25T16:00:54+00:00,192.0.2.150,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,diana,web-gateway,203.0.113.10,80,TCP,BLOCKED,host-19,SG,4096,131072,port_scan
+2026-10-25T16:01:00+00:00,192.0.2.94,LOGIN_FAILURE,HIGH,Repeated failed login attempt,diana,endpoint-agent,198.51.100.44,443,DNS,FAILED,host-10,GB,1024,32768,login_failure
+2026-10-25T16:06:25+00:00,192.0.2.129,LOGIN_FAILURE,HIGH,Repeated failed login attempt,alice,endpoint-agent,198.51.100.8,443,HTTP,OBSERVED,host-23,SG,4096,256,login_failure
+2026-10-25T16:01:36+00:00,192.0.2.10,FIREWALL_BLOCK,MEDIUM,Firewall blocked a connection,grace,dns-server,203.0.113.10,445,DNS,SUCCESS,host-16,US,65536,131072,firewall_block
+2026-10-25T16:01:31+00:00,192.0.2.119,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,frank,endpoint-agent,203.0.113.25,443,DNS,SUCCESS,host-04,IN,1048576,8192,port_scan
+2026-10-25T16:09:20+00:00,192.0.2.136,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,charlie,dns-server,198.51.100.8,8080,DNS,SUCCESS,host-20,US,512,8192,outbound_connection
+2026-10-25T16:05:00+00:00,192.0.2.76,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,eve,vpn-gateway,203.0.113.25,80,DNS,OBSERVED,host-22,SG,65536,2048,outbound_connection
+2026-10-25T16:01:20+00:00,192.0.2.198,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,charlie,dns-server,198.51.100.44,53,DNS,SUCCESS,host-15,DE,4096,32768,dns_query
+2026-10-25T16:05:57+00:00,192.0.2.206,ACCESS,LOW,User accessed an internal application,bob,auth-service,198.51.100.44,443,HTTP,BLOCKED,host-18,IN,65536,131072,access
+2026-10-25T16:09:18+00:00,192.0.2.70,ACCESS,LOW,User accessed an internal application,diana,endpoint-agent,203.0.113.25,443,HTTP,BLOCKED,host-20,IN,16384,256,access
+2026-10-25T16:11:24+00:00,192.0.2.206,ACCESS,LOW,User accessed an internal application,frank,endpoint-agent,203.0.113.25,443,TCP,OBSERVED,host-08,US,1024,8192,access
+2026-10-25T16:05:00+00:00,192.0.2.182,MALWARE_ALERT,CRITICAL,Endpoint malware signature detected,alice,vpn-gateway,203.0.113.25,443,UDP,FAILED,host-25,IN,512,131072,malware_alert
+2026-10-25T16:09:06+00:00,192.0.2.21,DATA_TRANSFER,HIGH,Large outbound data transfer observed,eve,firewall,203.0.113.25,443,UDP,BLOCKED,host-15,DE,1024,131072,data_transfer
+2026-10-25T16:13:56+00:00,192.0.2.10,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,diana,endpoint-agent,203.0.113.10,443,TCP,FAILED,host-22,IN,16384,32768,outbound_connection
+2026-10-25T16:08:49+00:00,192.0.2.152,DATA_TRANSFER,HIGH,Large outbound data transfer observed,bob,endpoint-agent,203.0.113.25,443,UDP,BLOCKED,host-12,DE,1048576,2048,data_transfer
+2026-10-25T16:13:12+00:00,192.0.2.224,FIREWALL_BLOCK,MEDIUM,Firewall blocked a connection,grace,firewall,198.51.100.8,22,HTTP,BLOCKED,host-18,US,16384,256,firewall_block
+2026-10-25T16:08:20+00:00,192.0.2.200,FIREWALL_BLOCK,MEDIUM,Firewall blocked a connection,frank,firewall,198.51.100.44,445,TCP,FAILED,host-02,IN,512,2048,firewall_block
+2026-10-25T16:12:08+00:00,192.0.2.56,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,diana,vpn-gateway,198.51.100.8,3389,HTTP,FAILED,host-01,DE,512,32768,port_scan
+2026-10-25T16:05:51+00:00,192.0.2.56,FIREWALL_BLOCK,MEDIUM,Firewall blocked a connection,bob,dns-server,203.0.113.25,22,HTTP,BLOCKED,host-07,DE,16384,32768,firewall_block
+2026-10-25T16:14:56+00:00,192.0.2.39,DATA_TRANSFER,HIGH,Large outbound data transfer observed,eve,endpoint-agent,198.51.100.44,443,TCP,BLOCKED,host-21,IN,1024,8192,data_transfer
+2026-10-25T16:10:38+00:00,192.0.2.29,SQL_INJECTION,CRITICAL,Suspicious SQL injection payload detected,charlie,firewall,203.0.113.10,5432,DNS,OBSERVED,host-20,US,512,2048,sql_injection
+2026-10-25T16:09:00+00:00,192.0.2.234,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,charlie,endpoint-agent,203.0.113.25,23,UDP,SUCCESS,host-19,DE,512,32768,port_scan
+2026-10-25T16:19:07+00:00,192.0.2.63,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,grace,auth-service,198.51.100.44,80,HTTP,FAILED,host-13,SG,512,2048,outbound_connection
+2026-10-25T16:05:52+00:00,192.0.2.133,LOGIN_FAILURE,HIGH,Repeated failed login attempt,alice,vpn-gateway,198.51.100.44,443,DNS,SUCCESS,host-06,DE,16384,8192,login_failure
+2026-10-25T16:09:54+00:00,192.0.2.65,DATA_TRANSFER,HIGH,Large outbound data transfer observed,eve,auth-service,203.0.113.10,443,UDP,OBSERVED,host-18,IN,1048576,2048,data_transfer
+2026-10-25T16:20:58+00:00,192.0.2.168,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,grace,dns-server,198.51.100.44,3389,DNS,OBSERVED,host-06,SG,1024,32768,port_scan
+2026-10-25T16:12:15+00:00,192.0.2.156,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,bob,web-gateway,203.0.113.25,443,TCP,BLOCKED,host-22,IN,16384,32768,port_scan
+2026-10-25T16:11:24+00:00,192.0.2.65,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,bob,firewall,203.0.113.25,443,TCP,BLOCKED,host-01,SG,65536,131072,port_scan
+2026-10-25T16:21:35+00:00,192.0.2.64,FIREWALL_BLOCK,MEDIUM,Firewall blocked a connection,charlie,endpoint-agent,198.51.100.44,3389,TCP,FAILED,host-11,US,4096,32768,firewall_block
+2026-10-25T16:20:16+00:00,192.0.2.33,SQL_INJECTION,CRITICAL,Suspicious SQL injection payload detected,diana,endpoint-agent,203.0.113.10,5432,UDP,SUCCESS,host-20,GB,1024,256,sql_injection
+2026-10-25T16:16:54+00:00,192.0.2.234,LOGIN_FAILURE,HIGH,Repeated failed login attempt,bob,web-gateway,198.51.100.8,443,UDP,BLOCKED,host-12,SG,1024,32768,login_failure
+2026-10-25T16:24:40+00:00,192.0.2.122,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,alice,auth-service,203.0.113.10,53,UDP,FAILED,host-25,IN,1048576,256,dns_query
+2026-10-25T16:07:31+00:00,192.0.2.67,LOGIN_FAILURE,HIGH,Repeated failed login attempt,bob,vpn-gateway,198.51.100.8,443,HTTP,FAILED,host-06,SG,16384,256,login_failure
+2026-10-25T16:22:24+00:00,192.0.2.25,LOGIN_FAILURE,HIGH,Repeated failed login attempt,frank,web-gateway,203.0.113.10,443,UDP,OBSERVED,host-08,DE,512,131072,login_failure
+2026-10-25T16:20:04+00:00,192.0.2.204,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,bob,endpoint-agent,203.0.113.10,53,UDP,FAILED,host-25,DE,4096,2048,dns_query
+2026-10-25T16:11:00+00:00,192.0.2.145,LOGIN_FAILURE,HIGH,Repeated failed login attempt,alice,vpn-gateway,203.0.113.25,443,HTTP,SUCCESS,host-15,GB,512,2048,login_failure
+2026-10-25T16:27:00+00:00,192.0.2.71,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,bob,endpoint-agent,198.51.100.44,53,HTTP,OBSERVED,host-12,DE,1048576,32768,dns_query
+2026-10-25T16:21:28+00:00,192.0.2.137,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,eve,dns-server,203.0.113.10,23,HTTP,BLOCKED,host-07,US,512,2048,port_scan
+2026-10-25T16:03:55+00:00,192.0.2.206,ACCESS,LOW,User accessed an internal application,bob,auth-service,198.51.100.44,443,TCP,OBSERVED,host-11,US,512,8192,access
+2026-10-25T16:09:36+00:00,192.0.2.25,LOGIN_FAILURE,HIGH,Repeated failed login attempt,bob,web-gateway,203.0.113.10,443,UDP,OBSERVED,host-06,US,65536,8192,login_failure
+2026-10-25T16:26:57+00:00,192.0.2.105,AUTH_SUCCESS,LOW,User authentication succeeded,diana,dns-server,198.51.100.8,443,DNS,FAILED,host-20,SG,4096,32768,auth_success
+2026-10-25T16:24:10+00:00,192.0.2.186,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,charlie,vpn-gateway,198.51.100.44,443,HTTP,SUCCESS,host-23,US,1048576,131072,outbound_connection
+2026-10-25T16:32:18+00:00,192.0.2.122,SQL_INJECTION,CRITICAL,Suspicious SQL injection payload detected,charlie,endpoint-agent,203.0.113.25,5432,TCP,SUCCESS,host-19,US,1024,131072,sql_injection
+2026-10-25T16:27:44+00:00,192.0.2.183,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,eve,vpn-gateway,198.51.100.8,8080,TCP,BLOCKED,host-13,DE,512,8192,outbound_connection
+2026-10-25T16:29:09+00:00,192.0.2.235,ACCESS,LOW,User accessed an internal application,diana,endpoint-agent,198.51.100.44,443,HTTP,FAILED,host-17,GB,4096,256,access
+2026-10-25T16:24:18+00:00,192.0.2.57,ACCESS,LOW,User accessed an internal application,alice,dns-server,198.51.100.8,443,DNS,FAILED,host-08,DE,1024,32768,access
+2026-10-25T16:36:40+00:00,192.0.2.204,LOGIN_FAILURE,HIGH,Repeated failed login attempt,eve,dns-server,203.0.113.10,443,HTTP,BLOCKED,host-06,DE,16384,256,login_failure
+2026-10-25T16:13:04+00:00,192.0.2.224,SQL_INJECTION,CRITICAL,Suspicious SQL injection payload detected,grace,firewall,198.51.100.8,5432,DNS,BLOCKED,host-09,SG,4096,32768,sql_injection
+2026-10-25T16:20:54+00:00,192.0.2.16,SQL_INJECTION,CRITICAL,Suspicious SQL injection payload detected,grace,vpn-gateway,203.0.113.25,5432,UDP,FAILED,host-25,US,4096,8192,sql_injection
+2026-10-25T16:14:30+00:00,192.0.2.36,FIREWALL_BLOCK,MEDIUM,Firewall blocked a connection,grace,web-gateway,198.51.100.44,3389,UDP,SUCCESS,host-18,DE,1048576,131072,firewall_block
+2026-10-25T16:32:27+00:00,192.0.2.42,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,charlie,vpn-gateway,203.0.113.10,8080,DNS,SUCCESS,host-13,GB,512,32768,outbound_connection
+2026-10-25T16:22:00+00:00,192.0.2.11,FIREWALL_BLOCK,MEDIUM,Firewall blocked a connection,frank,auth-service,198.51.100.8,3389,HTTP,BLOCKED,host-23,IN,1048576,8192,firewall_block
+2026-10-25T16:39:39+00:00,192.0.2.47,ACCESS,LOW,User accessed an internal application,frank,auth-service,198.51.100.8,443,DNS,FAILED,host-21,GB,16384,131072,access
+2026-10-25T16:28:56+00:00,192.0.2.67,ARP_CHANGE,HIGH,Unexpected ARP mapping change observed,grace,vpn-gateway,203.0.113.10,0,HTTP,BLOCKED,host-04,SG,512,8192,arp_change
+2026-10-25T16:32:33+00:00,192.0.2.112,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,grace,vpn-gateway,198.51.100.8,53,HTTP,FAILED,host-18,DE,16384,256,dns_query
+2026-10-25T16:24:32+00:00,192.0.2.188,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,frank,vpn-gateway,198.51.100.8,53,HTTP,SUCCESS,host-25,GB,1024,32768,dns_query
+2026-10-25T16:14:05+00:00,192.0.2.69,DATA_TRANSFER,HIGH,Large outbound data transfer observed,charlie,web-gateway,198.51.100.8,443,TCP,BLOCKED,host-24,DE,512,2048,data_transfer
+2026-10-25T16:35:12+00:00,192.0.2.26,SQL_INJECTION,CRITICAL,Suspicious SQL injection payload detected,charlie,endpoint-agent,198.51.100.8,5432,HTTP,FAILED,host-08,GB,1024,32768,sql_injection
+2026-10-25T16:33:30+00:00,192.0.2.115,LOGIN_FAILURE,HIGH,Repeated failed login attempt,frank,dns-server,198.51.100.8,443,TCP,SUCCESS,host-20,US,1024,256,login_failure
+2026-10-25T16:05:40+00:00,192.0.2.184,DATA_TRANSFER,HIGH,Large outbound data transfer observed,frank,endpoint-agent,198.51.100.8,443,HTTP,FAILED,host-15,SG,16384,256,data_transfer
+2026-10-25T16:39:06+00:00,192.0.2.217,ACCESS,LOW,User accessed an internal application,grace,firewall,198.51.100.8,443,UDP,BLOCKED,host-22,SG,1048576,256,access
+2026-10-25T16:40:50+00:00,192.0.2.158,SQL_INJECTION,CRITICAL,Suspicious SQL injection payload detected,alice,auth-service,203.0.113.25,5432,HTTP,BLOCKED,host-03,US,16384,32768,sql_injection
+2026-10-25T16:05:55+00:00,192.0.2.186,LOGIN_FAILURE,HIGH,Repeated failed login attempt,grace,vpn-gateway,198.51.100.8,443,DNS,FAILED,host-16,SG,16384,256,login_failure
+2026-10-25T16:46:48+00:00,192.0.2.230,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,eve,endpoint-agent,198.51.100.8,23,DNS,FAILED,host-21,GB,16384,32768,port_scan
+2026-10-25T16:12:10+00:00,192.0.2.26,FIREWALL_BLOCK,MEDIUM,Firewall blocked a connection,bob,auth-service,198.51.100.8,3389,HTTP,FAILED,host-11,US,512,256,firewall_block
+2026-10-25T16:43:10+00:00,192.0.2.93,ACCESS,LOW,User accessed an internal application,grace,firewall,203.0.113.25,443,TCP,BLOCKED,host-07,IN,512,2048,access
+2026-10-25T16:25:00+00:00,192.0.2.146,LOGIN_FAILURE,HIGH,Repeated failed login attempt,alice,web-gateway,198.51.100.44,443,TCP,SUCCESS,host-16,DE,4096,2048,login_failure
+2026-10-25T16:15:12+00:00,192.0.2.229,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,diana,firewall,198.51.100.8,80,DNS,SUCCESS,host-11,IN,1024,256,outbound_connection
+2026-10-25T16:44:55+00:00,192.0.2.41,ACCESS,LOW,User accessed an internal application,eve,vpn-gateway,203.0.113.10,443,DNS,BLOCKED,host-16,US,512,8192,access
+2026-10-25T16:15:36+00:00,192.0.2.191,FIREWALL_BLOCK,MEDIUM,Firewall blocked a connection,bob,auth-service,198.51.100.44,445,DNS,FAILED,host-24,US,512,131072,firewall_block
+2026-10-25T16:47:24+00:00,192.0.2.107,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,eve,firewall,198.51.100.44,53,DNS,OBSERVED,host-05,US,65536,2048,dns_query
+2026-10-25T16:28:00+00:00,192.0.2.22,ACCESS,LOW,User accessed an internal application,bob,web-gateway,198.51.100.8,443,DNS,OBSERVED,host-25,IN,1048576,8192,access
+2026-10-25T16:16:12+00:00,192.0.2.133,AUTH_SUCCESS,LOW,User authentication succeeded,bob,firewall,203.0.113.10,443,UDP,SUCCESS,host-24,DE,4096,256,auth_success
+2026-10-25T16:50:34+00:00,192.0.2.204,AUTH_SUCCESS,LOW,User authentication succeeded,bob,endpoint-agent,203.0.113.10,443,HTTP,FAILED,host-15,IN,1024,8192,auth_success
+2026-10-25T16:37:21+00:00,192.0.2.83,LOGIN_FAILURE,HIGH,Repeated failed login attempt,alice,endpoint-agent,198.51.100.8,443,HTTP,BLOCKED,host-05,IN,16384,32768,login_failure
+2026-10-25T16:51:48+00:00,192.0.2.135,AUTH_SUCCESS,LOW,User authentication succeeded,alice,web-gateway,198.51.100.8,443,HTTP,OBSERVED,host-03,GB,1024,2048,auth_success
+2026-10-25T16:49:35+00:00,192.0.2.201,LOGIN_FAILURE,HIGH,Repeated failed login attempt,eve,dns-server,198.51.100.8,443,TCP,SUCCESS,host-08,US,512,8192,login_failure
+2026-10-25T16:37:16+00:00,192.0.2.121,ACCESS,LOW,User accessed an internal application,frank,dns-server,198.51.100.8,443,UDP,FAILED,host-09,GB,1024,32768,access
+2026-10-25T16:36:15+00:00,192.0.2.72,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,diana,auth-service,203.0.113.25,80,TCP,BLOCKED,host-15,SG,4096,32768,port_scan
+2026-10-25T16:32:16+00:00,192.0.2.105,PRIVILEGE_ESCALATION,CRITICAL,Unexpected privilege escalation attempt,diana,web-gateway,198.51.100.44,22,TCP,OBSERVED,host-23,GB,1048576,32768,privilege_escalation
+2026-10-25T16:08:54+00:00,192.0.2.18,MALWARE_ALERT,CRITICAL,Endpoint malware signature detected,bob,web-gateway,203.0.113.10,445,HTTP,FAILED,host-21,IN,4096,32768,malware_alert
+2026-10-25T16:42:00+00:00,192.0.2.93,LOGIN_FAILURE,HIGH,Repeated failed login attempt,frank,web-gateway,203.0.113.10,443,TCP,BLOCKED,host-02,GB,16384,2048,login_failure
+2026-10-25T16:50:03+00:00,192.0.2.110,FIREWALL_BLOCK,MEDIUM,Firewall blocked a connection,diana,web-gateway,203.0.113.10,445,HTTP,FAILED,host-25,US,1048576,2048,firewall_block
+2026-10-25T16:56:44+00:00,192.0.2.90,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,eve,dns-server,203.0.113.25,53,DNS,FAILED,host-05,US,1024,8192,dns_query
+2026-10-25T16:13:57+00:00,192.0.2.136,LOGIN_FAILURE,HIGH,Repeated failed login attempt,alice,web-gateway,203.0.113.25,443,DNS,BLOCKED,host-16,GB,1048576,32768,login_failure
+2026-10-25T16:21:56+00:00,192.0.2.20,LOGIN_FAILURE,HIGH,Repeated failed login attempt,grace,auth-service,203.0.113.25,443,UDP,SUCCESS,host-19,SG,1048576,8192,login_failure
+2026-10-25T16:26:55+00:00,192.0.2.68,LOGIN_FAILURE,HIGH,Repeated failed login attempt,grace,auth-service,203.0.113.10,443,UDP,FAILED,host-15,DE,16384,131072,login_failure
+2026-10-25T16:14:24+00:00,192.0.2.228,LOGIN_FAILURE,HIGH,Repeated failed login attempt,frank,web-gateway,203.0.113.25,443,DNS,SUCCESS,host-22,US,512,256,login_failure
+2026-10-25T16:27:29+00:00,192.0.2.192,PRIVILEGE_ESCALATION,CRITICAL,Unexpected privilege escalation attempt,frank,web-gateway,198.51.100.44,22,DNS,FAILED,host-25,DE,65536,32768,privilege_escalation
+2026-10-25T16:09:48+00:00,192.0.2.145,LOGIN_FAILURE,HIGH,Repeated failed login attempt,diana,dns-server,203.0.113.25,443,UDP,FAILED,host-20,GB,16384,32768,login_failure
+2026-10-25T17:04:21+00:00,192.0.2.25,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,eve,vpn-gateway,198.51.100.8,8080,TCP,OBSERVED,host-14,GB,4096,32768,outbound_connection
+2026-10-25T16:46:40+00:00,192.0.2.90,MALWARE_ALERT,CRITICAL,Endpoint malware signature detected,bob,vpn-gateway,198.51.100.8,443,UDP,OBSERVED,host-05,SG,512,8192,malware_alert
+2026-10-25T16:43:46+00:00,192.0.2.127,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,diana,web-gateway,198.51.100.44,80,UDP,BLOCKED,host-24,IN,512,32768,outbound_connection
+2026-10-25T16:40:48+00:00,192.0.2.42,LOGIN_FAILURE,HIGH,Repeated failed login attempt,grace,firewall,198.51.100.44,443,UDP,OBSERVED,host-15,GB,1024,131072,login_failure
+2026-10-25T16:12:01+00:00,192.0.2.112,ACCESS,LOW,User accessed an internal application,eve,auth-service,203.0.113.10,443,TCP,SUCCESS,host-18,SG,1024,256,access
+2026-10-25T16:58:56+00:00,192.0.2.179,DATA_TRANSFER,HIGH,Large outbound data transfer observed,eve,dns-server,198.51.100.44,443,UDP,OBSERVED,host-18,SG,1048576,32768,data_transfer
+2026-10-25T17:08:15+00:00,192.0.2.93,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,grace,dns-server,198.51.100.44,8080,DNS,BLOCKED,host-21,IN,65536,32768,outbound_connection
+2026-10-25T16:26:30+00:00,192.0.2.136,MALWARE_ALERT,CRITICAL,Endpoint malware signature detected,bob,vpn-gateway,198.51.100.44,443,TCP,FAILED,host-11,DE,1024,131072,malware_alert
+2026-10-25T16:16:03+00:00,192.0.2.18,LOGIN_FAILURE,HIGH,Repeated failed login attempt,eve,auth-service,203.0.113.25,443,TCP,OBSERVED,host-17,US,4096,131072,login_failure
+2026-10-25T16:09:00+00:00,192.0.2.100,ACCESS,LOW,User accessed an internal application,eve,dns-server,198.51.100.8,443,TCP,FAILED,host-22,SG,65536,256,access
+2026-10-25T16:58:08+00:00,192.0.2.98,FIREWALL_BLOCK,MEDIUM,Firewall blocked a connection,charlie,endpoint-agent,203.0.113.25,3389,UDP,FAILED,host-09,DE,512,131072,firewall_block
+2026-10-25T16:53:10+00:00,192.0.2.67,FIREWALL_BLOCK,MEDIUM,Firewall blocked a connection,bob,web-gateway,203.0.113.10,22,DNS,SUCCESS,host-13,SG,1024,256,firewall_block
+2026-10-25T16:57:21+00:00,192.0.2.209,LOGIN_FAILURE,HIGH,Repeated failed login attempt,charlie,web-gateway,203.0.113.10,443,UDP,SUCCESS,host-23,SG,4096,256,login_failure
+2026-10-25T16:16:48+00:00,192.0.2.151,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,alice,dns-server,203.0.113.10,80,UDP,FAILED,host-10,SG,16384,32768,outbound_connection
+2026-10-25T17:04:02+00:00,192.0.2.198,SQL_INJECTION,CRITICAL,Suspicious SQL injection payload detected,charlie,web-gateway,198.51.100.44,5432,HTTP,SUCCESS,host-14,SG,1024,2048,sql_injection
+2026-10-25T16:09:30+00:00,192.0.2.13,ACCESS,LOW,User accessed an internal application,charlie,vpn-gateway,203.0.113.25,443,DNS,OBSERVED,host-02,DE,512,256,access
+2026-10-25T17:12:50+00:00,192.0.2.157,LOGIN_FAILURE,HIGH,Repeated failed login attempt,grace,auth-service,198.51.100.8,443,DNS,OBSERVED,host-01,DE,1024,32768,login_failure
+2026-10-25T17:15:24+00:00,192.0.2.91,LOGIN_FAILURE,HIGH,Repeated failed login attempt,eve,firewall,203.0.113.25,443,UDP,FAILED,host-17,IN,4096,256,login_failure
+2026-10-25T17:12:09+00:00,192.0.2.179,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,frank,web-gateway,203.0.113.25,80,TCP,OBSERVED,host-05,US,16384,32768,outbound_connection
+2026-10-25T16:23:36+00:00,192.0.2.51,LOGIN_FAILURE,HIGH,Repeated failed login attempt,eve,vpn-gateway,198.51.100.8,443,HTTP,BLOCKED,host-21,US,16384,8192,login_failure
+2026-10-25T17:15:22+00:00,192.0.2.155,DATA_TRANSFER,HIGH,Large outbound data transfer observed,grace,web-gateway,203.0.113.25,443,TCP,FAILED,host-06,GB,512,32768,data_transfer
+2026-10-25T16:42:00+00:00,192.0.2.21,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,eve,dns-server,198.51.100.44,53,HTTP,SUCCESS,host-25,IN,512,256,dns_query
+2026-10-25T16:58:29+00:00,192.0.2.215,LOGIN_FAILURE,HIGH,Repeated failed login attempt,frank,firewall,203.0.113.25,443,UDP,SUCCESS,host-13,SG,512,256,login_failure
+2026-10-25T16:20:20+00:00,192.0.2.214,LOGIN_FAILURE,HIGH,Repeated failed login attempt,diana,dns-server,203.0.113.25,443,DNS,FAILED,host-18,IN,4096,32768,login_failure
+2026-10-25T17:22:00+00:00,192.0.2.215,ARP_CHANGE,HIGH,Unexpected ARP mapping change observed,grace,web-gateway,203.0.113.25,0,UDP,FAILED,host-10,IN,4096,8192,arp_change
+2026-10-25T16:37:12+00:00,192.0.2.86,MALWARE_ALERT,CRITICAL,Endpoint malware signature detected,diana,auth-service,198.51.100.8,445,TCP,SUCCESS,host-21,DE,1048576,2048,malware_alert
+2026-10-25T16:54:10+00:00,192.0.2.18,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,diana,endpoint-agent,198.51.100.44,443,DNS,OBSERVED,host-15,IN,512,2048,port_scan
+2026-10-25T17:09:18+00:00,192.0.2.35,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,frank,dns-server,198.51.100.44,80,DNS,BLOCKED,host-15,US,65536,32768,outbound_connection
+2026-10-25T17:14:05+00:00,192.0.2.193,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,frank,web-gateway,198.51.100.8,443,TCP,OBSERVED,host-07,US,512,8192,outbound_connection
+2026-10-25T16:46:56+00:00,192.0.2.41,AUTH_SUCCESS,LOW,User authentication succeeded,charlie,vpn-gateway,203.0.113.10,443,UDP,BLOCKED,host-02,DE,4096,32768,auth_success
+2026-10-25T16:19:21+00:00,192.0.2.31,PRIVILEGE_ESCALATION,CRITICAL,Unexpected privilege escalation attempt,alice,vpn-gateway,203.0.113.10,22,DNS,FAILED,host-24,DE,65536,32768,privilege_escalation
+2026-10-25T16:32:30+00:00,192.0.2.71,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,bob,web-gateway,198.51.100.44,22,DNS,FAILED,host-10,SG,4096,2048,port_scan
+2026-10-25T16:37:07+00:00,192.0.2.55,MALWARE_ALERT,CRITICAL,Endpoint malware signature detected,grace,auth-service,203.0.113.10,443,TCP,OBSERVED,host-21,DE,1048576,2048,malware_alert
+2026-10-25T17:12:36+00:00,192.0.2.207,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,grace,web-gateway,203.0.113.25,8080,TCP,BLOCKED,host-01,US,65536,8192,outbound_connection
+2026-10-25T17:19:48+00:00,192.0.2.82,AUTH_SUCCESS,LOW,User authentication succeeded,alice,vpn-gateway,203.0.113.10,443,TCP,SUCCESS,host-05,GB,4096,131072,auth_success
+2026-10-25T16:17:52+00:00,192.0.2.119,LOGIN_FAILURE,HIGH,Repeated failed login attempt,bob,dns-server,198.51.100.44,443,UDP,OBSERVED,host-01,SG,1024,32768,login_failure
+2026-10-25T16:36:00+00:00,192.0.2.74,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,charlie,firewall,198.51.100.44,53,HTTP,OBSERVED,host-20,US,4096,32768,dns_query
+2026-10-25T16:11:20+00:00,192.0.2.119,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,eve,dns-server,203.0.113.10,53,DNS,OBSERVED,host-04,GB,512,8192,dns_query
+2026-10-25T16:52:31+00:00,192.0.2.218,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,grace,auth-service,203.0.113.25,443,DNS,SUCCESS,host-08,IN,4096,256,port_scan
+2026-10-25T17:27:24+00:00,192.0.2.110,DATA_TRANSFER,HIGH,Large outbound data transfer observed,frank,endpoint-agent,198.51.100.8,443,DNS,SUCCESS,host-05,DE,1048576,32768,data_transfer
+2026-10-25T17:23:24+00:00,192.0.2.165,MALWARE_ALERT,CRITICAL,Endpoint malware signature detected,frank,firewall,203.0.113.25,443,HTTP,OBSERVED,host-03,SG,1048576,2048,malware_alert
+2026-10-25T16:18:40+00:00,192.0.2.203,FIREWALL_BLOCK,MEDIUM,Firewall blocked a connection,grace,endpoint-agent,198.51.100.8,3389,HTTP,OBSERVED,host-14,IN,4096,2048,firewall_block
+2026-10-25T17:03:27+00:00,192.0.2.101,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,alice,endpoint-agent,203.0.113.10,53,UDP,SUCCESS,host-04,GB,512,8192,dns_query
+2026-10-25T16:26:02+00:00,192.0.2.96,AUTH_SUCCESS,LOW,User authentication succeeded,eve,web-gateway,198.51.100.8,443,DNS,FAILED,host-23,SG,1048576,2048,auth_success
+2026-10-25T16:45:17+00:00,192.0.2.180,LOGIN_FAILURE,HIGH,Repeated failed login attempt,frank,dns-server,198.51.100.8,443,HTTP,BLOCKED,host-25,SG,512,32768,login_failure
+2026-10-25T17:14:24+00:00,192.0.2.78,LOGIN_FAILURE,HIGH,Repeated failed login attempt,bob,dns-server,198.51.100.8,443,UDP,OBSERVED,host-17,US,4096,2048,login_failure
+2026-10-25T16:45:55+00:00,192.0.2.194,DNS_QUERY,MEDIUM,Unusual DNS query pattern detected,bob,vpn-gateway,203.0.113.25,53,DNS,OBSERVED,host-16,DE,4096,256,dns_query
+2026-10-25T16:58:24+00:00,192.0.2.93,PORT_SCAN,CRITICAL,Multiple destination ports probed from one source,bob,web-gateway,203.0.113.10,80,DNS,BLOCKED,host-10,IN,65536,2048,port_scan
+2026-10-25T17:38:00+00:00,192.0.2.136,MALWARE_ALERT,CRITICAL,Endpoint malware signature detected,frank,dns-server,198.51.100.8,445,DNS,SUCCESS,host-04,DE,4096,2048,malware_alert
+2026-10-25T17:31:16+00:00,192.0.2.238,OUTBOUND_CONNECTION,MEDIUM,New outbound connection observed,alice,vpn-gateway,198.51.100.44,80,DNS,FAILED,host-24,DE,4096,32768,outbound_connection
+2026-10-25T16:52:09+00:00,192.0.2.27,LOGIN_FAILURE,HIGH,Repeated failed login attempt,bob,firewall,203.0.113.10,443,TCP,BLOCKED,host-03,DE,1024,256,login_failure
